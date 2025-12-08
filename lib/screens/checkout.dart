@@ -18,11 +18,10 @@ class _CheckoutState extends State<Checkout> {
   String input = "";
   String partValues = "";
   double storedValue = 0;
-  bool plusPressed = false;
   int _currentIndex = 0;
   String currentSale = "";
-  int count = 0;
   int saleListIndex = 0;
+  String tempCharge = "";
 
 
   late final tabs = [
@@ -39,41 +38,49 @@ class _CheckoutState extends State<Checkout> {
   final _currentSaleList = [];
 
   void onNumPressed(String digit){
-    setState (() => input += digit);
+    setState (() {
+      input += digit;
+    });
   }
 
   void onClear() {
     setState(() {
       input = "";
       storedValue = 0;
-      plusPressed = false;
       partValues = "";
-      count = 0;
       _currentSaleList.clear();
-      saleListIndex = 0;
     });
   }
 
   void onPlusPressed(){
+    if(input.isEmpty) return;
     setState(() {
       final current = double.parse(input);
       storedValue += current;
-      partValues += "$input + ";
       _currentSaleList.add("Custom Amount: $input TZS");
       input = "";
-      plusPressed = true;
     });
+  }
+
+  String getChargeButtonText() {
+    if (_currentSaleList.length > 1) {
+      return "Review ${_currentSaleList.length} items";
+    } else if (_currentSaleList.length == 1 && input.isEmpty) {
+      final total = _currentSaleList.fold<double>(0, (sum, item) {
+        final number = int.parse(item.split(": ")[1].split(" ")[0]);
+        return sum + number;
+      });
+      return "Charge: $total TZS";
+    } else if (input.isNotEmpty) {
+      return "Charge: $input TZS";
+    } else {
+      return "Charge: 0 TZS";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if(partValues.split('+').length - 1 > 1){
-      count = '+'.allMatches(partValues).length;
-      currentSale = "Review $count items";
-    } else {
-      currentSale = "Charge: $storedValue TZS";
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -89,12 +96,12 @@ class _CheckoutState extends State<Checkout> {
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
-            currentSale,
+            getChargeButtonText(),
                 onClicked: () {
               showModalBottomSheet(
                   context: context,
                   builder: (_) => CheckoutBottomSheet(
-                      itemsCount: count,
+                      itemsCount: _currentSaleList.length,
                       currentSaleItems: _currentSaleList.join('\n')),
                   );
                 })
