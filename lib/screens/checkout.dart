@@ -21,6 +21,8 @@ class _CheckoutState extends State<Checkout> {
   bool plusPressed = false;
   int _currentIndex = 0;
   String currentSale = "";
+  int count = 0;
+  int saleListIndex = 0;
 
 
   late final tabs = [
@@ -34,6 +36,8 @@ class _CheckoutState extends State<Checkout> {
     () => FavoritesWidget(),
   ];
 
+  final _currentSaleList = [];
+
   void onNumPressed(String digit){
     setState (() => input += digit);
   }
@@ -44,6 +48,9 @@ class _CheckoutState extends State<Checkout> {
       storedValue = 0;
       plusPressed = false;
       partValues = "";
+      count = 0;
+      _currentSaleList.clear();
+      saleListIndex = 0;
     });
   }
 
@@ -52,6 +59,7 @@ class _CheckoutState extends State<Checkout> {
       final current = double.parse(input);
       storedValue += current;
       partValues += "$input + ";
+      _currentSaleList.add("Custom Amount: $input TZS");
       input = "";
       plusPressed = true;
     });
@@ -61,7 +69,7 @@ class _CheckoutState extends State<Checkout> {
   Widget build(BuildContext context) {
 
     if(partValues.split('+').length - 1 > 1){
-      int count = '+'.allMatches(partValues).length;
+      count = '+'.allMatches(partValues).length;
       currentSale = "Review $count items";
     } else {
       currentSale = "Charge: $storedValue TZS";
@@ -85,7 +93,9 @@ class _CheckoutState extends State<Checkout> {
                 onClicked: () {
               showModalBottomSheet(
                   context: context,
-                  builder: (_) => const CheckoutBottomSheet(),
+                  builder: (_) => CheckoutBottomSheet(
+                      itemsCount: count,
+                      currentSaleItems: _currentSaleList.join('\n')),
                   );
                 })
             )
