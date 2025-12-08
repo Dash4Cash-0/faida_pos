@@ -51,7 +51,7 @@ class _CheckoutState extends State<Checkout> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             NumpadDisplayWidget(value: value),
-            Text("$partValues"),
+            Text(partValues),
             Text("Total: $storedValue TZS"),
             Expanded(
                 child: Numpad(
