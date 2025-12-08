@@ -1,3 +1,4 @@
+import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/inventory_widget.dart';
@@ -82,22 +83,10 @@ class _CheckoutState extends State<Checkout> {
             CheckoutButtonWidget(label:
             currentSale,
                 onClicked: () {
-              showModalBottomSheet<void>(
+              showModalBottomSheet(
                   context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 400,
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Align(alignment: Alignment.topLeft,
-                            child: CloseButton(),
-                          )
-                        ],
-                      ),
-                    );
-                  });
+                  builder: (_) => const CheckoutBottomSheet(),
+                  );
                 })
             )
           ],
