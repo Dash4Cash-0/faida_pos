@@ -15,9 +15,8 @@ class Numpad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: GridView.count(
+    return
+          GridView.count(
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -32,8 +31,7 @@ class Numpad extends StatelessWidget {
             numButton("0", () => onNumberPressed("0")),
             numButton("+", onPlusPressed)
           ],
-        )
-    );
+        );
   }
 
   Widget numButton(String label, VoidCallback onTap) {

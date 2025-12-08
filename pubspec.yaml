@@ -9,6 +9,7 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
+  window_size: ^0.1.0
   flutter:
     sdk: flutter
 

@@ -1,6 +1,9 @@
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/favorites_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/inventory_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/numpad_display_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/numpad_widget.dart';
+import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,6 +19,13 @@ class _CheckoutState extends State<Checkout> {
   String partValues = "";
   double storedValue = 0;
   bool plusPressed = false;
+  int _currentIndex = 0;
+
+  late final tabs = [
+    () => numpadTab(),
+    () => InventoryWidget(),
+    () => FavoritesWidget(),
+  ];
 
 
 
@@ -50,15 +60,11 @@ class _CheckoutState extends State<Checkout> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            NumpadDisplayWidget(value: value),
-            Text(partValues),
-            Text("Total: $storedValue TZS"),
-            Expanded(
-                child: Numpad(
-                  onNumberPressed: onNumPressed,
-                  onClearPressed: onClear,
-                onPlusPressed: onPlusPressed)),
-            //Spacer(),
+            TabsWidget(currentIndex: _currentIndex,
+                onSelectedTab: (index) {
+              setState(() => _currentIndex = index);
+                }),
+            Expanded(child: tabs[_currentIndex]()),
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
@@ -93,5 +99,19 @@ class _CheckoutState extends State<Checkout> {
     IconButton(
         onPressed: () => Navigator.pop(context),
         icon: Icon(Icons.close));
+
+  Widget numpadTab() =>
+      Column(
+        children: [
+          NumpadDisplayWidget(value: value),
+          Text(partValues),
+          Text("Total: $storedValue TZS"),
+          Expanded(
+              child: Numpad(
+                  onNumberPressed: onNumPressed,
+                  onClearPressed: onClear,
+                  onPlusPressed: onPlusPressed)),
+        ],
+      );
 }
 
