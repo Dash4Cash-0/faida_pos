@@ -20,8 +20,7 @@ class _CheckoutState extends State<Checkout> {
   double storedValue = 0;
   int _currentIndex = 0;
   String currentSale = "";
-  int saleListIndex = 0;
-  String tempCharge = "";
+
 
 
   late final tabs = [
@@ -81,7 +80,6 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
 
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -98,11 +96,20 @@ class _CheckoutState extends State<Checkout> {
             CheckoutButtonWidget(label:
             getChargeButtonText(),
                 onClicked: () {
+              if(input.isNotEmpty){
+                setState(() {
+                  final customAmount = double.parse(input);
+                  storedValue += customAmount;
+                  _currentSaleList.add("Custom Amount: $input TZS");
+                  input = "";
+                });
+              }
               showModalBottomSheet(
                   context: context,
                   builder: (_) => CheckoutBottomSheet(
                       itemsCount: _currentSaleList.length,
-                      currentSaleItems: _currentSaleList.join('\n')),
+                      currentSaleItems: _currentSaleList.join('\n'),
+                      storedValue: storedValue,),
                   );
                 })
             )

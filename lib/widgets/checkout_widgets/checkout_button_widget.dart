@@ -19,6 +19,7 @@ class CheckoutButtonWidget extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           fixedSize: Size(300, 60),
           backgroundColor: Colors.white,
+          side: BorderSide(color: Colors.black, style: BorderStyle.solid),
           padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16)
         ),
         onPressed: onClicked,
