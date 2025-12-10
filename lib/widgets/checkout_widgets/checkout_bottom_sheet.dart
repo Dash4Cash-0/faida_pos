@@ -44,9 +44,34 @@ class CheckoutBottomSheet extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: CheckoutButtonWidget(
                     label: "Charge: $storedValue TZS",
-                    onClicked: () => Navigator.pop(context)),
+                    onClicked: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => Dialog(
+                          backgroundColor: Colors.white,
+                          child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              SizedBox(height: 250),
+                              Positioned(top: 0, left: 0, child: CloseButton()),
+                              Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Text("Amount Recieved",
+                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  )),
+                              Positioned.fill(child: Align( alignment: Alignment.bottomCenter,
+                              child: CheckoutButtonWidget(label: "Calculate Change",
+                                  onClicked: () => Navigator.pop(context)
+                                  )
+                                )
+                              ),
+                            ],
+                          )),
+                        )),
               ))
-        ],
+          ),
+      ]
       ),
     );
   }
