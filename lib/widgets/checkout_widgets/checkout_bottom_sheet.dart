@@ -1,4 +1,5 @@
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/discount_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/receipt_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.all(8.0),
                           child: Stack(
                             children: [
-                              SizedBox(height: 250),
+                              SizedBox(height: 250, width: 400),
                               Positioned(top: 0, left: 0, child: CloseButton()),
                               Positioned.fill(
                                   child: Align(
@@ -74,6 +75,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                 ),
                                 ),
                               )),
+                              Positioned(bottom:70, child: DiscountWidget(onClicked: () => Text("Text"))),
                               Positioned.fill(child: Align( alignment: Alignment.bottomCenter,
                               child: CheckoutButtonWidget(label: "Calculate Change",
                                   onClicked: () => showDialog(
@@ -89,7 +91,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                         )),
               ))
           ),
-      ]
+        ]
       ),
     );
   }
