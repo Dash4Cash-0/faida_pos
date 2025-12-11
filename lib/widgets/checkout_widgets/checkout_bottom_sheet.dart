@@ -1,4 +1,5 @@
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/receipt_widget.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutBottomSheet extends StatelessWidget {
@@ -9,10 +10,13 @@ class CheckoutBottomSheet extends StatelessWidget {
   const CheckoutBottomSheet({super.key,
     required this.itemsCount,
     required this.currentSaleItems,
-    required this.storedValue});
+    required this.storedValue,});
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = TextEditingController();
+
     return Container(
       height: 400,
       color: Colors.white,
@@ -60,9 +64,23 @@ class CheckoutBottomSheet extends StatelessWidget {
                                     child: Text("Amount Recieved",
                                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   )),
+                              Positioned.fill(child: Align(
+                                alignment: Alignment.center,
+                                child: TextField(
+                                  controller: controller,
+                                  decoration: InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  labelText: "Total price: $storedValue TZS"
+                                ),
+                                ),
+                              )),
                               Positioned.fill(child: Align( alignment: Alignment.bottomCenter,
                               child: CheckoutButtonWidget(label: "Calculate Change",
-                                  onClicked: () => Navigator.pop(context)
+                                  onClicked: () => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => Dialog.fullscreen(
+                                        child: ReceiptWidget(amountToPay: storedValue, amountRecieved: double.tryParse(controller.text) ?? 0),
+                                      )),
                                   )
                                 )
                               ),

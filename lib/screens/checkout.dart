@@ -22,7 +22,6 @@ class _CheckoutState extends State<Checkout> {
   String currentSale = "";
 
 
-
   late final tabs = [
     () => NumpadTabWidget(onNumPressed: onNumPressed,
         onClear: onClear,
@@ -106,12 +105,14 @@ class _CheckoutState extends State<Checkout> {
               }
               showModalBottomSheet(
                   context: context,
-                  builder: (_) => CheckoutBottomSheet(
+                  builder: (_) =>
+                    CheckoutBottomSheet(
                       itemsCount: _currentSaleList.length,
                       currentSaleItems: _currentSaleList.join('\n'),
-                      storedValue: storedValue,),
+                      storedValue: storedValue),
                   );
-                })
+                  }
+                )
             )
           ],
         ),
