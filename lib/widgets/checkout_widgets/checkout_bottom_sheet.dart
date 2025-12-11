@@ -79,7 +79,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                   onClicked: () => showDialog(
                                       context: context,
                                       builder: (BuildContext context) => Dialog.fullscreen(
-                                        child: ReceiptWidget(amountToPay: storedValue, amountRecieved: double.tryParse(controller.text) ?? 0),
+                                        child: ReceiptWidget(amountToPay: storedValue, amountReceived: double.tryParse(controller.text) ?? 0),
                                       )),
                                   )
                                 )

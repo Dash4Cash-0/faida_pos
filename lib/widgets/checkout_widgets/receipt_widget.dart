@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class ReceiptWidget extends StatelessWidget {
   final double amountToPay;
-  final double amountRecieved;
+  final double amountReceived;
 
-  const ReceiptWidget({super.key, required this.amountToPay, required this.amountRecieved});
+  const ReceiptWidget({super.key, required this.amountToPay, required this.amountReceived});
   
   
   double calcChange() {
     double change = 0;
-    if(amountToPay < amountRecieved) {
-      change = amountRecieved - amountToPay;
+    if(amountToPay < amountReceived) {
+      change = amountReceived - amountToPay;
     }
     return change;
   }
