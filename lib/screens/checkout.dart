@@ -1,7 +1,7 @@
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
-import 'package:faida_pos/widgets/checkout_widgets/favorites_widget.dart';
-import 'package:faida_pos/widgets/checkout_widgets/inventory_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
+import 'package:faida_pos/widgets/checkout_widgets/inventory_tab/inventory_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/numpad_tab_widget.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
