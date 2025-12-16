@@ -27,13 +27,18 @@ class ReceiptWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Stack(
+      child: Column(
         children: [
-          Positioned(top: 0, left: 0,child: CloseButton()),
-          Positioned.fill(child: Align(
+          Align(alignment: Alignment.topLeft ,child: CloseButton()),
+          Align(
             alignment: Alignment.center,
             child: Text(getSellCompleted(calcChange()), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-          ))
+          ),
+               ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                  child: Text("New sale"))
         ],
       ),
     );

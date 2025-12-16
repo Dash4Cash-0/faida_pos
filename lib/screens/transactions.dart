@@ -33,7 +33,7 @@ class _TransactionsState extends State<Transactions> {
                   currentIndex: _currentIndex,
                   onSelectedTab: (index) {
                     setState(() {
-                      _currentIndex == index;
+                      _currentIndex = index;
                     });
                   },
                   tabs: const[

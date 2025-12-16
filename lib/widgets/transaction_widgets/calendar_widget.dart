@@ -4,6 +4,12 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    int firstDate = DateTime.now().year - 70;
+    int lastDate = DateTime.now().year + 10;
+    return Column(
+      children: [
+        CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime(firstDate), lastDate: DateTime(lastDate), onDateChanged: (DateTime date){})
+      ],
+    );
   }
 }
