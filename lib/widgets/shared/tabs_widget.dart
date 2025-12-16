@@ -1,14 +1,17 @@
+import 'package:faida_pos/widgets/shared/tab_config.dart';
 import 'package:faida_pos/widgets/shared/tab_item.dart';
 import 'package:flutter/material.dart';
 
 class TabsWidget extends StatelessWidget {
   final int currentIndex;
   final Function(int) onSelectedTab;
+  final List<TabConfig> tabs;
   
   const TabsWidget({
     super.key, 
     required this.currentIndex,
-    required this.onSelectedTab});
+    required this.onSelectedTab,
+    required this.tabs});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,14 @@ class TabsWidget extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          TabItem(tabLabel: "Numpad",
-              selectedTab: currentIndex == 0,
-              onTap: () => onSelectedTab(0)),
-          TabItem(tabLabel: "Inventory",
-              selectedTab: currentIndex == 1,
-              onTap: () => onSelectedTab(1)),
-          TabItem(tabLabel: "Favorites",
-              selectedTab: currentIndex == 2,
-              onTap: () => onSelectedTab(2)),
-        ],
+        children: List.generate(tabs.length, (index) {
+          final tab = tabs[index];
+
+          return TabItem(
+              tabLabel: tab.tabLabel,
+              selectedTab: currentIndex == index,
+              onTap: () => onSelectedTab(index));
+        })
       ),
     );
   }

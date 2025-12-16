@@ -3,6 +3,8 @@ import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/inventory_tab/inventory_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/numpad_tab_widget.dart';
+import 'package:faida_pos/widgets/shared/tab_config.dart';
+import 'package:faida_pos/widgets/shared/tab_item.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +87,11 @@ class _CheckoutState extends State<Checkout> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TabsWidget(currentIndex: _currentIndex,
+            TabsWidget(tabs: const [
+              TabConfig("Numpad"),
+              TabConfig("Inventory"),
+              TabConfig("Favorites")],
+                currentIndex: _currentIndex,
                 onSelectedTab: (index) {
               setState(() => _currentIndex = index);
                 }),
