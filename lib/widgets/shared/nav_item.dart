@@ -20,7 +20,7 @@ class NavItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: selected ? Color(0xff000000):Color(0xff000000)),
+          Icon(icon, color: selected ? Color(0xff000000):Color(0xff000000), size: 30,),
           Text(label, style: TextStyle(color: selected ? Color(0xff000000):Color(0xff000000),
               fontWeight: FontWeight.bold, fontSize: 14))
         ],
