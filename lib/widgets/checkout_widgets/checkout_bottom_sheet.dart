@@ -8,12 +8,14 @@ class CheckoutBottomSheet extends StatelessWidget {
   final String currentSaleItems;
   final double storedValue;
   final VoidCallback onNewSale;
+  final Function(String) addDiscount;
 
   const CheckoutBottomSheet({super.key,
     required this.itemsCount,
     required this.currentSaleItems,
     required this.storedValue,
-    required this.onNewSale});
+    required this.onNewSale,
+    required this.addDiscount});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,10 @@ class CheckoutBottomSheet extends StatelessWidget {
                                 ),
                               SizedBox(height: 24),
                               Text("Add Discount"),
-                              DiscountWidget(onClicked: () => Text("Text")),
+                              DiscountWidget(onDiscountSelected: (discount) {
+                                addDiscount(discount);
+                              },
+                              ),
                               Spacer(),
                               CheckoutButtonWidget(label: "Calculate Change",
                                   onClicked: () => showDialog(

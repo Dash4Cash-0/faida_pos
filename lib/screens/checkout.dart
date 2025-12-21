@@ -22,6 +22,7 @@ class _CheckoutState extends State<Checkout> {
   double storedValue = 0;
   int _currentIndex = 0;
   String currentSale = "";
+  final controller = TextEditingController();
 
 
   late final tabs = [
@@ -71,6 +72,26 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void addDiscount(String discount){
+
+    setState(() {
+      switch (discount) {
+        case "5%":
+          storedValue *= 0.95;
+          break;
+        case "10%":
+          storedValue *= 0.90;
+          break;
+        case "15%":
+          storedValue *=0.85;
+          break;
+        case "...":
+          //_showCustomDialog();
+          break;
+      }
+    }
+    );
+  }
 
 
   @override
@@ -111,7 +132,8 @@ class _CheckoutState extends State<Checkout> {
                       itemsCount: _currentSaleList.length,
                       currentSaleItems: _currentSaleList.join('\n'),
                       storedValue: storedValue,
-                      onNewSale: resetSale,),
+                      onNewSale: resetSale,
+                      addDiscount: addDiscount),
                   );
                   }
                 )
