@@ -7,7 +7,6 @@ class CheckoutBottomSheet extends StatelessWidget {
   final int itemsCount;
   final String currentSaleItems;
   final ValueNotifier<double> storedValueNotifier;
-  //final double storedValue;
   final VoidCallback onNewSale;
   final Function(String) addDiscount;
 
@@ -15,7 +14,6 @@ class CheckoutBottomSheet extends StatelessWidget {
     required this.itemsCount,
     required this.currentSaleItems,
     required this.storedValueNotifier,
-    //required this.storedValue,
     required this.onNewSale,
     required this.addDiscount});
 
@@ -42,16 +40,11 @@ class CheckoutBottomSheet extends StatelessWidget {
                               fontWeight: FontWeight.bold, fontSize: 24)),
                     )
                 ),
-                Positioned(
-                    top: 60,
-                    left: 0,
-                    right: 0,
-                    bottom: 80,
+                Positioned(top: 60, left: 0, right: 0, bottom: 80,
                     child: SingleChildScrollView(
                       child: Padding(
                           padding: EdgeInsets.all(8),
-                          child: Text(
-                              currentSaleItems,
+                          child: Text( currentSaleItems,
                               style: TextStyle(fontSize: 18))),
                     )
                 ),
@@ -60,35 +53,21 @@ class CheckoutBottomSheet extends StatelessWidget {
                         alignment: Alignment.bottomCenter,
                         child: CheckoutButtonWidget(
                           label: "Charge: ${storedValueNotifier.value} TZS",
-                          onClicked: () =>
-                              showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      Dialog(
-                                          backgroundColor: Colors.white,
-                                          child: SizedBox(
-                                            height: 320,
-                                            width: 400,
-                                            child: Padding(
-                                                padding: EdgeInsets.all(8.0),
+                          onClicked: () => showDialog<String>( context: context, builder: (BuildContext context) =>
+                                      Dialog( backgroundColor: Colors.white,
+                                          child: SizedBox(height: 320, width: 400,
+                                            child: Padding( padding: EdgeInsets.all(8.0),
                                                 child: Column(
                                                   children: [
                                                     SizedBox(height: 56,
-                                                        child: Stack(
-                                                          alignment: Alignment
-                                                              .center,
+                                                        child: Stack( alignment: Alignment.center,
                                                           children: [
-                                                            Align(
-                                                                alignment: Alignment
-                                                                    .centerLeft,
+                                                            Align(alignment: Alignment.centerLeft,
                                                                 child: CloseButton()
                                                             ),
-                                                            Text(
-                                                                "Amount Received",
-                                                                style: TextStyle(
+                                                            Text("Amount Received", style: TextStyle(
                                                                     fontSize: 18,
-                                                                    fontWeight: FontWeight
-                                                                        .bold)),
+                                                                    fontWeight: FontWeight.bold)),
                                                           ],
                                                         )
                                                     ),
@@ -111,22 +90,17 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                     Spacer(),
                                                     CheckoutButtonWidget(
                                                       label: "Calculate Change",
-                                                      onClicked: () =>
-                                                          showDialog(
-                                                              context: context,
-                                                              builder: (
-                                                                  BuildContext context) =>
-                                                                  Dialog
-                                                                      .fullscreen(
-                                                                    child: ReceiptWidget(
-                                                                        amountToPay: storedValueNotifier.value,
-                                                                        onNewSale: onNewSale,
-                                                                        amountReceived: double
-                                                                            .tryParse(
-                                                                            controller
-                                                                                .text) ??
-                                                                            0),
-                                                                  )),
+                                                      onClicked: () => showDialog(context: context, builder: (
+                                                          BuildContext context) => Dialog.fullscreen(
+                                                        child: ReceiptWidget(
+                                                            amountToPay: storedValueNotifier.value,
+                                                            onNewSale: onNewSale,
+                                                            amountReceived: double
+                                                                .tryParse(
+                                                                controller
+                                                                    .text) ??
+                                                                0),
+                                                      )),
                                                     )
                                                   ],
                                                 )),
@@ -138,7 +112,7 @@ class CheckoutBottomSheet extends StatelessWidget {
               ]
           ),
         );
-    }
+        }
     );
   }
 }
