@@ -19,10 +19,10 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   String input = "";
   String partValues = "";
-  double storedValue = 0;
+  //double storedValue = 0;
   int _currentIndex = 0;
   String currentSale = "";
-  final controller = TextEditingController();
+  final storedValueNotifier = ValueNotifier<double>(0);
 
 
   late final tabs = [
@@ -31,7 +31,7 @@ class _CheckoutState extends State<Checkout> {
         onPlusPressed: onPlusPressed,
         value: input,
         partValues: partValues,
-        storedValue: storedValue),
+        storedValue: storedValueNotifier.value),
     () => InventoryWidget(),
     () => FavoritesWidget(),
   ];
@@ -47,7 +47,7 @@ class _CheckoutState extends State<Checkout> {
   void onClear() {
     setState(() {
       input = "";
-      storedValue = 0;
+      storedValueNotifier.value = 0;
       partValues = "";
       _currentSaleList.clear();
     });
@@ -57,7 +57,7 @@ class _CheckoutState extends State<Checkout> {
     if(input.isEmpty) return;
     setState(() {
       final current = double.parse(input);
-      storedValue += current;
+      storedValueNotifier.value += current;
       _currentSaleList.add("Custom Amount: $input TZS");
       input = "";
     });
@@ -65,7 +65,7 @@ class _CheckoutState extends State<Checkout> {
 
   void resetSale(){
     setState(() {
-      storedValue = 0;
+      storedValueNotifier.value = 0;
       input = "";
       partValues = "";
       _currentSaleList.clear();
@@ -77,13 +77,13 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       switch (discount) {
         case "5%":
-          storedValue *= 0.95;
+          storedValueNotifier.value *= 0.95;
           break;
         case "10%":
-          storedValue *= 0.90;
+          storedValueNotifier.value *= 0.90;
           break;
         case "15%":
-          storedValue *=0.85;
+          storedValueNotifier.value *=0.85;
           break;
         case "...":
           //_showCustomDialog();
@@ -120,7 +120,7 @@ class _CheckoutState extends State<Checkout> {
               if(input.isNotEmpty){
                 setState(() {
                   final customAmount = double.parse(input);
-                  storedValue += customAmount;
+                  storedValueNotifier.value += customAmount;
                   _currentSaleList.add("Custom Amount: $input TZS");
                   input = "";
                 });
@@ -131,7 +131,7 @@ class _CheckoutState extends State<Checkout> {
                     CheckoutBottomSheet(
                       itemsCount: _currentSaleList.length,
                       currentSaleItems: _currentSaleList.join('\n'),
-                      storedValue: storedValue,
+                      storedValueNotifier: storedValueNotifier,
                       onNewSale: resetSale,
                       addDiscount: addDiscount),
                   );
