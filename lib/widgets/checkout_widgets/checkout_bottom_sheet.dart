@@ -53,44 +53,53 @@ class CheckoutBottomSheet extends StatelessWidget {
                     label: "Charge: $storedValue TZS",
                     onClicked: () => showDialog<String>(
                         context: context,
-                        builder: (BuildContext context) => Dialog(
+                        builder: (BuildContext context) =>
+                            Dialog(
                           backgroundColor: Colors.white,
-                          child: Padding(
+                          child: SizedBox(
+                            height: 320,
+                            width: 400,
+                            child: Padding(
                               padding: EdgeInsets.all(8.0),
-                          child: Stack(
+                          child: Column(
                             children: [
-                              SizedBox(height: 250, width: 400),
-                              Positioned(top: 0, left: 0, child: CloseButton()),
-                              Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text("Amount Recieved",
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  )),
-                              Positioned.fill(child: Align(
-                                alignment: Alignment.center,
-                                child: TextField(
+                                SizedBox(height: 56,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: CloseButton()
+                                      ),
+                                      Text("Amount Received",
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                    ],
+                                  )
+                                ),
+                              SizedBox(height: 24),
+                              TextField(
                                   controller: controller,
                                   decoration: InputDecoration(
                                   border: UnderlineInputBorder(),
                                   labelText: "Total price: $storedValue TZS"
                                 ),
                                 ),
-                              )),
-                              Positioned(bottom:70, child: DiscountWidget(onClicked: () => Text("Text"))),
-                              Positioned.fill(child: Align( alignment: Alignment.bottomCenter,
-                              child: CheckoutButtonWidget(label: "Calculate Change",
+                              SizedBox(height: 24),
+                              Text("Add Discount"),
+                              DiscountWidget(onClicked: () => Text("Text")),
+                              Spacer(),
+                              CheckoutButtonWidget(label: "Calculate Change",
                                   onClicked: () => showDialog(
                                       context: context,
                                       builder: (BuildContext context) => Dialog.fullscreen(
                                         child: ReceiptWidget(amountToPay: storedValue, onNewSale: onNewSale, amountReceived: double.tryParse(controller.text) ?? 0),
                                       )),
                                   )
-                                )
-                              ),
                             ],
                           )),
-                        )),
+                        )
+                    )
+                  ),
               ))
           ),
         ]

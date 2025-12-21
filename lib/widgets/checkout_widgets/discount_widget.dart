@@ -10,28 +10,25 @@ class DiscountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          discountButton("5%", onClicked, Colors.yellow),
-          discountButton("10%", onClicked, Colors.yellowAccent),
-          discountButton("15%", onClicked, Colors.orange),
-          discountButton("Custom", onClicked, Colors.orangeAccent),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        discountButton("5%", onClicked, Colors.yellow),
+        discountButton("10%", onClicked, Colors.yellowAccent),
+        discountButton("15%", onClicked, Colors.orange),
+        discountButton("...", onClicked, Colors.orangeAccent),
+      ],
     );
   }
 
   Widget discountButton(String label, VoidCallback onClicked, Color bgColor) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-          minimumSize: Size(55, 40),
+          minimumSize: Size(55, 45),
           backgroundColor: bgColor,
-          //fixedSize: Size(73, 10),
           side: BorderSide(color: Colors.black, style: BorderStyle.solid)
         ),
         onPressed: onClicked,
-        child: Text(label, style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold),));
+        child: Text(label, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),));
   }
 }
