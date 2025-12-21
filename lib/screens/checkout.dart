@@ -6,6 +6,7 @@ import 'package:faida_pos/widgets/checkout_widgets/numpad_tab_widget.dart';
 import 'package:faida_pos/widgets/shared/tab_config.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:faida_pos/utils/checkout_utils/charge_button_text.dart';
 
 
 class Checkout extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CheckoutState extends State<Checkout> {
     () => FavoritesWidget(),
   ];
 
-  final _currentSaleList = [];
+  final List<String> _currentSaleList = [];
 
   void onNumPressed(String digit){
     setState (() {
@@ -70,21 +71,7 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
-  String getChargeButtonText() {
-    if (_currentSaleList.length > 1) {
-      return "Review ${_currentSaleList.length} items";
-    } else if (_currentSaleList.length == 1 && input.isEmpty) {
-      final total = _currentSaleList.fold<double>(0, (sum, item) {
-        final number = int.parse(item.split(": ")[1].split(" ")[0]);
-        return sum + number;
-      });
-      return "Charge: $total TZS";
-    } else if (input.isNotEmpty) {
-      return "Charge: $input TZS";
-    } else {
-      return "Charge: 0 TZS";
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +94,7 @@ class _CheckoutState extends State<Checkout> {
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
-            getChargeButtonText(),
+            getChargeButtonText(currentSaleList: _currentSaleList, input: input),
                 onClicked: () {
               if(input.isNotEmpty){
                 setState(() {
