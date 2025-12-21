@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class ReceiptWidget extends StatelessWidget {
   final double amountToPay;
   final double amountReceived;
+  final VoidCallback onNewSale;
 
-  const ReceiptWidget({super.key, required this.amountToPay, required this.amountReceived});
+  const ReceiptWidget({
+    super.key,
+    required this.amountToPay,
+    required this.amountReceived,
+    required this.onNewSale});
   
   
   double calcChange() {
@@ -36,6 +41,7 @@ class ReceiptWidget extends StatelessWidget {
           ),
                ElevatedButton(
                   onPressed: () {
+                    onNewSale();
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   child: Text("New sale"))

@@ -4,7 +4,6 @@ import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widge
 import 'package:faida_pos/widgets/checkout_widgets/inventory_tab/inventory_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/numpad_tab_widget.dart';
 import 'package:faida_pos/widgets/shared/tab_config.dart';
-import 'package:faida_pos/widgets/shared/tab_item.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -62,6 +61,15 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void resetSale(){
+    setState(() {
+      storedValue = 0;
+      input = "";
+      partValues = "";
+      _currentSaleList.clear();
+    });
+  }
+
   String getChargeButtonText() {
     if (_currentSaleList.length > 1) {
       return "Review ${_currentSaleList.length} items";
@@ -115,7 +123,8 @@ class _CheckoutState extends State<Checkout> {
                     CheckoutBottomSheet(
                       itemsCount: _currentSaleList.length,
                       currentSaleItems: _currentSaleList.join('\n'),
-                      storedValue: storedValue),
+                      storedValue: storedValue,
+                      onNewSale: resetSale,),
                   );
                   }
                 )

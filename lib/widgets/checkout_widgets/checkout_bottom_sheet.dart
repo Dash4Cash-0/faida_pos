@@ -7,11 +7,13 @@ class CheckoutBottomSheet extends StatelessWidget {
   final int itemsCount;
   final String currentSaleItems;
   final double storedValue;
+  final VoidCallback onNewSale;
 
   const CheckoutBottomSheet({super.key,
     required this.itemsCount,
     required this.currentSaleItems,
-    required this.storedValue,});
+    required this.storedValue,
+    required this.onNewSale});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                   onClicked: () => showDialog(
                                       context: context,
                                       builder: (BuildContext context) => Dialog.fullscreen(
-                                        child: ReceiptWidget(amountToPay: storedValue, amountReceived: double.tryParse(controller.text) ?? 0),
+                                        child: ReceiptWidget(amountToPay: storedValue, onNewSale: onNewSale, amountReceived: double.tryParse(controller.text) ?? 0),
                                       )),
                                   )
                                 )
