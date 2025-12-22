@@ -95,11 +95,8 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                         child: ReceiptWidget(
                                                             amountToPay: storedValueNotifier.value,
                                                             onNewSale: onNewSale,
-                                                            amountReceived: double
-                                                                .tryParse(
-                                                                controller
-                                                                    .text) ??
-                                                                0),
+                                                            amountReceived: double.tryParse(
+                                                                controller.text) ?? 0),
                                                       )),
                                                     )
                                                   ],

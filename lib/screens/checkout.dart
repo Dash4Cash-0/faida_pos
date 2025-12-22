@@ -23,6 +23,7 @@ class _CheckoutState extends State<Checkout> {
   int _currentIndex = 0;
   String currentSale = "";
   final storedValueNotifier = ValueNotifier<double>(0);
+  final controller = TextEditingController();
 
 
   late final tabs = [
@@ -86,13 +87,56 @@ class _CheckoutState extends State<Checkout> {
           storedValueNotifier.value *=0.85;
           break;
         case "...":
-          //_showCustomDialog();
+          _showCustomDialog();
           break;
+       }
       }
-    }
     );
   }
 
+  void _showCustomDialog(){
+    setState(() {
+      showDialog(context: context, builder: (BuildContext context) => Dialog(
+        backgroundColor: Colors.white,
+        child: SizedBox(width: 400, height: 200,
+        child: Column(
+          children: [
+            SizedBox(height: 56,
+                child: Stack( alignment: Alignment.center,
+                  children: [
+                    Align(alignment: Alignment.centerLeft,
+                        child: CloseButton()
+                    ),
+                    Text("Custom discount", style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                  ],
+                )
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: controller,
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxWidth: 100),
+              suffixIcon: Icon(Icons.percent),
+              border: OutlineInputBorder(),
+            )
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(color: Colors.black, style: BorderStyle.solid)
+            ),
+                onPressed: () => {
+            storedValueNotifier.value *= 1.0 - (double.parse(controller.text) / 100),
+                  controller.text = "",
+            Navigator.pop(context)},
+                child: Text("Add discount", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),))
+          ],
+        ))
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
