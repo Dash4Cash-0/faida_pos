@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
@@ -19,11 +20,11 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   String input = "";
   String partValues = "";
-  //double storedValue = 0;
   int _currentIndex = 0;
   String currentSale = "";
   final storedValueNotifier = ValueNotifier<double>(0);
   final controller = TextEditingController();
+  late final l10n = AppLocalizations.of(context)!;
 
 
   late final tabs = [
@@ -107,7 +108,7 @@ class _CheckoutState extends State<Checkout> {
                     Align(alignment: Alignment.centerLeft,
                         child: CloseButton()
                     ),
-                    Text("Custom discount", style: TextStyle(
+                    Text(l10n.customDiscount, style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold)),
                   ],
@@ -131,7 +132,7 @@ class _CheckoutState extends State<Checkout> {
             storedValueNotifier.value *= 1.0 - (double.parse(controller.text) / 100),
                   controller.text = "",
             Navigator.pop(context)},
-                child: Text("Add discount", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),))
+                child: Text(l10n.addDiscount, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),))
           ],
         ))
       ));
@@ -147,10 +148,10 @@ class _CheckoutState extends State<Checkout> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TabsWidget(tabs: const [
-              TabConfig("Numpad"),
-              TabConfig("Inventory"),
-              TabConfig("Favorites")],
+            TabsWidget(tabs: [
+              TabConfig(l10n.numpad),
+              TabConfig(l10n.inventory),
+              TabConfig(l10n.favorites)],
                 currentIndex: _currentIndex,
                 onSelectedTab: (index) {
               setState(() => _currentIndex = index);
@@ -165,7 +166,7 @@ class _CheckoutState extends State<Checkout> {
                 setState(() {
                   final customAmount = double.parse(input);
                   storedValueNotifier.value += customAmount;
-                  _currentSaleList.add("Custom Amount: $input TZS");
+                  _currentSaleList.add("${l10n.customAmount}: $input TZS");
                   input = "";
                 });
               }
