@@ -18,11 +18,12 @@
   "itemsCap": "Vitu",
   "charge": "Shtaka",
   "edit": "Hariri",
-  "totalPrice": "Bei jumla: ",
+  "totalPrice": "Bei jumla",
   "calculateChange": "Kuhesabu Mabadiliko",
   "currentSale": "Uuzaji wa sasa",
-  "total": "Jumla: ",
+  "total": "Jumla",
   "newSale": "Mauzo Mapya",
   "checkout": "Malipo",
-  "transactions": "Shughuli"
+  "transactions": "Shughuli",
+  "language": "Lugha"
 }

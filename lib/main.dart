@@ -29,13 +29,13 @@ class MyApp extends StatefulWidget {
 
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => MyAppState();
 
-  static _MyAppState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>();
+  static MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<MyAppState>();
 }
 
-class _MyAppState extends State<MyApp>{
+class MyAppState extends State<MyApp>{
   Locale _locale = const Locale("en");
 
   void setLocale(Locale locale) {

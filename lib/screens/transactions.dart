@@ -1,3 +1,5 @@
+
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/widgets/shared/tab_config.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:faida_pos/widgets/transaction_widgets/calendar_widget.dart';
@@ -23,6 +25,7 @@ int _currentIndex = 0;
 class _TransactionsState extends State<Transactions> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -36,10 +39,10 @@ class _TransactionsState extends State<Transactions> {
                       _currentIndex = index;
                     });
                   },
-                  tabs: const[
-                    TabConfig("Today"),
-                    TabConfig("This Week"),
-                    TabConfig("Calendar"),
+                  tabs: [
+                    TabConfig(l10n.today),
+                    TabConfig(l10n.thisWeek),
+                    TabConfig(l10n.calendar),
                   ]
                   ),
               Expanded(child: tabs[_currentIndex]()),

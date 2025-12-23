@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ReceiptWidget extends StatelessWidget {
@@ -30,6 +31,7 @@ class ReceiptWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       color: Colors.white,
       child: Column(
@@ -44,7 +46,7 @@ class ReceiptWidget extends StatelessWidget {
                     onNewSale();
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                  child: Text("New sale"))
+                  child: Text(l10n.newSale))
         ],
       ),
     );

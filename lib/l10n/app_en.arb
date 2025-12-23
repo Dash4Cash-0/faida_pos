@@ -18,12 +18,13 @@
   "itemsCap": "Items",
   "charge": "Charge",
   "edit": "Edit",
-  "totalPrice": "Total price: ",
+  "totalPrice": "Total price",
   "calculateChange": "Calculate Change",
   "currentSale": "Current Sale",
-  "total": "Total: ",
+  "total": "Total",
   "newSale": "New Sale",
   "checkout": "Checkout",
-  "transactions": "Transactions"
+  "transactions": "Transactions",
+  "language": "Language"
 
 }

@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/discount_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/receipt_widget.dart';
@@ -21,6 +22,7 @@ class CheckoutBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final controller = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
 
     return ValueListenableBuilder(
         valueListenable: storedValueNotifier,
@@ -35,7 +37,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                 Positioned.fill(
                     child: Align(
                       alignment: Alignment.topCenter,
-                      child: Text("Current Sale($itemsCount)",
+                      child: Text("${l10n.currentSale}($itemsCount)",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24)),
                     )
@@ -52,7 +54,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                     child: Align(
                         alignment: Alignment.bottomCenter,
                         child: CheckoutButtonWidget(
-                          label: "Charge: ${storedValueNotifier.value} TZS",
+                          label: "${l10n.charge}: ${storedValueNotifier.value} TZS",
                           onClicked: () => showDialog<String>( context: context, builder: (BuildContext context) =>
                                       Dialog( backgroundColor: Colors.white,
                                           child: SizedBox(height: 320, width: 400,
@@ -65,7 +67,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                             Align(alignment: Alignment.centerLeft,
                                                                 child: CloseButton()
                                                             ),
-                                                            Text("Amount Received", style: TextStyle(
+                                                            Text(l10n.amountReceived, style: TextStyle(
                                                                     fontSize: 18,
                                                                     fontWeight: FontWeight.bold)),
                                                           ],
@@ -76,11 +78,11 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                       controller: controller,
                                                       decoration: InputDecoration(
                                                           border: UnderlineInputBorder(),
-                                                          labelText: "Total price: ${storedValueNotifier.value} TZS"
+                                                          labelText: "${l10n.totalPrice}: ${storedValueNotifier.value} TZS"
                                                       ),
                                                     ),
                                                     SizedBox(height: 24),
-                                                    Text("Add Discount"),
+                                                    Text(l10n.addDiscount),
                                                     DiscountWidget(
                                                       onDiscountSelected: (
                                                           discount) {
@@ -89,7 +91,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                     ),
                                                     Spacer(),
                                                     CheckoutButtonWidget(
-                                                      label: "Calculate Change",
+                                                      label: l10n.calculateChange,
                                                       onClicked: () => showDialog(context: context, builder: (
                                                           BuildContext context) => Dialog.fullscreen(
                                                         child: ReceiptWidget(

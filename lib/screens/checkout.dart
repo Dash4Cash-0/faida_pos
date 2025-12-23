@@ -60,7 +60,7 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       final current = double.parse(input);
       storedValueNotifier.value += current;
-      _currentSaleList.add("Custom Amount: $input TZS");
+      _currentSaleList.add("${l10n.customAmount}: $input TZS");
       input = "";
     });
   }
@@ -160,7 +160,9 @@ class _CheckoutState extends State<Checkout> {
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
-            getChargeButtonText(currentSaleList: _currentSaleList, input: input),
+            getChargeButtonText(currentSaleList: _currentSaleList,
+                input: input,
+                review: l10n.review, items: l10n.items, charge: l10n.charge),
                 onClicked: () {
               if(input.isNotEmpty){
                 setState(() {
