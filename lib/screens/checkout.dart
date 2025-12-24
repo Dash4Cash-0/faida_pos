@@ -1,4 +1,6 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
+import 'package:faida_pos/models/product.dart';
+import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
@@ -26,6 +28,33 @@ class _CheckoutState extends State<Checkout> {
   final controller = TextEditingController();
   late final l10n = AppLocalizations.of(context)!;
 
+  List<Product> _favoriteProducts = [];
+  bool _isLoadingProducts = true;
+
+  @override
+  void initState(){
+    super.initState();
+    _loadFavoriteProducts();
+  }
+
+  Future<void> _loadFavoriteProducts() async {
+    final products = await DatabaseService.instance.getFavoriteProducts();
+    setState(() {
+      _favoriteProducts = products;
+      _isLoadingProducts = false;
+    });
+  }
+
+  void _onProductTapped(Product product) {
+    setState(() {
+      storedValueNotifier.value += product.price;
+      _currentSaleList.add("${product.name}: ${product.price} TZS");
+    });
+  }
+
+  void _onAddProductComplete() {
+    _loadFavoriteProducts();
+  }
 
   late final tabs = [
     () => NumpadTabWidget(onNumPressed: onNumPressed,
@@ -35,7 +64,12 @@ class _CheckoutState extends State<Checkout> {
         partValues: partValues,
         storedValue: storedValueNotifier.value),
     () => InventoryWidget(),
-    () => FavoritesWidget(),
+    () => FavoritesWidget(
+      products: _favoriteProducts,
+      isLoading: _isLoadingProducts,
+      onProductTap: _onProductTapped,
+      onProductAdded: _onAddProductComplete,
+    ),
   ];
 
   final List<String> _currentSaleList = [];

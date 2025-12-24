@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:faida_pos/models/product.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseService {
 
@@ -14,7 +17,12 @@ class DatabaseService {
   }
 
   Future<Database> initDb() async {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
     String databasesPath = await getDatabasesPath();
+    print('DB PATH = $databasesPath');
     String path = join(databasesPath,'faida.db');
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
@@ -28,6 +36,7 @@ class DatabaseService {
     description TEXT,
     price REAL,
     image TEXT,
+    isFavorite INTEGER DEFAULT 0
     )
     ''');
   }
@@ -37,14 +46,35 @@ class DatabaseService {
     return await db.insert('products', product.toMap());
   }
 
-  Future<List<Map<String, dynamic>>> queryAllProducts() async {
+  Future<List<Product>> getAllProducts() async {
     Database db = await instance.db;
-    return await db.query('products');
+    final maps = await db.query('products');
+    return maps.map((map) => Product.fromMap(map)).toList();
+  }
+
+  Future<List<Product>> getFavoriteProducts() async {
+    Database db = await instance.db;
+    final maps = await db.query(
+      'products',
+      where: 'isFavorite = ?',
+      whereArgs: [1],
+    );
+    return maps.map((map) => Product.fromMap(map)).toList();
   }
 
   Future<int> updateProduct(Product product) async {
     Database db = await instance.db;
     return await db.update('products', product.toMap(), where: 'id = ?', whereArgs: [product.id]);
+  }
+
+  Future<int> toggleFavorite(int productId, bool isFavorite) async {
+    Database db = await instance.db;
+    return await db.update(
+      'products',
+      {'isFavorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [productId],
+    );
   }
 
   Future<int> deleteProduct(int id) async {
