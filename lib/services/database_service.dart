@@ -22,7 +22,6 @@ class DatabaseService {
       databaseFactory = databaseFactoryFfi;
     }
     String databasesPath = await getDatabasesPath();
-    print('DB PATH = $databasesPath');
     String path = join(databasesPath,'faida.db');
 
     return await openDatabase(path, version: 1, onCreate: _onCreate);
