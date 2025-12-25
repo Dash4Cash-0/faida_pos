@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -51,28 +52,29 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Product')),
+      appBar: AppBar(title: Text(l10n.addProduct)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Product Name'),
+              decoration: InputDecoration(labelText: l10n.productName),
             ),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(labelText: l10n.description),
             ),
             TextField(
               controller: _priceController,
-              decoration: const InputDecoration(labelText: 'Price'),
+              decoration: InputDecoration(labelText: l10n.price),
               keyboardType: TextInputType.number,
             ),
 
             CheckboxListTile(
-              title: const Text('Add to Favorites'),
+              title: Text(l10n.addToFav),
               value: _isFavorite,
               onChanged: (value) {
                 setState(() => _isFavorite = value ?? false);
@@ -87,7 +89,7 @@ class _AddProductState extends State<AddProduct> {
                   setState(() => _imageFile = File(photo.path));
                 }
               },
-              child: const Text('Take Photo'),
+              child: Text(l10n.takePhoto),
             ),
 
             if (_imageFile != null)
@@ -97,7 +99,7 @@ class _AddProductState extends State<AddProduct> {
 
             ElevatedButton(
               onPressed: _saveProduct,
-              child: const Text('Save Product'),
+              child: Text(l10n.saveProduct),
             ),
           ],
         ),

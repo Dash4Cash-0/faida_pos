@@ -25,6 +25,13 @@
   "newSale": "New Sale",
   "checkout": "Checkout",
   "transactions": "Transactions",
-  "language": "Language"
+  "language": "Language",
+  "addProduct": "Add Product",
+  "productName": "Product Name",
+  "addToFav": "Add to Favorites",
+  "takePhoto": "Take Photo",
+  "saveProduct": "Save Product",
+  "description": "Description",
+  "price": "Price"
 
 }

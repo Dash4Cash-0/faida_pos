@@ -25,5 +25,12 @@
   "newSale": "Mauzo Mapya",
   "checkout": "Malipo",
   "transactions": "Shughuli",
-  "language": "Lugha"
+  "language": "Lugha",
+  "addProduct": "Ongeza Bidhaa",
+  "productName": "Jina la Bidhaa",
+  "addToFav": "Ongeza kwa Vipendwa",
+  "takePhoto": "Piga Picha",
+  "saveProduct": "Hifadhi Bidhaa",
+  "description": "Maelezo",
+  "price": "Bei"
 }
