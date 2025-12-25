@@ -8,7 +8,7 @@ String getChargeButtonText({
     return "$review ${currentSaleList.length} $items";
   } else if (currentSaleList.length == 1 && input.isEmpty) {
     final total = currentSaleList.fold<double>(0, (sum, item) {
-      final number = int.parse(item.split(": ")[1].split(" ")[0]);
+      final number = double.parse(item.split(": ")[1].split(" ")[0]);
       return sum + number;
     });
     return "$charge: $total TZS";

@@ -29,10 +29,10 @@ class DatabaseService {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
     CREATE TABLE products (
-    id INTEGER PRIMARY_KEY,
-    name TEXT,
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
     description TEXT,
-    price REAL,
+    price REAL NOT NULL,
     image TEXT,
     isFavorite INTEGER DEFAULT 0
     )

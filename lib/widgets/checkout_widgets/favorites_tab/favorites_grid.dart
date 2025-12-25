@@ -62,8 +62,8 @@ class FavoritesGrid extends StatelessWidget {
                 ),
               )
             else
-              const Expanded(
-                child: Icon(Icons.shopping_bag, size: 40),
+              Expanded(
+                child: Text(product.name.substring(0,2), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               ),
             Padding(
               padding: const EdgeInsets.all(4.0),
