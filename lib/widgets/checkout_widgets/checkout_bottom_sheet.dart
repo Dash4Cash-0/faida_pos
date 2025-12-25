@@ -73,7 +73,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                           ],
                                                         )
                                                     ),
-                                                    SizedBox(height: 24),
+                                                    SizedBox(height: 8),
                                                     TextField(
                                                       controller: controller,
                                                       decoration: InputDecoration(
@@ -81,7 +81,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                           labelText: "${l10n.totalPrice}: ${storedValueNotifier.value} TZS"
                                                       ),
                                                     ),
-                                                    SizedBox(height: 24),
+                                                    SizedBox(height: 12),
                                                     Text(l10n.addDiscount),
                                                     DiscountWidget(
                                                       onDiscountSelected: (
@@ -89,7 +89,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                                                         addDiscount(discount);
                                                       },
                                                     ),
-                                                    Spacer(),
+                                                    SizedBox(height: 12),
                                                     CheckoutButtonWidget(
                                                       label: l10n.calculateChange,
                                                       onClicked: () => showDialog(context: context, builder: (

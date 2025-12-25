@@ -21,7 +21,7 @@ class ImageService {
 
       await imageFile.copy(savedPath);
 
-      return savedPath; // This is what you store in SQLite
+      return savedPath;
     } catch (e) {
       throw Exception('Failed to save image: $e');
     }
