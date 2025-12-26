@@ -57,7 +57,8 @@ class _CheckoutState extends State<Checkout> {
   }
 
   late final tabs = [
-    () => NumpadTabWidget(onNumPressed: onNumPressed,
+    () => NumpadTabWidget(
+        onNumPressed: onNumPressed,
         onClear: onClear,
         onPlusPressed: onPlusPressed,
         value: input,

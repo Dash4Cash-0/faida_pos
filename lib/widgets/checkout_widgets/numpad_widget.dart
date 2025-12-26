@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class Numpad extends StatelessWidget {
 
   final Function(String) onNumberPressed;
@@ -14,7 +13,6 @@ class Numpad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return
           GridView.count(
           crossAxisCount: 3,
@@ -26,7 +24,7 @@ class Numpad extends StatelessWidget {
               final number = (index + 1).toString();
               return numButton(number, () => onNumberPressed(number));
             }),
-            
+
             numButton("C", onClearPressed),
             numButton("0", () => onNumberPressed("0")),
             numButton("+", onPlusPressed)
@@ -35,14 +33,20 @@ class Numpad extends StatelessWidget {
   }
 
   Widget numButton(String label, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey)
-        ),
-        child: Text(label, style: TextStyle(fontSize: 24)),
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+
+        splashColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade50,
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey)
+          ),
+          child: Text(label, style: TextStyle(fontSize: 24)),
+      )
       ),
     );
   }
