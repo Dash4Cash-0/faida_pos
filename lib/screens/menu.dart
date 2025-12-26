@@ -1,5 +1,7 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/main.dart';
+import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
+import 'package:faida_pos/widgets/shared/add_product.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -18,18 +20,23 @@ class Menu extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          ElevatedButton(onPressed: () => showDialog(context: context, builder: (BuildContext context) =>
+          MenuButton(label: "Items",
+              onClicked: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => AddProduct()));
+              }),
+          MenuButton(label: l10n.language, onClicked: () => showDialog(context: context, builder: (BuildContext context) =>
           Dialog(
+            constraints: BoxConstraints(minWidth: 300, maxHeight: 190),
             backgroundColor: Colors.white,
             child: Column(
               children: [
-                  ElevatedButton(onPressed: () {MyApp.of(context)?.setLocale(const Locale("en"));}, child: Text("English")),
-                  ElevatedButton(onPressed: () {MyApp.of(context)?.setLocale(const Locale("sw"));}, child: Text("Swahili")),
+                  SizedBox(height: 30),
+                  MenuButton(label: "English", onClicked: () {MyApp.of(context)?.setLocale(const Locale("en"));}),
+                  MenuButton(label: "Swahili", onClicked: () {MyApp.of(context)?.setLocale(const Locale("sw"));}),
               ],
             ),
-          )), child: Text(l10n.language)),
-
-
+          ))),
         ],
       ),
     );

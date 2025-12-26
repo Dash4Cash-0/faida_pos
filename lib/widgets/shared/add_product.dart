@@ -45,16 +45,17 @@ class _AddProductState extends State<AddProduct> {
         isFavorite: _isFavorite);
 
     await DatabaseService.instance.insertProduct(product);
+    if(!mounted) return;
     Navigator.pop(context, true);
   }
-
 
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.addProduct)),
+      appBar: AppBar(title: Text(l10n.addProduct), backgroundColor: Colors.white,),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -82,6 +83,14 @@ class _AddProductState extends State<AddProduct> {
             ),
 
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  textStyle: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)
+              ),
               onPressed: () async {
                 final picker = ImagePicker();
                 final photo = await picker.pickImage(source: ImageSource.camera);
@@ -98,6 +107,14 @@ class _AddProductState extends State<AddProduct> {
             const Spacer(),
 
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,)
+              ),
               onPressed: _saveProduct,
               child: Text(l10n.saveProduct),
             ),
