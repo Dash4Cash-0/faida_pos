@@ -20,7 +20,7 @@ class Menu extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          MenuButton(label: "Items",
+          MenuButton(label: l10n.itemsCap,
               onClicked: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => AddProduct()));
@@ -32,8 +32,8 @@ class Menu extends StatelessWidget {
             child: Column(
               children: [
                   SizedBox(height: 30),
-                  MenuButton(label: "English", onClicked: () {MyApp.of(context)?.setLocale(const Locale("en"));}),
-                  MenuButton(label: "Swahili", onClicked: () {MyApp.of(context)?.setLocale(const Locale("sw"));}),
+                  MenuButton(label: "English", onClicked: () {MyApp.of(context)?.setLocale(const Locale("en")); Navigator.pop(context);}),
+                  MenuButton(label: "Swahili", onClicked: () {MyApp.of(context)?.setLocale(const Locale("sw")); Navigator.pop(context);}),
               ],
             ),
           ))),

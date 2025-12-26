@@ -37,9 +37,7 @@ class Numpad extends StatelessWidget {
       color: Colors.white,
       child: InkWell(
         onTap: onTap,
-
         splashColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade50,
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
