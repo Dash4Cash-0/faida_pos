@@ -32,6 +32,9 @@
   "takePhoto": "Take Photo",
   "saveProduct": "Save Product",
   "description": "Description",
-  "price": "Price"
+  "price": "Price",
+
+  "enterProductName": "You need to enter a product name",
+  "enterPrice": "You need to enter a price"
 
 }

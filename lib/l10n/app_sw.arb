@@ -32,5 +32,8 @@
   "takePhoto": "Piga Picha",
   "saveProduct": "Hifadhi Bidhaa",
   "description": "Maelezo",
-  "price": "Bei"
+  "price": "Bei",
+
+  "enterProductName": "Unahitaji kuingiza jina la bidhaa",
+  "enterPrice": "Unahitaji kuweka bei"
 }

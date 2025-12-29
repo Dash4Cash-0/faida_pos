@@ -53,25 +53,40 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(title: Text(l10n.addProduct), backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
         child: Column(
           children: [
-            TextField(
+            TextFormField(
               controller: _nameController,
               decoration: InputDecoration(labelText: l10n.productName),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty){
+                  return l10n.enterProductName;
+                }
+                return null;
+              },
             ),
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: l10n.description),
+              decoration: InputDecoration(labelText: l10n.description,),
             ),
-            TextField(
+            TextFormField(
               controller: _priceController,
               decoration: InputDecoration(labelText: l10n.price),
               keyboardType: TextInputType.number,
+              validator: (value) {
+                if(value == null || value.trim().isEmpty){
+                  return l10n.enterPrice;
+                }
+                return null;
+              },
             ),
 
             CheckboxListTile(
@@ -115,12 +130,17 @@ class _AddProductState extends State<AddProduct> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,)
               ),
-              onPressed: _saveProduct,
+              onPressed: () {
+               if(_formKey.currentState!.validate()){
+                _saveProduct();
+               }
+              },
               child: Text(l10n.saveProduct),
             ),
           ],
         ),
       ),
+      )
     );
   }
 }
