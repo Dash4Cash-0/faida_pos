@@ -2,6 +2,7 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/main.dart';
 import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
 import 'package:faida_pos/widgets/shared/add_product.dart';
+import 'package:faida_pos/widgets/shared/all_products.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -25,6 +26,7 @@ class Menu extends StatelessWidget {
             Navigator.push(
                 context, MaterialPageRoute(builder: (_) => AddProduct()));
               }),
+          MenuButton(label: "All Products", onClicked: () => showDialog(context: context, builder: (_) => AllProducts())),
           MenuButton(label: l10n.language, onClicked: () => showDialog(context: context, builder: (BuildContext context) =>
           Dialog(
             constraints: BoxConstraints(minWidth: 300, maxHeight: 190),
