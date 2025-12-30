@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/shared/delete_product.dart';
@@ -15,6 +16,7 @@ class AllProducts extends StatefulWidget {
 
 class _AllProductsState extends State<AllProducts> {
   late Future<List<Product>> _productsFuture;
+  late final l10n = AppLocalizations.of(context)!;
 
   @override
   void initState(){
@@ -33,7 +35,7 @@ class _AllProductsState extends State<AllProducts> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("All Products"),
+        title: Text(l10n.allItems),
       ),
       backgroundColor: Colors.white,
       body:
@@ -66,8 +68,8 @@ class _AllProductsState extends State<AllProducts> {
                       if(deletedProduct != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content:
-                            Text("${deletedProduct.name} deleted"),
-                              action: SnackBarAction(label: "Undo",
+                            Text("${deletedProduct.name} ${l10n.deleted}"),
+                              action: SnackBarAction(label: l10n.undo,
                                   onPressed: () async {
                                 await DatabaseService.instance.insertProduct(deletedProduct);
                                 _refresh();

@@ -33,8 +33,13 @@
   "saveProduct": "Save Product",
   "description": "Description",
   "price": "Price",
-
   "enterProductName": "You need to enter a product name",
-  "enterPrice": "You need to enter a price"
+  "enterPrice": "You need to enter a price",
+  "allItems": "All items",
+  "deleteItem": "Delete item",
+  "yes": "Yes",
+  "no": "No",
+  "deleted": "deleted",
+  "undo": "Undo"
 
 }

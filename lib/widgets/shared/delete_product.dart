@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
@@ -22,13 +23,14 @@ class DeleteProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Dialog(
       backgroundColor: Colors.red,
       child: Padding(padding: EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Delete product?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("${l10n.deleteItem}?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -43,9 +45,9 @@ class DeleteProduct extends StatelessWidget {
               if(context.mounted){
                 Navigator.pop(context, deletedProduct);
               }
-              } , child: Text("Yes")),
+              } , child: Text(l10n.yes)),
               ElevatedButton(onPressed: () => Navigator.pop(context, null),
-                  child: Text("No"))
+                  child: Text(l10n.no))
             ],
           )
         ],

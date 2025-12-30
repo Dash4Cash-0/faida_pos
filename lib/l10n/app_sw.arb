@@ -33,7 +33,12 @@
   "saveProduct": "Hifadhi Bidhaa",
   "description": "Maelezo",
   "price": "Bei",
-
   "enterProductName": "Unahitaji kuingiza jina la bidhaa",
-  "enterPrice": "Unahitaji kuweka bei"
+  "enterPrice": "Unahitaji kuweka bei",
+  "allItems": "Vipengee vyote",
+  "deleteItem": "Futa kipengee",
+  "yes": "Ndiyo",
+  "no": "Hapana",
+  "deleted": "imefutwa",
+  "undo": "Tendua"
 }
