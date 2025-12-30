@@ -40,6 +40,8 @@
   "yes": "Yes",
   "no": "No",
   "deleted": "deleted",
-  "undo": "Undo"
+  "undo": "Undo",
+  "noProducts": "There are no products",
+  "error": "Error"
 
 }

@@ -40,5 +40,7 @@
   "yes": "Ndiyo",
   "no": "Hapana",
   "deleted": "imefutwa",
-  "undo": "Tendua"
+  "undo": "Tendua",
+  "noProducts": "Hakuna vitu",
+  "error": "Hitilafu"
 }

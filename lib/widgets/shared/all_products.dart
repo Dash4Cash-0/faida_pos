@@ -46,11 +46,11 @@ class _AllProductsState extends State<AllProducts> {
                   return Center(child: CircularProgressIndicator());
                 }
                 if(snapshot.hasError){
-                  return Center(child: Text("Error: ${snapshot.error}"));
+                  return Center(child: Text("${l10n.error}: ${snapshot.error}"));
                 }
                 final products = snapshot.data!;
                 if(products.isEmpty){
-                  return Center(child: Text("There are no products"));
+                  return Center(child: Text(l10n.noProducts));
                 }
 
                 return ListView.builder(padding: EdgeInsets.all(8),
@@ -63,7 +63,7 @@ class _AllProductsState extends State<AllProducts> {
                       final Product? deletedProduct = await showDialog<Product>(context: context,
                           builder: (_) => DeleteProduct(productId: p.id));
 
-                      if(!mounted) return;
+                      if(!context.mounted) return;
 
                       if(deletedProduct != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
