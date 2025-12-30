@@ -42,5 +42,8 @@
   "deleted": "imefutwa",
   "undo": "Tendua",
   "noProducts": "Hakuna vitu",
-  "error": "Hitilafu"
+  "error": "Hitilafu",
+  "english": "Kiingereza",
+  "swahili": "Kiswahili",
+  "selectLanguage": "Chagua Lugha"
 }

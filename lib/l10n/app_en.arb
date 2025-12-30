@@ -42,6 +42,9 @@
   "deleted": "deleted",
   "undo": "Undo",
   "noProducts": "There are no products",
-  "error": "Error"
+  "error": "Error",
+  "english": "English",
+  "swahili": "Swahili",
+  "selectLanguage": "Select Language"
 
 }

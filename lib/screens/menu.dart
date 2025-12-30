@@ -3,7 +3,11 @@ import 'package:faida_pos/main.dart';
 import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
 import 'package:faida_pos/widgets/shared/add_product.dart';
 import 'package:faida_pos/widgets/shared/all_products.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'app_initializer.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -34,11 +38,55 @@ class Menu extends StatelessWidget {
             child: Column(
               children: [
                   SizedBox(height: 30),
-                  MenuButton(label: "English", onClicked: () {MyApp.of(context)?.setLocale(const Locale("en")); Navigator.pop(context);}),
-                  MenuButton(label: "Swahili", onClicked: () {MyApp.of(context)?.setLocale(const Locale("sw")); Navigator.pop(context);}),
+                  MenuButton(label: l10n.english, onClicked: () {MyApp.of(context)?.setLocale(const Locale("en")); Navigator.pop(context);}),
+                  MenuButton(label: l10n.swahili, onClicked: () {MyApp.of(context)?.setLocale(const Locale("sw")); Navigator.pop(context);}),
               ],
             ),
           ))),
+          if (kDebugMode) ...[
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Reset App?'),
+                      content: Text('This will clear all data and restart the app.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text('Reset'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirmed == true) {
+                    final storage = FlutterSecureStorage();
+                    await storage.deleteAll();
+
+                    if (context.mounted) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => AppInitializer()),
+                            (route) => false,
+                      );
+                    }
+                  }
+                },
+                icon: Icon(Icons.refresh, color: Colors.red),
+                label: Text('DEV: Reset App', style: TextStyle(color: Colors.red)),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
