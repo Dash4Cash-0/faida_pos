@@ -1,11 +1,32 @@
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
+import 'package:faida_pos/widgets/shared/delete_product.dart';
 import 'package:flutter/material.dart';
 
-class AllProducts extends StatelessWidget {
+class AllProducts extends StatefulWidget {
   const AllProducts({
     super.key,
   });
+
+  @override
+  State<AllProducts> createState() => _AllProductsState();
+}
+
+
+class _AllProductsState extends State<AllProducts> {
+  late Future<List<Product>> _productsFuture;
+
+  @override
+  void initState(){
+    super.initState();
+    _productsFuture = DatabaseService.instance.getAllProducts();
+  }
+
+  void _refresh(){
+    setState(() {
+      _productsFuture = DatabaseService.instance.getAllProducts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +43,7 @@ class AllProducts extends StatelessWidget {
           Divider(),
           Expanded(
               child: FutureBuilder<List<Product>>(
-                  future: DatabaseService.instance.getAllProducts(),
+                  future: _productsFuture,
                   builder: (context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator());
@@ -41,6 +62,17 @@ class AllProducts extends StatelessWidget {
                   final p = products[index];
 
                   return ListTile(
+                    onLongPress: () async {
+                      final deleted = await showDialog<bool>(context: context,
+                          builder: (_) => DeleteProduct(productId: p.id));
+
+                      if(!mounted) return;
+
+                      if(deleted == true) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product Deleted"), duration: Duration(seconds: 2),));
+                      }
+                      _refresh();
+                    },
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),
                     trailing: Text("${p.price} TZS") ,

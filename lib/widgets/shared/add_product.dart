@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../services/image_service.dart';
 
 class AddProduct extends StatefulWidget {
@@ -23,6 +21,7 @@ class _AddProductState extends State<AddProduct> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _isFavorite = false;
   File? _imageFile;
 
@@ -53,7 +52,6 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(title: Text(l10n.addProduct), backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
