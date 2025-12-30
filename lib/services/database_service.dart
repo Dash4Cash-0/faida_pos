@@ -80,4 +80,16 @@ class DatabaseService {
     return await db.delete('products', where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<Product?> getProductById(int id) async {
+    final db = await instance.db;
+    final maps = await db.query(
+      'products',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isEmpty) return null;
+    return Product.fromMap(maps.first);
+  }
+
 }

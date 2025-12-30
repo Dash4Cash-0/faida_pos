@@ -1,5 +1,6 @@
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
+import '../../models/product.dart';
 
 class DeleteProduct extends StatelessWidget {
   final int? productId;
@@ -8,8 +9,15 @@ class DeleteProduct extends StatelessWidget {
     super.key,
     required this.productId});
 
-  Future<void>_deleteProduct() async {
-    await DatabaseService.instance.deleteProduct(productId!);
+  Future<Product?>_deleteProduct() async {
+    final product = await DatabaseService.instance.getProductById(productId!);
+
+    if(product != null) {
+      await DatabaseService.instance.deleteProduct(productId!);
+      return product;
+    }
+
+    return null;
 }
 
   @override
@@ -31,10 +39,13 @@ class DeleteProduct extends StatelessWidget {
                       side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)
                   ),
                   onPressed: () async {
-              await _deleteProduct();
-              Navigator.pop(context, true);
+              final deletedProduct = await _deleteProduct();
+              if(context.mounted){
+                Navigator.pop(context, deletedProduct);
+              }
               } , child: Text("Yes")),
-              ElevatedButton(onPressed: () => Navigator.pop(context, false), child: Text("No"))
+              ElevatedButton(onPressed: () => Navigator.pop(context, null),
+                  child: Text("No"))
             ],
           )
         ],

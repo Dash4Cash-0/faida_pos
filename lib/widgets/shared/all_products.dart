@@ -30,19 +30,14 @@ class _AllProductsState extends State<AllProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog.fullscreen(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("All Products"),
+      ),
       backgroundColor: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 16),
-          Row(children: [
-            CloseButton(),
-            Text("All Products", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          ]),
-          Divider(),
-          Expanded(
-              child: FutureBuilder<List<Product>>(
+      body:
+          FutureBuilder<List<Product>>(
                   future: _productsFuture,
                   builder: (context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
@@ -63,13 +58,21 @@ class _AllProductsState extends State<AllProducts> {
 
                   return ListTile(
                     onLongPress: () async {
-                      final deleted = await showDialog<bool>(context: context,
+                      final Product? deletedProduct = await showDialog<Product>(context: context,
                           builder: (_) => DeleteProduct(productId: p.id));
 
                       if(!mounted) return;
 
-                      if(deleted == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product Deleted"), duration: Duration(seconds: 2),));
+                      if(deletedProduct != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content:
+                            Text("${deletedProduct.name} deleted"),
+                              action: SnackBarAction(label: "Undo",
+                                  onPressed: () async {
+                                await DatabaseService.instance.insertProduct(deletedProduct);
+                                _refresh();
+                                  }),
+                              duration: Duration(seconds: 5),));
                       }
                       _refresh();
                     },
@@ -81,9 +84,6 @@ class _AllProductsState extends State<AllProducts> {
                     );
               }
             )
-          )
-        ],
-      ),
     );
   }
 }
