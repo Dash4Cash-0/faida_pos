@@ -33,7 +33,7 @@ class Menu extends StatelessWidget {
           MenuButton(label: "All Products", onClicked: () => showDialog(context: context, builder: (_) => AllProducts())),
           MenuButton(label: l10n.language, onClicked: () => showDialog(context: context, builder: (BuildContext context) =>
           Dialog(
-            constraints: BoxConstraints(minWidth: 300, maxHeight: 190),
+            constraints: BoxConstraints(minWidth: 300, maxHeight: 220),
             backgroundColor: Colors.white,
             child: Column(
               children: [

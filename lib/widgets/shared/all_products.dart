@@ -16,7 +16,7 @@ class AllProducts extends StatefulWidget {
 
 class _AllProductsState extends State<AllProducts> {
   late Future<List<Product>> _productsFuture;
-  late final l10n = AppLocalizations.of(context)!;
+
 
   @override
   void initState(){
@@ -32,13 +32,11 @@ class _AllProductsState extends State<AllProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(l10n.allItems),
-      ),
-      backgroundColor: Colors.white,
-      body:
+    final l10n = AppLocalizations.of(context)!;
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(child:
           FutureBuilder<List<Product>>(
                   future: _productsFuture,
                   builder: (context, snapshot) {
@@ -86,6 +84,9 @@ class _AllProductsState extends State<AllProducts> {
                     );
               }
             )
+          )
+        ],
+      )
     );
   }
 }

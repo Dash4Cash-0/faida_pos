@@ -54,7 +54,7 @@ class MyAppState extends State<MyApp>{
       },
       child: MaterialApp(
         locale: _locale,
-        home: AppInitializer(),
+        home: HomeRoot(),//AppInitializer(),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

@@ -1,3 +1,4 @@
+import 'package:faida_pos/widgets/shared/all_products.dart';
 import 'package:flutter/material.dart';
 
 class InventoryWidget extends StatelessWidget {
@@ -5,6 +6,11 @@ class InventoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+
+        Expanded(child: AllProducts())
+      ],
+    );
   }
 }
