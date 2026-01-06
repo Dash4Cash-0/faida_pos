@@ -2,6 +2,7 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/shared/delete_product.dart';
+import 'package:faida_pos/widgets/shared/search_widget.dart';
 import 'package:flutter/material.dart';
 
 class AllProducts extends StatefulWidget {
@@ -16,6 +17,8 @@ class AllProducts extends StatefulWidget {
 
 class _AllProductsState extends State<AllProducts> {
   late Future<List<Product>> _productsFuture;
+  List<Product> _allProducts = [];
+  String _searchText = "";
 
 
   @override
@@ -30,12 +33,28 @@ class _AllProductsState extends State<AllProducts> {
     });
   }
 
+  void _onSearch(String text) {
+    setState(() {
+      _searchText = text.toLowerCase();
+    });
+  }
+
+  List<Product> _filteredProducts(){
+    if(_searchText.isEmpty) return _allProducts;
+
+    return _allProducts.where((p) {
+      return p.name.toLowerCase().contains(_searchText) ||
+      p.description.toLowerCase().contains(_searchText);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Column(
         children: [
+          SearchWidget(onSearch: _onSearch),
           Expanded(child:
           FutureBuilder<List<Product>>(
                   future: _productsFuture,
@@ -46,7 +65,9 @@ class _AllProductsState extends State<AllProducts> {
                 if(snapshot.hasError){
                   return Center(child: Text("${l10n.error}: ${snapshot.error}"));
                 }
-                final products = snapshot.data!;
+                _allProducts = snapshot.data!;
+                final products = _filteredProducts();
+
                 if(products.isEmpty){
                   return Center(child: Text(l10n.noProducts));
                 }
