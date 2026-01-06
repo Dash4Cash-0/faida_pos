@@ -3,6 +3,7 @@ class Product {
   final String name;
   final String description;
   final double price;
+  final double inStock;
   final String? image;
   final bool isFavorite;
 
@@ -11,6 +12,7 @@ class Product {
     required this.name,
     required this.description,
     required this.price,
+    required this.inStock,
     required this.image,
     required this.isFavorite});
 
@@ -19,6 +21,7 @@ class Product {
       'name': name,
       'description': description,
       'price': price,
+      'inStock': inStock,
       'image': image,
       'isFavorite': isFavorite ? 1 : 0};
   }
@@ -28,6 +31,7 @@ class Product {
         name: map['name'],
         description: map['description'],
         price: map['price'],
+        inStock: map['inStock'],
         image: map['image'],
         isFavorite: map['isFavorite'] == 1);
   }
@@ -37,6 +41,7 @@ class Product {
     String? name,
     String? description,
     double? price,
+    double? inStock,
     String? image,
     bool? isFavorite,
   }) {
@@ -45,6 +50,7 @@ class Product {
       name: name ?? this.name,
       description: description ?? this.description,
       price: price ?? this.price,
+      inStock: inStock ?? this.inStock,
       image: image ?? this.image,
       isFavorite: isFavorite ?? this.isFavorite,
     );

@@ -45,5 +45,7 @@
   "error": "Hitilafu",
   "english": "Kiingereza",
   "swahili": "Kiswahili",
-  "selectLanguage": "Chagua Lugha"
+  "selectLanguage": "Chagua Lugha",
+  "amount": "Kiasi",
+  "enterAmount": "Weka kiasi"
 }

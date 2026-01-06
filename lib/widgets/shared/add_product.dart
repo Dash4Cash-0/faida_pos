@@ -21,6 +21,7 @@ class _AddProductState extends State<AddProduct> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
+  final _inStockController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isFavorite = false;
   File? _imageFile;
@@ -40,6 +41,7 @@ class _AddProductState extends State<AddProduct> {
         name: _nameController.text,
         description: _descriptionController.text,
         price: double.parse(_priceController.text),
+        inStock: double.parse(_inStockController.text),
         image: imagePath,
         isFavorite: _isFavorite);
 
@@ -86,6 +88,17 @@ class _AddProductState extends State<AddProduct> {
                 return null;
               },
             ),
+            TextFormField(
+              controller: _inStockController,
+              decoration: InputDecoration(labelText: l10n.amount),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if(value == null || value.trim().isEmpty){
+                  return l10n.enterAmount;
+                }
+                return null;
+              },
+            ),
 
             CheckboxListTile(
               title: Text(l10n.addToFav),
@@ -95,6 +108,8 @@ class _AddProductState extends State<AddProduct> {
               },
             ),
 
+            Row(spacing: 50,
+                children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
@@ -117,8 +132,6 @@ class _AddProductState extends State<AddProduct> {
             if (_imageFile != null)
               Image.file(_imageFile!, height: 100),
 
-            const Spacer(),
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
@@ -135,6 +148,7 @@ class _AddProductState extends State<AddProduct> {
               },
               child: Text(l10n.saveProduct),
             ),
+            ])
           ],
         ),
       ),

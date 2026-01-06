@@ -99,7 +99,8 @@ class _AllProductsState extends State<AllProducts> {
                     },
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),
-                    trailing: Text("${p.price} TZS") ,
+                    trailing: Text("${p.price} TZS\n"
+                    "In stock: ${p.inStock}"),
                   );
                     }
                     );

@@ -45,6 +45,8 @@
   "error": "Error",
   "english": "English",
   "swahili": "Swahili",
-  "selectLanguage": "Select Language"
+  "selectLanguage": "Select Language",
+  "amount": "Amount",
+  "enterAmount": "Enter amount"
 
 }
