@@ -78,6 +78,9 @@ class _AllProductsState extends State<AllProducts> {
                   final p = products[index];
 
                   return ListTile(
+                    onTap: () async {
+
+                    },
                     onLongPress: () async {
                       final Product? deletedProduct = await showDialog<Product>(context: context,
                           builder: (_) => DeleteProduct(productId: p.id));
