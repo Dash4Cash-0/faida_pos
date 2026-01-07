@@ -11,6 +11,8 @@ import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:faida_pos/utils/checkout_utils/charge_button_text.dart';
 
+import '../widgets/checkout_widgets/receipt_widget.dart';
+
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -130,6 +132,22 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 
+  void _onCalculatePressed(double amountReceived){
+
+    Navigator.pop(context);
+
+    showDialog(
+      context: context,
+      builder: (_) => Dialog.fullscreen(
+        child: ReceiptWidget(
+          amountToPay: storedValueNotifier.value,
+          onNewSale: resetSale,
+          amountReceived: amountReceived,
+        ),
+      ),
+    );
+  }
+
   void _showCustomDialog(){
     setState(() {
       showDialog(context: context, builder: (BuildContext context) => Dialog(
@@ -215,7 +233,8 @@ class _CheckoutState extends State<Checkout> {
                       currentSaleItems: _currentSaleList.join('\n'),
                       storedValueNotifier: storedValueNotifier,
                       onNewSale: resetSale,
-                      addDiscount: addDiscount),
+                      addDiscount: addDiscount,
+                      onCalculate: _onCalculatePressed,),
                   );
                   }
                 )
