@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/shared/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:faida_pos/models/product.dart';
@@ -33,7 +33,7 @@ class FavoritesGrid extends StatelessWidget {
       itemCount: products.length < 24 ? products.length + 1 : products.length,
       itemBuilder: (context, index) {
           if(index < products.length) {
-            return _buildProductTile(products[index]);
+            return _buildProductTile(context, products[index]);
           }
           return _buildAddButton(context);
       },
@@ -41,9 +41,38 @@ class FavoritesGrid extends StatelessWidget {
   }
 
 
-  Widget _buildProductTile(Product product) {
+  Widget _buildProductTile(BuildContext context, Product product) {
     return GestureDetector(
       onTap: () => onProductTap(product),
+      onLongPress: () {
+        showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Remove item from favorites?"),
+                content: Text("Do you want to remove this"
+                    "item from your favorites list?"),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await DatabaseService.instance.toggleFavorite(product.id!, false);
+                      if(!context.mounted) return;
+                      Navigator.pop(context);
+                      onProductAdded();
+                    },
+                    child: const Text("Yes"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("No"),
+                  ),
+                ],
+                );
+
+            });
+      }
+      ,
       child: Container(
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(

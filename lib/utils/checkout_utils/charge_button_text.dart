@@ -1,20 +1,23 @@
+import 'package:faida_pos/models/sale_item.dart';
+
 String getChargeButtonText({
-  required List<String> currentSaleList,
+  required List<SaleItem> currentSaleList,
   required String input,
   required String review,
   required String items,
   required String charge}) {
   if (currentSaleList.length > 1) {
     return "$review ${currentSaleList.length} $items";
-  } else if (currentSaleList.length == 1 && input.isEmpty) {
-    final total = currentSaleList.fold<double>(0, (sum, item) {
-      final number = double.parse(item.split(": ")[1].split(" ")[0]);
-      return sum + number;
-    });
-    return "$charge: $total TZS";
-  } else if (input.isNotEmpty) {
-    return "$charge: $input TZS";
-  } else {
-    return "$charge: 0 TZS";
   }
+
+  if (currentSaleList.length == 1 && input.isEmpty) {
+    final total = currentSaleList.first.subtotal;
+    return "$charge: $total TZS";
+  }
+
+  if (input.isNotEmpty) {
+    return "$charge: $input TZS";
+  }
+
+  return "$charge: 0 TZS";
 }

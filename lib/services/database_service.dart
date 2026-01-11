@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../models/sale_item.dart';
+
 class DatabaseService {
 
   static final DatabaseService instance = DatabaseService._instance();
@@ -23,7 +25,7 @@ class DatabaseService {
     String databasesPath = await getDatabasesPath();
     String path = join(databasesPath,'faida.db');
 
-    return await openDatabase(path, version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    return await openDatabase(path, version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -144,28 +146,48 @@ class DatabaseService {
   }
 
   Future<void> processSale({
-    required int productId,
-    required double quantity,
-    required double total
+    required List<SaleItem> items,
+    required double amountReceived
 }) async {
     final db = await instance.db;
 
     await db.transaction((txn) async {
-      final updated = txn.rawUpdate(
-        '''
-        UPDATE products
-        SET inStock = inStock - ?
-        WHERE id = ?
-          AND inStock >= ?
-        ''',
-        [quantity,productId,quantity]
-      );
-      if(updated == 0) {
-        throw Exception("Not enough stock");
+      final total = items.fold(0.0, (sum, i) => sum + i.subtotal);
+      final change = amountReceived - total;
+
+      final saleId = await txn.insert('sales', {
+        'total': total,
+        'amountReceived': amountReceived,
+        'change': change,
+        'createdAt': DateTime.now().toIso8601String(),
+      });
+
+      for (final item in items) {
+        await txn.insert('sale_items', {
+          'saleId': saleId,
+          'productId': item.productId,
+          'name': item.name,
+          'price': item.price,
+          'quantity': item.quantity,
+          'subtotal': item.subtotal,
+        });
+
+        if (item.productId != null) {
+          final updated = await txn.rawUpdate(
+            '''
+          UPDATE products
+          SET inStock = inStock - ?
+          WHERE id = ?
+            AND inStock >= ?
+          ''',
+            [item.quantity, item.productId, item.quantity],
+          );
+
+          if (updated == 0) {
+            throw Exception('Not enough stock for ${item.name}');
+          }
+        }
       }
     });
   }
-
-
-
 }

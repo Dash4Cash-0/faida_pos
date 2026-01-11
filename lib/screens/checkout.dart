@@ -1,5 +1,6 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
+import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
@@ -48,9 +49,34 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void _onProductTapped(Product product) {
+    final quantity = TextEditingController();
     setState(() {
-      storedValueNotifier.value += product.price;
-      _currentSaleList.add("${product.name}: ${product.price} TZS");
+      showDialog(context: context, builder: (_) => Dialog(
+        backgroundColor: Colors.white,
+        child: SizedBox(width: 200, height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              controller: quantity,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(border: OutlineInputBorder(),
+              labelText: "Enter Quantity"),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)),
+                onPressed: (){
+              _currentSaleList.add(SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text)));
+              storedValueNotifier.value += product.price * double.parse(quantity.text);
+              Navigator.pop(context);
+            }, child: Text("Add"))
+          ],
+        ),
+
+        ),
+      ));
+
     });
   }
 
@@ -75,7 +101,7 @@ class _CheckoutState extends State<Checkout> {
     ),
   ];
 
-  final List<String> _currentSaleList = [];
+  final List<SaleItem> _currentSaleList = [];
 
   void onNumPressed(String digit){
     setState (() {
@@ -97,7 +123,7 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       final current = double.parse(input);
       storedValueNotifier.value += current;
-      _currentSaleList.add("${l10n.customAmount}: $input TZS");
+      _currentSaleList.add(SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1));
       input = "";
     });
   }
@@ -221,7 +247,7 @@ class _CheckoutState extends State<Checkout> {
                 setState(() {
                   final customAmount = double.parse(input);
                   storedValueNotifier.value += customAmount;
-                  _currentSaleList.add("${l10n.customAmount}: $input TZS");
+                  _currentSaleList.add(SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1));
                   input = "";
                 });
               }
@@ -230,7 +256,12 @@ class _CheckoutState extends State<Checkout> {
                   builder: (_) =>
                     CheckoutBottomSheet(
                       itemsCount: _currentSaleList.length,
-                      currentSaleItems: _currentSaleList.join('\n'),
+                      currentSaleItems: _currentSaleList.map((item) {
+                        if(item.productId == null) {
+                          return "${item.name}: ${item.subtotal} TZS";
+                        }
+                        return "${item.name} x ${item.quantity}: ${item.subtotal} TZS";
+                      }).join('\n'),
                       storedValueNotifier: storedValueNotifier,
                       onNewSale: resetSale,
                       addDiscount: addDiscount,
