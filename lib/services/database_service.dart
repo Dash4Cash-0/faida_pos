@@ -102,4 +102,23 @@ class DatabaseService {
     return Product.fromMap(maps.first);
   }
 
+  Future<bool> decreaseStock({
+    required int productId,
+    required double quantity
+}) async {
+    final db = await instance.db;
+    final result = db.rawUpdate(
+      '''
+      UPDATE products
+      SET inStock = inStock - ?
+      WHERE id = ?
+        AND inStock >= ?
+      ''',
+      [quantity,productId,quantity]
+    );
+    return result == 0;
+  }
+
+
+
 }
