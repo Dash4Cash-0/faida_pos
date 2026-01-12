@@ -50,7 +50,6 @@ class _CheckoutState extends State<Checkout> {
 
   void _onProductTapped(Product product) {
     final quantity = TextEditingController();
-    setState(() {
       showDialog(context: context, builder: (_) => Dialog(
         backgroundColor: Colors.white,
         child: SizedBox(width: 200, height: 200,
@@ -67,17 +66,16 @@ class _CheckoutState extends State<Checkout> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)),
                 onPressed: (){
-              _currentSaleList.add(SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text)));
-              storedValueNotifier.value += product.price * double.parse(quantity.text);
-              Navigator.pop(context);
+                setState(() {
+                  _currentSaleList.add(SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text)));
+                  storedValueNotifier.value += product.price * double.parse(quantity.text);
+                  Navigator.pop(context);
+                });
             }, child: Text("Add"))
           ],
         ),
-
         ),
       ));
-
-    });
   }
 
   void _onAddProductComplete() {
