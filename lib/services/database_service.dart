@@ -133,7 +133,7 @@ class DatabaseService {
     required double quantity
 }) async {
     final db = await instance.db;
-    final result = db.rawUpdate(
+    final int result = await db.rawUpdate(
       '''
       UPDATE products
       SET inStock = inStock - ?
@@ -142,7 +142,24 @@ class DatabaseService {
       ''',
       [quantity,productId,quantity]
     );
-    return result == 1;
+    return result > 0;
+  }
+
+  Future<bool> increaseStock({
+    required int productId,
+    required double quantity
+  }) async {
+    final db = await instance.db;
+    final int result = await db.rawUpdate(
+        '''
+      UPDATE products
+      SET inStock = inStock - ?
+      WHERE id = ?
+        AND inStock >= ?
+      ''',
+        [quantity,productId,quantity]
+    );
+    return result > 0;
   }
 
   Future<void> processSale({

@@ -50,11 +50,18 @@ class FavoritesGrid extends StatelessWidget {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return AlertDialog(
+                backgroundColor: Colors.red,
                 title: Text("Remove item from favorites?"),
                 content: Text("Do you want to remove this"
                     "item from your favorites list?"),
                 actions: [
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(
+                            color: Colors.black,
+                            width: 1,
+                            style: BorderStyle.solid)),
                     onPressed: () async {
                       await DatabaseService.instance.toggleFavorite(product.id!, false);
                       if(!context.mounted) return;
@@ -64,6 +71,12 @@ class FavoritesGrid extends StatelessWidget {
                     child: const Text("Yes"),
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(
+                            color: Colors.black,
+                            width: 1,
+                            style: BorderStyle.solid)),
                     onPressed: () => Navigator.pop(context),
                     child: const Text("No"),
                   ),
