@@ -1,11 +1,13 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
+import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/discount_widget.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
   final int itemsCount;
-  final String currentSaleItems;
+  final List<SaleItem> currentSaleItems;
+  final ValueNotifier<List<SaleItem>> saleItemNotifier;
   final ValueNotifier<double> storedValueNotifier;
   final VoidCallback onNewSale;
   final Function(String) addDiscount;
@@ -15,6 +17,7 @@ class CheckoutBottomSheet extends StatefulWidget {
     required this.itemsCount,
     required this.currentSaleItems,
     required this.storedValueNotifier,
+    required this.saleItemNotifier,
     required this.onNewSale,
     required this.addDiscount,
     required this.onCalculate });
@@ -58,12 +61,24 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                     left: 0,
                     right: 0,
                     bottom: 80,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(widget.currentSaleItems,
-                              style: TextStyle(fontSize: 18))),
-                    )
+                    child: ValueListenableBuilder(
+                        valueListenable: widget.saleItemNotifier,
+                        builder: (context, items, _){
+                          return SingleChildScrollView(
+                          child: Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: items.map((item) {
+                                    if(item.productId == null) {
+                                      return Text("${item.name}: ${item.subtotal} TZS");
+                                    }
+                                    return Text("${item.name} x ${item.quantity}: ${item.subtotal} TZS");
+                                  }).toList()
+                              )),
+                        );
+                        }
+                        )
                 ),
                 Positioned.fill(
                     child: Align(

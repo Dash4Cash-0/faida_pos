@@ -30,7 +30,8 @@ class _CheckoutState extends State<Checkout> {
   final storedValueNotifier = ValueNotifier<double>(0);
   final controller = TextEditingController();
   late final l10n = AppLocalizations.of(context)!;
-  final List<SaleItem> _currentSaleList = [];
+  final ValueNotifier <List<SaleItem>> _currentSaleList = ValueNotifier<List<SaleItem>>([]);
+  //final saleItemNotifier = ValueNotifier<List<SaleItem>>([]);
   List<Product> _favoriteProducts = [];
   bool _isLoadingProducts = true;
 
@@ -67,7 +68,10 @@ class _CheckoutState extends State<Checkout> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)),
                 onPressed: (){
                 setState(() {
-                  _currentSaleList.add(SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text)));
+                  _currentSaleList.value = [
+                    ..._currentSaleList.value,
+                    SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text))
+                  ];
                   storedValueNotifier.value += product.price * double.parse(quantity.text);
                   Navigator.pop(context);
                 });
@@ -111,7 +115,7 @@ class _CheckoutState extends State<Checkout> {
       input = "";
       storedValueNotifier.value = 0;
       partValues = "";
-      _currentSaleList.clear();
+      _currentSaleList.value = [];
     });
   }
 
@@ -120,7 +124,10 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       final current = double.parse(input);
       storedValueNotifier.value += current;
-      _currentSaleList.add(SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1));
+      _currentSaleList.value = [
+       ..._currentSaleList.value,
+        SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1)
+      ];
       input = "";
     });
   }
@@ -130,7 +137,7 @@ class _CheckoutState extends State<Checkout> {
       storedValueNotifier.value = 0;
       input = "";
       partValues = "";
-      _currentSaleList.clear();
+      _currentSaleList.value = [];
     });
   }
 
@@ -142,21 +149,30 @@ class _CheckoutState extends State<Checkout> {
           final double fivePercent = -storedValueNotifier.value * 0.05;
           setState(() {
             storedValueNotifier.value *= 0.95;
-            _currentSaleList.add(SaleItem(productId: null, name: "5% ${l10n.discount}: ", price: fivePercent, quantity: 1));
+            _currentSaleList.value = [
+              ..._currentSaleList.value,
+            SaleItem(productId: null, name: "5% ${l10n.discount}: ", price: fivePercent, quantity: 1)
+            ];
           });
           break;
         case "10%":
           final double tenPercent = -storedValueNotifier.value * 0.1;
           setState(() {
             storedValueNotifier.value *= 0.90;
-            _currentSaleList.add(SaleItem(productId: null, name: "10% ${l10n.discount}: ", price: tenPercent, quantity: 1));
+            _currentSaleList.value = [
+              ..._currentSaleList.value,
+              SaleItem(productId: null, name: "10% ${l10n.discount}: ", price: tenPercent, quantity: 1)
+            ];
           });
           break;
         case "15%":
           final double fifteenPercent = -storedValueNotifier.value * 0.15;
           setState(() {
             storedValueNotifier.value *=0.85;
-            _currentSaleList.add(SaleItem(productId: null, name: "15% ${l10n.discount}: ", price: fifteenPercent, quantity: 1));
+            _currentSaleList.value = [
+              ..._currentSaleList.value,
+              SaleItem(productId: null, name: "15% ${l10n.discount}: ", price: fifteenPercent, quantity: 1)
+            ];
           });
           break;
         case "...":
@@ -220,11 +236,14 @@ class _CheckoutState extends State<Checkout> {
                 onPressed: () => {
               setState(() {
               customDiscount = -storedValueNotifier.value * (double.parse(controller.text) / 100);
-                  _currentSaleList.add(SaleItem(
+                  _currentSaleList.value = [
+                    ..._currentSaleList.value,
+                    SaleItem(
                       productId: null,
                       name: "${controller.text}% ${l10n.discount}",
                       price: customDiscount,
-                      quantity: 1));
+                      quantity: 1)
+                  ];
 
                   storedValueNotifier.value *= 1.0 - (double.parse(controller.text) / 100);
                   controller.text = "";
@@ -258,7 +277,7 @@ class _CheckoutState extends State<Checkout> {
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
-            getChargeButtonText(currentSaleList: _currentSaleList,
+            getChargeButtonText(currentSaleList: _currentSaleList.value,
                 input: input,
                 review: l10n.review, items: l10n.items, charge: l10n.charge),
                 onClicked: () {
@@ -266,7 +285,10 @@ class _CheckoutState extends State<Checkout> {
                 setState(() {
                   final customAmount = double.parse(input);
                   storedValueNotifier.value += customAmount;
-                  _currentSaleList.add(SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1));
+                  _currentSaleList.value = [
+                    ..._currentSaleList.value,
+                    SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1)
+                  ];
                   input = "";
                 });
               }
@@ -274,14 +296,10 @@ class _CheckoutState extends State<Checkout> {
                   context: context,
                   builder: (_) =>
                     CheckoutBottomSheet(
-                      itemsCount: _currentSaleList.length,
-                      currentSaleItems: _currentSaleList.map((item) {
-                        if(item.productId == null) {
-                          return "${item.name}: ${item.subtotal} TZS";
-                        }
-                        return "${item.name} x ${item.quantity}: ${item.subtotal} TZS";
-                      }).join('\n'),
+                      itemsCount: _currentSaleList.value.length,
+                      currentSaleItems: _currentSaleList.value,
                       storedValueNotifier: storedValueNotifier,
+                      saleItemNotifier: _currentSaleList,
                       onNewSale: resetSale,
                       addDiscount: addDiscount,
                       onCalculate: _onCalculatePressed,),
