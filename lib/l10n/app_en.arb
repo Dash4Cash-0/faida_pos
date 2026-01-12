@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "addDiscount": "Add Discount",
+  "discount": "discount",
   "amountReceived": "Amount Received",
   "customAmount": "Custom amount",
   "customDiscount": "Custom discount",

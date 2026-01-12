@@ -142,13 +142,19 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       switch (discount) {
         case "5%":
+          final double fivePercent = -storedValueNotifier.value * 0.05;
           storedValueNotifier.value *= 0.95;
+          _currentSaleList.add(SaleItem(productId: null, name: "5% ${l10n.discount}: ", price: fivePercent, quantity: 1));
           break;
         case "10%":
+          final double tenPercent = -storedValueNotifier.value * 0.1;
           storedValueNotifier.value *= 0.90;
+          _currentSaleList.add(SaleItem(productId: null, name: "10% ${l10n.discount}: ", price: tenPercent, quantity: 1));
           break;
         case "15%":
+          final double fifteenPercent = -storedValueNotifier.value * 0.15;
           storedValueNotifier.value *=0.85;
+          _currentSaleList.add(SaleItem(productId: null, name: "15% ${l10n.discount}: ", price: fifteenPercent, quantity: 1));
           break;
         case "...":
           _showCustomDialog();
@@ -175,6 +181,7 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void _showCustomDialog(){
+    double customDiscount;
     setState(() {
       showDialog(context: context, builder: (BuildContext context) => Dialog(
         backgroundColor: Colors.white,
@@ -208,6 +215,13 @@ class _CheckoutState extends State<Checkout> {
               side: BorderSide(color: Colors.black, style: BorderStyle.solid)
             ),
                 onPressed: () => {
+              customDiscount = -storedValueNotifier.value * (double.parse(controller.text) / 100),
+                  _currentSaleList.add(SaleItem(
+                      productId: null,
+                      name: "${controller.text}% ${l10n.discount}",
+                      price: customDiscount,
+                      quantity: 1)),
+
             storedValueNotifier.value *= 1.0 - (double.parse(controller.text) / 100),
                   controller.text = "",
             Navigator.pop(context)},

@@ -1,6 +1,7 @@
 {
   "@@locale": "sw",
   "addDiscount": "Ongeza Punguzo",
+  "discount": "punguzo",
   "amountReceived": "Kiasi Kilichopokelewa",
   "customAmount": "Kiasi desturi",
   "customDiscount": "Punguzo maalum",
