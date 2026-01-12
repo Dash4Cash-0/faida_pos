@@ -99,12 +99,17 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                               ],
                                                     )
                                                 ),
+
                                                 SizedBox(height: 8),
-                                                TextFormField(
-                                                  controller: controller,
-                                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                  decoration: InputDecoration(border: UnderlineInputBorder(),
+                                                ValueListenableBuilder<double>
+                                                  (valueListenable: widget.storedValueNotifier,
+                                                    builder: (context, total, _) {
+
+                                                    return TextFormField(
+                                                    controller: controller,
+                                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                    decoration: InputDecoration(border: UnderlineInputBorder(),
                                                       labelText: "${l10n.totalPrice}: ${widget.storedValueNotifier.value} TZS",
                                                       errorMaxLines: 3
                                                   ),
@@ -122,12 +127,13 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                     }
                                                     return null;
                                                     },
-                                                ),
+                                                );
+                                                    }),
                                                 SizedBox(height: 12),
                                                 Text(l10n.addDiscount),
                                                 DiscountWidget(
                                                   onDiscountSelected: (discount) {
-                                                    widget.addDiscount(discount);
+                                                      widget.addDiscount(discount);
                                                     },
                                                 ),
                                                 SizedBox(height: 12),
