@@ -7,7 +7,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../models/sale_item.dart';
 
 class DatabaseService {
-
+  //get the DB from phone: adb exec-out run-as com.example.faida_pos cat databases/faida.db > faida.db
   static final DatabaseService instance = DatabaseService._instance();
   static Database? _database;
   DatabaseService._instance();

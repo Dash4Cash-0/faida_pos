@@ -94,7 +94,7 @@ class _CheckoutState extends State<Checkout> {
         value: input,
         partValues: partValues,
         storedValue: storedValueNotifier.value),
-    () => InventoryWidget(),
+    () => InventoryWidget(onProductTap: _onProductTapped),
     () => FavoritesWidget(
       products: _favoriteProducts,
       isLoading: _isLoadingProducts,
