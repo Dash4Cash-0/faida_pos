@@ -48,6 +48,7 @@
   "swahili": "Swahili",
   "selectLanguage": "Select Language",
   "amount": "Amount",
-  "enterAmount": "Enter amount"
+  "enterAmount": "Enter amount",
+  "productDetails": "Product Details"
 
 }

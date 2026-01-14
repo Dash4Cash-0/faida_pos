@@ -11,7 +11,6 @@ import 'package:faida_pos/widgets/shared/tab_config.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:faida_pos/utils/checkout_utils/charge_button_text.dart';
-
 import '../widgets/checkout_widgets/receipt_widget.dart';
 
 
@@ -31,7 +30,6 @@ class _CheckoutState extends State<Checkout> {
   final controller = TextEditingController();
   late final l10n = AppLocalizations.of(context)!;
   final ValueNotifier <List<SaleItem>> _currentSaleList = ValueNotifier<List<SaleItem>>([]);
-  //final saleItemNotifier = ValueNotifier<List<SaleItem>>([]);
   List<Product> _favoriteProducts = [];
   bool _isLoadingProducts = true;
 
