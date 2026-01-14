@@ -55,6 +55,7 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(l10n.addProduct), backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
       body: Padding(
@@ -108,7 +109,9 @@ class _AddProductState extends State<AddProduct> {
               },
             ),
 
-            Row(spacing: 50,
+
+            Row(crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -129,9 +132,6 @@ class _AddProductState extends State<AddProduct> {
               child: Text(l10n.takePhoto),
             ),
 
-            if (_imageFile != null)
-              Image.file(_imageFile!, height: 100),
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
@@ -148,7 +148,11 @@ class _AddProductState extends State<AddProduct> {
               },
               child: Text(l10n.saveProduct),
             ),
-            ])
+            SizedBox(height: 10),
+
+            ]),
+            if (_imageFile != null)
+              Image.file(_imageFile!, height: 300),
           ],
         ),
       ),

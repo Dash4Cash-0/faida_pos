@@ -53,7 +53,7 @@ class FavoritesGrid extends StatelessWidget {
                 backgroundColor: Colors.red,
                 title: Text("Remove item from favorites?"),
                 content: Text("Do you want to remove this"
-                    "item from your favorites list?"),
+                    " item from your favorites list?"),
                 actions: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +103,16 @@ class _DetailedProductState extends State<DetailedProduct> {
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 16),
+          if(widget.product.image != null)
+            Expanded(
+                child: Image.file(
+                  File(widget.product.image!),
+                  fit: BoxFit.cover)
+            ) else
+              Expanded(child: Text("No Product Image")),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(onPressed: () {
 

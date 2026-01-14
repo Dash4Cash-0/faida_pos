@@ -1,7 +1,6 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
-//import 'package:faida_pos/widgets/shared/delete_product.dart';
 import 'package:faida_pos/widgets/shared/search_widget.dart';
 import 'package:flutter/material.dart';
 
