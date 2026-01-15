@@ -12,12 +12,12 @@ String getChargeButtonText({
 
   if (currentSaleList.length == 1 && input.isEmpty) {
     final total = currentSaleList.first.subtotal;
-    return "$charge: $total TZS";
+    return "$charge: TZS $total";
   }
 
   if (input.isNotEmpty) {
-    return "$charge: $input TZS";
+    return "$charge: TZS $input";
   }
 
-  return "$charge: 0 TZS";
+  return "$charge: TZS 0";
 }

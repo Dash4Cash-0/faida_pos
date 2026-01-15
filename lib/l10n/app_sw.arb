@@ -55,5 +55,8 @@
   "enterQuantity": "Ingiza Kiasi",
   "add": "Ongeza",
   "added": "Imeongezwa",
-  "inStock": "Katika Hisa"
+  "inStock": "Katika Hisa",
+  "transactionCompleted": "Transaction Completed",
+  "summary": "Summary",
+  "cashback": "Change"
 }

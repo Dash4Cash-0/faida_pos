@@ -125,7 +125,13 @@ class _DetailedProductState extends State<DetailedProduct> {
 
               ElevatedButton(onPressed: () {
                 widget.onItemAdd(widget.product);
-              }, child: Text(l10n.addItem)),
+              },style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  side: BorderSide(
+                      color: Colors.black,
+                      width: 1,
+                      style: BorderStyle.solid)),
+                  child: Text(l10n.addItem)),
 
               ElevatedButton(onPressed: () async {
 
@@ -148,7 +154,14 @@ class _DetailedProductState extends State<DetailedProduct> {
                 }
                 widget.refreshList();
 
-                }, child: Text(l10n.deleteItem)),
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                        color: Colors.black,
+                        width: 1,
+                        style: BorderStyle.solid)),
+                child: Text(l10n.deleteItem),),
             ],
           )
         ],

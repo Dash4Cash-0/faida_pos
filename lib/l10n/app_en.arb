@@ -55,6 +55,9 @@
   "enterQuantity": "Enter Quantity",
   "add": "Add",
   "added": "Added",
-  "inStock": "In Stock"
+  "inStock": "In Stock",
+  "transactionCompleted": "Transaction Completed",
+  "summary": "Summary",
+  "cashback": "Change"
 
 }

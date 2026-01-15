@@ -1,16 +1,20 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
+import 'package:faida_pos/models/sale_item.dart';
 import 'package:flutter/material.dart';
+
 
 class ReceiptWidget extends StatelessWidget {
   final double amountToPay;
   final double amountReceived;
   final VoidCallback onNewSale;
+  final ValueNotifier<List<SaleItem>> soldProducts;
 
   const ReceiptWidget({
     super.key,
     required this.amountToPay,
     required this.amountReceived,
-    required this.onNewSale});
+    required this.onNewSale,
+    required this.soldProducts});
   
   
   double calcChange() {
@@ -21,13 +25,15 @@ class ReceiptWidget extends StatelessWidget {
     return change;
   }
   
-  String getSellCompleted(double amount){
+  String getSellCompleted(double amount, String completed, String change){
     if(amount == 0){
-      return "Transaction Completed!";
+      return "$completed!";
     }else{
-      return "Customer is getting $amount TZS back";
+      return "$change: TZS $amount";
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +45,52 @@ class ReceiptWidget extends StatelessWidget {
           Align(alignment: Alignment.topLeft ,child: CloseButton()),
           Align(
             alignment: Alignment.center,
-            child: Text(getSellCompleted(calcChange()), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+            child: Text(getSellCompleted(calcChange(),
+                l10n.transactionCompleted,
+                l10n.cashback),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
           ),
+          Expanded(child: ValueListenableBuilder(
+              valueListenable: soldProducts,
+              builder: (context, items, _) {
+                if(items.isEmpty){
+                  return Text("No Items");
+                }
+
+                return ListView.separated(
+                    itemCount: items.length,
+                    separatorBuilder: (_,__) => Divider(),
+                    itemBuilder: (context, index){
+                      final item = items[index];
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text(
+                            item.productId == null
+                                ? item.name : "${item.name} x ${item.quantity}",
+                            style: TextStyle(fontSize: 10),
+                          )
+                          ),
+                          Text("TZS ${item.subtotal.toStringAsFixed(0)}",
+                          style: TextStyle(fontWeight: FontWeight.bold))
+                        ],
+                      );
+                    }
+                    );
+              })),
+
                ElevatedButton(
                   onPressed: () {
                     onNewSale();
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
+                   style: ElevatedButton.styleFrom(
+                       backgroundColor: Colors.white,
+                       side: BorderSide(
+                           color: Colors.black,
+                           width: 1,
+                           style: BorderStyle.solid)),
                   child: Text(l10n.newSale))
         ],
       ),

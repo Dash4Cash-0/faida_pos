@@ -198,6 +198,7 @@ class _CheckoutState extends State<Checkout> {
           amountToPay: storedValueNotifier.value,
           onNewSale: resetSale,
           amountReceived: amountReceived,
+          soldProducts: _currentSaleList,
         ),
       ),
     );
