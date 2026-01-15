@@ -56,7 +56,7 @@ class _AddProductState extends State<AddProduct> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(l10n.addProduct), backgroundColor: Colors.white,),
+      appBar: AppBar(title: Text(l10n.addItem), backgroundColor: Colors.white,),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -66,10 +66,10 @@ class _AddProductState extends State<AddProduct> {
           children: [
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: l10n.productName),
+              decoration: InputDecoration(labelText: l10n.itemName),
               validator: (value) {
                 if (value == null || value.trim().isEmpty){
-                  return l10n.enterProductName;
+                  return l10n.enterItemName;
                 }
                 return null;
               },
@@ -146,7 +146,7 @@ class _AddProductState extends State<AddProduct> {
                 _saveProduct();
                }
               },
-              child: Text(l10n.saveProduct),
+              child: Text(l10n.saveItem),
             ),
             SizedBox(height: 10),
 

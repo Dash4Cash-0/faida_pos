@@ -68,7 +68,7 @@ class _DetailedProductState extends State<DetailedProduct> {
               maxLength: 50,
               enabled: isEditing,
               decoration: InputDecoration(
-                labelText: "Product Name",
+                labelText: l10n.itemName,
                 border: OutlineInputBorder()
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
@@ -76,9 +76,12 @@ class _DetailedProductState extends State<DetailedProduct> {
           TextFormField(
               controller: descController,
               maxLength: 300,
+              minLines: 1,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
               enabled: isEditing,
               decoration: InputDecoration(
-                  labelText: "Product Description",
+                  labelText: l10n.description,
                   border: OutlineInputBorder()
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
@@ -88,7 +91,7 @@ class _DetailedProductState extends State<DetailedProduct> {
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               enabled: isEditing,
               decoration: InputDecoration(
-                  labelText: "Product Price",
+                  labelText: l10n.price,
                   border: OutlineInputBorder()
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
@@ -98,7 +101,7 @@ class _DetailedProductState extends State<DetailedProduct> {
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               enabled: isEditing,
               decoration: InputDecoration(
-                  labelText: "Current Stock",
+                  labelText: l10n.currentStock,
                   border: OutlineInputBorder()
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
@@ -116,7 +119,7 @@ class _DetailedProductState extends State<DetailedProduct> {
             children: [
               ElevatedButton(onPressed: () {
 
-              }, child: Text("Add Product")),
+              }, child: Text(l10n.addItem)),
 
               ElevatedButton(onPressed: () async {
 
@@ -139,7 +142,7 @@ class _DetailedProductState extends State<DetailedProduct> {
                 }
                 widget.refreshList();
 
-                }, child: Text("Delete Product")),
+                }, child: Text(l10n.deleteItem)),
             ],
           )
 

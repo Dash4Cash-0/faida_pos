@@ -72,7 +72,7 @@ class _AllProductsState extends State<AllProducts> {
                 final products = _filteredProducts();
 
                 if(products.isEmpty){
-                  return Center(child: Text(l10n.noProducts));
+                  return Center(child: Text(l10n.noItems));
                 }
 
                 return ListView.builder(padding: EdgeInsets.all(8),
