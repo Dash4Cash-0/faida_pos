@@ -126,6 +126,7 @@ class _DetailedProductState extends State<DetailedProduct> {
               ElevatedButton(onPressed: () {
                 widget.onItemAdd(widget.product);
               },style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
                   side: BorderSide(
                       color: Colors.black,
@@ -156,6 +157,7 @@ class _DetailedProductState extends State<DetailedProduct> {
 
                 },
                 style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
                     side: BorderSide(
                         color: Colors.black,

@@ -29,7 +29,7 @@ class ReceiptWidget extends StatelessWidget {
     if(amount == 0){
       return "$completed!";
     }else{
-      return "$change: TZS $amount";
+      return "$change: TZS ${amount.toStringAsFixed(0)}";
     }
   }
 
@@ -43,6 +43,9 @@ class ReceiptWidget extends StatelessWidget {
       child: Column(
         children: [
           Align(alignment: Alignment.topLeft ,child: CloseButton()),
+          Text("Receipt",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 28)),
           Align(
             alignment: Alignment.center,
             child: Text(getSellCompleted(calcChange(),
@@ -87,6 +90,7 @@ class ReceiptWidget extends StatelessWidget {
                   },
                    style: ElevatedButton.styleFrom(
                        backgroundColor: Colors.white,
+                       foregroundColor: Colors.black,
                        side: BorderSide(
                            color: Colors.black,
                            width: 1,
