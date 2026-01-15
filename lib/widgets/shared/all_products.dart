@@ -87,13 +87,14 @@ class _AllProductsState extends State<AllProducts> {
                           MaterialPageRoute<void>(
                               builder: (context) =>
                                   DetailedProduct(
+                                      onItemAdd: widget.onProductTap,
                                       product: p,
                                       refreshList: _refresh)));
                     },
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),
                     trailing: Text("${p.price} TZS\n"
-                    "In stock: ${p.inStock}"),
+                    "${l10n.inStock}: ${p.inStock}"),
                   );
                     }
                     );

@@ -59,12 +59,18 @@ class _CheckoutState extends State<Checkout> {
               controller: quantity,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(border: OutlineInputBorder(),
-              labelText: "Enter Quantity"),
+              labelText: l10n.enterQuantity),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)),
                 onPressed: (){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:Text("${product.name} ${l10n.added}"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 setState(() {
                   _currentSaleList.value = [
                     ..._currentSaleList.value,
@@ -73,7 +79,7 @@ class _CheckoutState extends State<Checkout> {
                   storedValueNotifier.value += product.price * double.parse(quantity.text);
                   Navigator.pop(context);
                 });
-            }, child: Text("Add"))
+            }, child: Text(l10n.add))
           ],
         ),
         ),

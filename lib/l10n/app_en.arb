@@ -49,7 +49,12 @@
   "selectLanguage": "Select Language",
   "amount": "Amount",
   "enterAmount": "Enter amount",
-  "productDetails": "Product Details",
-  "currentStock": "Current Stock"
+  "itemDetails": "Item Details",
+  "currentStock": "Current Stock",
+  "noImage": "No Item Image",
+  "enterQuantity": "Enter Quantity",
+  "add": "Add",
+  "added": "Added",
+  "inStock": "In Stock"
 
 }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +8,13 @@ import 'delete_product.dart';
 class DetailedProduct extends StatefulWidget {
   final Product product;
   final VoidCallback refreshList;
+  final Function(Product) onItemAdd;
 
   const DetailedProduct({
     super.key, 
     required this.product,
-    required this.refreshList});
+    required this.refreshList,
+    required this.onItemAdd});
 
   @override
   State<DetailedProduct> createState() => _DetailedProductState();
@@ -25,6 +26,7 @@ class _DetailedProductState extends State<DetailedProduct> {
   late TextEditingController descController;
   late TextEditingController priceController;
   late double costPerUnit;
+  late bool isFavorite;
   bool isEditing = false;
 
 
@@ -35,6 +37,7 @@ class _DetailedProductState extends State<DetailedProduct> {
     nameController = TextEditingController(text: widget.product.name);
     descController = TextEditingController(text: widget.product.description);
     priceController = TextEditingController(text: widget.product.price.toString());
+    isFavorite = widget.product.isFavorite;
 
   }
 
@@ -45,7 +48,7 @@ class _DetailedProductState extends State<DetailedProduct> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(l10n.productDetails, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+        title: Text(l10n.itemDetails, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
         actions: [
           IconButton(onPressed: () {
             _saveChanges();
@@ -65,7 +68,9 @@ class _DetailedProductState extends State<DetailedProduct> {
         children: [
           TextFormField(
               controller: nameController,
-              maxLength: 50,
+              maxLength: 30,
+              minLines: 1,
+              maxLines: 2,
               enabled: isEditing,
               decoration: InputDecoration(
                 labelText: l10n.itemName,
@@ -75,7 +80,7 @@ class _DetailedProductState extends State<DetailedProduct> {
           SizedBox(height: 16),
           TextFormField(
               controller: descController,
-              maxLength: 300,
+              maxLength: 70,
               minLines: 1,
               maxLines: null,
               keyboardType: TextInputType.multiline,
@@ -112,13 +117,14 @@ class _DetailedProductState extends State<DetailedProduct> {
                   File(widget.product.image!),
                   fit: BoxFit.cover)
             ) else
-              Expanded(child: Text("No Product Image")),
+              Expanded(child: Text(l10n.noImage)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(onPressed: () {
 
+              ElevatedButton(onPressed: () {
+                widget.onItemAdd(widget.product);
               }, child: Text(l10n.addItem)),
 
               ElevatedButton(onPressed: () async {
@@ -145,7 +151,6 @@ class _DetailedProductState extends State<DetailedProduct> {
                 }, child: Text(l10n.deleteItem)),
             ],
           )
-
         ],
       )),
     )
@@ -160,7 +165,7 @@ class _DetailedProductState extends State<DetailedProduct> {
             price: double.parse(priceController.text),
             inStock: double.parse(currentStockController.text),
             image: widget.product.image,
-            isFavorite: widget.product.isFavorite));
+            isFavorite: isFavorite));
     
   }
 }

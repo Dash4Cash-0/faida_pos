@@ -49,6 +49,11 @@
   "selectLanguage": "Chagua Lugha",
   "amount": "Kiasi",
   "enterAmount": "Weka kiasi",
-  "productDetails": "Maelezo ya Bidhaa",
-  "currentStock": "Hifadhi ya Sasa"
+  "itemDetails": "Maelezo ya Kipengee",
+  "currentStock": "Hifadhi ya Sasa",
+  "noImage": "Hakuna Picha ya Kipengee",
+  "enterQuantity": "Ingiza Kiasi",
+  "add": "Ongeza",
+  "added": "Imeongezwa",
+  "inStock": "Katika Hisa"
 }
