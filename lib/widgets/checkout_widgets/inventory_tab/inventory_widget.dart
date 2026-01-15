@@ -5,15 +5,21 @@ import '../../../models/product.dart';
 
 class InventoryWidget extends StatelessWidget {
   final Function(Product) onProductTap;
+  final VoidCallback refreshOnAddedFavorite;
 
-  const InventoryWidget({super.key, required this.onProductTap});
+  const InventoryWidget({super.key,
+    required this.onProductTap,
+    required this.refreshOnAddedFavorite});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
 
-        Expanded(child: AllProducts(onProductTap: onProductTap))
+        Expanded(child:
+        AllProducts(
+            refreshOnAddedFavorite: refreshOnAddedFavorite,
+            onProductTap: onProductTap))
       ],
     );
   }

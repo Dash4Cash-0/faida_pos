@@ -8,10 +8,12 @@ import 'detailed_product.dart';
 
 class AllProducts extends StatefulWidget {
   final Function(Product) onProductTap;
+  final VoidCallback refreshOnAddedFavorite;
 
   const AllProducts({
     super.key,
-    required this.onProductTap
+    required this.onProductTap,
+    required this.refreshOnAddedFavorite
   });
 
   @override
@@ -87,6 +89,7 @@ class _AllProductsState extends State<AllProducts> {
                           MaterialPageRoute<void>(
                               builder: (context) =>
                                   DetailedProduct(
+                                      refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
                                       onItemAdd: widget.onProductTap,
                                       product: p,
                                       refreshList: _refresh)));

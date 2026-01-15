@@ -9,12 +9,14 @@ class DetailedProduct extends StatefulWidget {
   final Product product;
   final VoidCallback refreshList;
   final Function(Product) onItemAdd;
+  final VoidCallback refreshOnAddedFavorite;
 
   const DetailedProduct({
     super.key, 
     required this.product,
     required this.refreshList,
-    required this.onItemAdd});
+    required this.onItemAdd,
+    required this.refreshOnAddedFavorite});
 
   @override
   State<DetailedProduct> createState() => _DetailedProductState();
@@ -111,6 +113,14 @@ class _DetailedProductState extends State<DetailedProduct> {
               ),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 16),
+          CheckboxListTile(
+             title: Text(l10n.addToFav),
+              enabled: isEditing,
+              value: isFavorite, onChanged: (value) {
+                setState(() {
+                  isFavorite = value ?? false;
+                });
+          }),
           if(widget.product.image != null)
             Expanded(
                 child: Image.file(
@@ -181,7 +191,7 @@ class _DetailedProductState extends State<DetailedProduct> {
             inStock: double.parse(currentStockController.text),
             image: widget.product.image,
             isFavorite: isFavorite));
-    
+    widget.refreshOnAddedFavorite();
   }
 }
 
