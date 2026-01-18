@@ -1,5 +1,6 @@
 import 'package:faida_pos/home_root.dart';
 import 'package:faida_pos/screens/app_initializer.dart';
+import 'package:faida_pos/utils/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,7 +55,7 @@ class MyAppState extends State<MyApp>{
       },
       child: MaterialApp(
         locale: _locale,
-        home: HomeRoot(),//AppInitializer(),
+        home: SplashScreen(),//HomeRoot(),//AppInitializer(),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

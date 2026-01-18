@@ -30,13 +30,28 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.1
 
 flutter:
   generate: true
   uses-material-design: true
+  assets:
+    - assets/images/splash_logo.png
 
 localization:
   arb-dir: lib/l10n
   template-arb-file: app_en.arb
   output-localization-file: app_localizations.dart
   output-class: AppLocalizations
+
+flutter_native_splash:
+  color: "#05421d"
+  image: assets/images/splash_logo.png
+
+  android: true
+  ios: true
+  web: false
+
+  android_12:
+    color: "#05421d"
+    image: assets/images/splash_logo.png
