@@ -2,12 +2,11 @@ import 'package:faida_pos/main.dart';
 import 'package:faida_pos/security/pin_setup.dart';
 import 'package:faida_pos/services/app_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class LanguageSelection extends StatelessWidget {
 
-  LanguageSelection({super.key});
+  const LanguageSelection({super.key});
 
   @override
   Widget build(BuildContext context) {
