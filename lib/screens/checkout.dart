@@ -189,9 +189,14 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 
-  void _onCalculatePressed(double amountReceived){
+  void _onCalculatePressed(double amountReceived) async {
 
     Navigator.pop(context);
+
+    await DatabaseService.instance.processSale(
+        items: _currentSaleList.value,
+        amountReceived: amountReceived);
+    if(!mounted) return;
 
     showDialog(
       context: context,
