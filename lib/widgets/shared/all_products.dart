@@ -24,6 +24,7 @@ class _AllProductsState extends State<AllProducts> {
   late Future<List<Product>> _productsFuture;
   List<Product> _allProducts = [];
   String _searchText = "";
+  late final l10n = AppLocalizations.of(context)!;
 
 
   @override
@@ -53,9 +54,33 @@ class _AllProductsState extends State<AllProducts> {
     }).toList();
   }
 
+  void _showOutOfStockDialog(Product p) {
+    showDialog(context:
+    context, builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        title: Text(l10n.outOfStock),
+        content: Text("${p.name} ${l10n.isOutOfStock}",
+            style: TextStyle(fontSize: 16)),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: BorderSide(
+                    color: Colors.black,
+                    width: 1, style:
+                BorderStyle.solid)
+            ),
+            child: Text(l10n.ok),)
+        ],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Column(
         children: [
@@ -87,28 +112,7 @@ class _AllProductsState extends State<AllProducts> {
                     onTap: () async {
                       if(p.inStock == 0){
                         null;
-                        showDialog(context:
-                        context, builder: (BuildContext context) {
-                           return AlertDialog(
-                             backgroundColor: Colors.red,
-                             title: Text("Out of Stock"),
-                             content: Text("${p.name} is out of stock",
-                               style: TextStyle(fontSize: 16)),
-                             actions: [
-                               ElevatedButton(
-                                 onPressed: () => Navigator.pop(context),
-                                 style: ElevatedButton.styleFrom(
-                                   foregroundColor: Colors.black,
-                                   backgroundColor: Colors.white,
-                                   side: BorderSide(
-                                       color: Colors.black,
-                                       width: 1, style:
-                                        BorderStyle.solid)
-                                 ),
-                                 child: Text("Ok"),)
-                             ],
-                          );
-                        });
+                        _showOutOfStockDialog(p);
                       } else {
                         widget.onProductTap(p);
                       }
@@ -121,7 +125,8 @@ class _AllProductsState extends State<AllProducts> {
                                       refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
                                       onItemAdd: widget.onProductTap,
                                       product: p,
-                                      refreshList: _refresh)));
+                                      refreshList: _refresh,
+                                      outOfStockAlert: _showOutOfStockDialog)));
                     },
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),

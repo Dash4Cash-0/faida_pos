@@ -61,6 +61,6 @@
   "cashback": "Change",
   "receipt": "Receipt",
   "outOfStock": "Out Of Stock",
-  "isOutOfStock": "is out of stock"
-
+  "isOutOfStock": "is out of stock",
+  "ok": "Ok"
 }

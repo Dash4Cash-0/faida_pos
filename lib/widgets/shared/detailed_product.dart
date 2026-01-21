@@ -10,13 +10,15 @@ class DetailedProduct extends StatefulWidget {
   final VoidCallback refreshList;
   final Function(Product) onItemAdd;
   final VoidCallback refreshOnAddedFavorite;
+  final Function(Product) outOfStockAlert;
 
   const DetailedProduct({
     super.key, 
     required this.product,
     required this.refreshList,
     required this.onItemAdd,
-    required this.refreshOnAddedFavorite});
+    required this.refreshOnAddedFavorite,
+    required this.outOfStockAlert});
 
   @override
   State<DetailedProduct> createState() => _DetailedProductState();
@@ -30,6 +32,7 @@ class _DetailedProductState extends State<DetailedProduct> {
   late double costPerUnit;
   late bool isFavorite;
   bool isEditing = false;
+  late bool isOutOfStock = widget.product.inStock == 0;
 
 
   @override
@@ -132,17 +135,19 @@ class _DetailedProductState extends State<DetailedProduct> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
-              ElevatedButton(onPressed: () {
-                widget.onItemAdd(widget.product);
-              },style: ElevatedButton.styleFrom(
+              ElevatedButton(
+                  onPressed: isOutOfStock
+                  ? () => widget.outOfStockAlert(widget.product)
+                  : () => widget.onItemAdd(widget.product)
+                  ,style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
                   side: BorderSide(
                       color: Colors.black,
                       width: 1,
                       style: BorderStyle.solid)),
-                  child: Text(l10n.addItem)),
+                  child: Text(l10n.addItem)
+              ),
 
               ElevatedButton(onPressed: () async {
 
