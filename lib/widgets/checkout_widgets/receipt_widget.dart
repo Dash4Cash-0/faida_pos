@@ -43,7 +43,7 @@ class ReceiptWidget extends StatelessWidget {
       child: Column(
         children: [
           Align(alignment: Alignment.topLeft ,child: CloseButton()),
-          Text("Receipt",
+          Text(l10n.receipt,
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 28)),
           Align(
@@ -57,7 +57,7 @@ class ReceiptWidget extends StatelessWidget {
               valueListenable: soldProducts,
               builder: (context, items, _) {
                 if(items.isEmpty){
-                  return Text("No Items");
+                  return Text(l10n.noItems);
                 }
 
                 return ListView.separated(

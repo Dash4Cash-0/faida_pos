@@ -56,7 +56,9 @@
   "add": "Ongeza",
   "added": "Imeongezwa",
   "inStock": "Katika Hisa",
-  "transactionCompleted": "Transaction Completed",
-  "summary": "Summary",
-  "cashback": "Change"
+  "transactionCompleted": "Muamala Umekamilika",
+  "summary": "Muhtasari",
+  "cashback": "Badilika",
+  "receipt": "Risiti"
+
 }

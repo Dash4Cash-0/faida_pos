@@ -58,6 +58,7 @@
   "inStock": "In Stock",
   "transactionCompleted": "Transaction Completed",
   "summary": "Summary",
-  "cashback": "Change"
+  "cashback": "Change",
+  "receipt": "Receipt"
 
 }
