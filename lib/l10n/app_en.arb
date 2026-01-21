@@ -59,6 +59,8 @@
   "transactionCompleted": "Transaction Completed",
   "summary": "Summary",
   "cashback": "Change",
-  "receipt": "Receipt"
+  "receipt": "Receipt",
+  "outOfStock": "Out Of Stock",
+  "isOutOfStock": "is out of stock"
 
 }
