@@ -82,8 +82,37 @@ class _AllProductsState extends State<AllProducts> {
                     itemBuilder: (context, index) {
                   final p = products[index];
 
+
                   return ListTile(
-                    onTap: () => widget.onProductTap(p),
+                    onTap: () async {
+                      if(p.inStock == 0){
+                        null;
+                        showDialog(context:
+                        context, builder: (BuildContext context) {
+                           return AlertDialog(
+                             backgroundColor: Colors.red,
+                             title: Text("Out of Stock"),
+                             content: Text("${p.name} is out of stock",
+                               style: TextStyle(fontSize: 16)),
+                             actions: [
+                               ElevatedButton(
+                                 onPressed: () => Navigator.pop(context),
+                                 style: ElevatedButton.styleFrom(
+                                   foregroundColor: Colors.black,
+                                   backgroundColor: Colors.white,
+                                   side: BorderSide(
+                                       color: Colors.black,
+                                       width: 1, style:
+                                        BorderStyle.solid)
+                                 ),
+                                 child: Text("Ok"),)
+                             ],
+                          );
+                        });
+                      } else {
+                        widget.onProductTap(p);
+                      }
+                    },
                     onLongPress: () async {
                       Navigator.push(context,
                           MaterialPageRoute<void>(
