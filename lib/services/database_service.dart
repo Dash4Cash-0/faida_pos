@@ -85,6 +85,7 @@ class DatabaseService {
     return maps.map((map) => Product.fromMap(map)).toList();
   }
 
+
   Future<List<Product>> getFavoriteProducts() async {
     Database db = await instance.db;
     final maps = await db.query(

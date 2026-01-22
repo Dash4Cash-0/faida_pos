@@ -5,6 +5,7 @@ class TodayWidget extends StatelessWidget {
 
 
 
+
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
@@ -22,6 +23,14 @@ class TodayWidget extends StatelessWidget {
               child: Text(dateFormat,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall)
+            ),
+            SingleChildScrollView(
+              child: Padding(padding: EdgeInsets.all(9),
+              child: Column(
+                children: [
+
+                ],
+              )),
             )
 
           ],
