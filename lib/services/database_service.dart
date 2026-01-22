@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:faida_pos/models/sale.dart';
 import 'package:path/path.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -94,6 +95,22 @@ class DatabaseService {
       whereArgs: [1],
     );
     return maps.map((map) => Product.fromMap(map)).toList();
+  }
+
+  Future<List<Sale>> getTodaySales() async {
+    Database db = await instance.db;
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final startTomorrow = startOfDay.add(Duration(days: 1));
+
+    final maps = await db.query(
+      'sales',
+      where: 'createdAt >= ? AND createdAt < ?',
+        whereArgs: [startOfDay.toIso8601String(),
+        startTomorrow.toIso8601String()],
+    );
+    print('Today sales maps: $maps');
+    return maps.map((map) => Sale.fromMap(map)).toList();
   }
 
   Future<int> updateProduct(Product product) async {
