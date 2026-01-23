@@ -62,6 +62,9 @@
   "receipt": "Risiti",
   "outOfStock": "Imeisha",
   "isOutOfStock": "imeisha",
-  "ok": "Sawa"
+  "ok": "Sawa",
+  "receivedAmountError": "Tafadhali ingiza kiasi kilichopokelewa",
+  "numberError": "Tafadhali ingiza kiasi kwa kutumia nambari",
+  "enterCorrectAmount": "Tafadhali ingiza angalau"
 
 }

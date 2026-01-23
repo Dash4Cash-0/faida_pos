@@ -62,5 +62,8 @@
   "receipt": "Receipt",
   "outOfStock": "Out Of Stock",
   "isOutOfStock": "is out of stock",
-  "ok": "Ok"
+  "ok": "Ok",
+  "receivedAmountError": "Please enter amount received",
+  "numberError": "Please enter amount with numbers",
+  "enterCorrectAmount": "Please enter at least"
 }

@@ -118,14 +118,14 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                   validator: (value) {
                                                     if (value == null ||
                                                         value.isEmpty) {
-                                                      return "You need to enter the amount received";
+                                                      return l10n.receivedAmountError;
                                                     }
                                                     final parsed = double.tryParse(value.trim());
                                                     if (parsed == null) {
-                                                      return "Please enter a valid number";
+                                                      return l10n.numberError;
                                                     }
                                                     if (parsed < widget.storedValueNotifier.value) {
-                                                      return "Please enter: ${widget.storedValueNotifier.value} TZS or more";
+                                                      return "${l10n.enterCorrectAmount}: TZS ${widget.storedValueNotifier.value}";
                                                     }
                                                     return null;
                                                     },

@@ -9,9 +9,6 @@ class TodayWidget extends StatelessWidget {
     super.key, required
     this.soldItems});
 
-
-
-
   @override
   Widget build(BuildContext context)  {
     final locale = Localizations.localeOf(context).languageCode;
@@ -33,8 +30,7 @@ class TodayWidget extends StatelessWidget {
             ),
             Expanded(
               child: Padding(padding: EdgeInsets.all(9),
-              child: Column(
-                children: [
+              child:
                   ValueListenableBuilder(
                       valueListenable: soldItems, builder: (context, sales, _) {
                 if (sales.isEmpty) {
@@ -66,10 +62,7 @@ class TodayWidget extends StatelessWidget {
                 );
               }
                   )
-                ],
               )),
-            )
-
           ],
       )),
     );
