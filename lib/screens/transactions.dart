@@ -38,8 +38,13 @@ int _currentIndex = 0;
   }
 
   Future<void> _loadTodaySales() async {
-    final sales = await DatabaseService.instance.getTodaySales();
-    _salesToday.value = sales;
+    _salesToday.value = await DatabaseService.instance.getTodaySales();;
+  }
+
+  @override
+  void dispose() {
+    _salesToday.dispose();
+    super.dispose();
   }
 
 
