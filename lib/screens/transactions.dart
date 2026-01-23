@@ -20,7 +20,6 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
 
-  late Future<List<Sale>> _salesFuture;
   late final ValueNotifier<List<Sale>> _salesToday
   = ValueNotifier<List<Sale>>([]);
 
@@ -35,7 +34,6 @@ int _currentIndex = 0;
   @override
   void initState(){
     super.initState();
-    _salesFuture = DatabaseService.instance.getTodaySales();
     _loadTodaySales();
   }
 
