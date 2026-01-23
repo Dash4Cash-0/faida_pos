@@ -1,3 +1,4 @@
+import 'package:faida_pos/controllers/checkout_controller.dart';
 import 'package:faida_pos/screens/checkout.dart';
 import 'package:faida_pos/screens/menu.dart';
 import 'package:faida_pos/screens/notifications.dart';
@@ -15,9 +16,10 @@ class HomeRoot extends StatefulWidget {
 
 class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
+  late final CheckoutController _controller;
 
-  final _screens = [
-    Checkout(),
+  late final _screens = [
+    Checkout(controller: _controller,),
     Transactions(),
     Reports(),
     Notifications(),

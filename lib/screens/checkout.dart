@@ -1,3 +1,4 @@
+import 'package:faida_pos/controllers/checkout_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/models/sale_item.dart';
@@ -15,17 +16,20 @@ import '../widgets/checkout_widgets/receipt_widget.dart';
 
 
 class Checkout extends StatefulWidget {
-  const Checkout({super.key});
+
+  final CheckoutController controller;
+
+  const Checkout({super.key, required this.controller});
 
   @override
   State<Checkout> createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
-  String input = "";
-  String partValues = "";
-  int _currentIndex = 0;
-  String currentSale = "";
+  //String input = "";
+  //String partValues = "";
+  //int _currentIndex = 0;
+ // String currentSale = "";
   final storedValueNotifier = ValueNotifier<double>(0);
   final controller = TextEditingController();
   late final l10n = AppLocalizations.of(context)!;
@@ -95,8 +99,8 @@ class _CheckoutState extends State<Checkout> {
         onNumPressed: onNumPressed,
         onClear: onClear,
         onPlusPressed: onPlusPressed,
-        value: input,
-        partValues: partValues,
+        value: widget.controller.input,
+        partValues: widget.controller.partValues,
         storedValue: storedValueNotifier.value),
     () => InventoryWidget(
         onProductTap: _onProductTapped,
@@ -112,37 +116,37 @@ class _CheckoutState extends State<Checkout> {
 
   void onNumPressed(String digit){
     setState (() {
-      input += digit;
+      widget.controller.input += digit;
     });
   }
 
   void onClear() {
     setState(() {
-      input = "";
+      widget.controller.input = "";
       storedValueNotifier.value = 0;
-      partValues = "";
+      widget.controller.partValues = "";
       _currentSaleList.value = [];
     });
   }
 
   void onPlusPressed(){
-    if(input.isEmpty) return;
+    if(widget.controller.input.isEmpty) return;
     setState(() {
-      final current = double.parse(input);
+      final current = double.parse(widget.controller.input);
       storedValueNotifier.value += current;
       _currentSaleList.value = [
        ..._currentSaleList.value,
-        SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1)
+        SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
       ];
-      input = "";
+      widget.controller.input = "";
     });
   }
 
   void resetSale(){
     setState(() {
       storedValueNotifier.value = 0;
-      input = "";
-      partValues = "";
+      widget.controller.input = "";
+      widget.controller.partValues = "";
       _currentSaleList.value = [];
     });
   }
@@ -289,27 +293,27 @@ class _CheckoutState extends State<Checkout> {
               TabConfig(l10n.numpad),
               TabConfig(l10n.inventory),
               TabConfig(l10n.favorites)],
-                currentIndex: _currentIndex,
+                currentIndex: widget.controller.currentIndex,
                 onSelectedTab: (index) {
-              setState(() => _currentIndex = index);
+              setState(() => widget.controller.currentIndex = index);
                 }),
-            Expanded(child: tabs[_currentIndex]()),
+            Expanded(child: tabs[widget.controller.currentIndex]()),
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
             getChargeButtonText(currentSaleList: _currentSaleList.value,
-                input: input,
+                input: widget.controller.input,
                 review: l10n.review, items: l10n.items, charge: l10n.charge),
                 onClicked: () {
-              if(input.isNotEmpty){
+              if(widget.controller.input.isNotEmpty){
                 setState(() {
-                  final customAmount = double.parse(input);
+                  final customAmount = double.parse(widget.controller.input);
                   storedValueNotifier.value += customAmount;
                   _currentSaleList.value = [
                     ..._currentSaleList.value,
-                    SaleItem(productId: null, name: l10n.customAmount, price: double.parse(input), quantity: 1)
+                    SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
                   ];
-                  input = "";
+                  widget.controller.input = "";
                 });
               }
               showModalBottomSheet(
