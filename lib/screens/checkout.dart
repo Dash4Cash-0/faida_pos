@@ -269,6 +269,14 @@ class _CheckoutState extends State<Checkout> {
   }
 
   @override
+  void dispose() {
+    storedValueNotifier.dispose();
+    _currentSaleList.dispose();
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
