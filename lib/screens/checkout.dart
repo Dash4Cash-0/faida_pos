@@ -26,16 +26,7 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-  //String input = "";
-  //String partValues = "";
-  //int _currentIndex = 0;
- // String currentSale = "";
-  final storedValueNotifier = ValueNotifier<double>(0);
-  final controller = TextEditingController();
   late final l10n = AppLocalizations.of(context)!;
-  final ValueNotifier <List<SaleItem>> _currentSaleList = ValueNotifier<List<SaleItem>>([]);
-  List<Product> _favoriteProducts = [];
-  bool _isLoadingProducts = true;
 
   @override
   void initState(){
@@ -46,8 +37,8 @@ class _CheckoutState extends State<Checkout> {
   Future<void> _loadFavoriteProducts() async {
     final products = await DatabaseService.instance.getFavoriteProducts();
     setState(() {
-      _favoriteProducts = products;
-      _isLoadingProducts = false;
+      widget.controller.favoriteProducts = products;
+      widget.controller.isLoadingProducts = false;
     });
   }
 
@@ -76,11 +67,11 @@ class _CheckoutState extends State<Checkout> {
                     ),
                   );
                 setState(() {
-                  _currentSaleList.value = [
-                    ..._currentSaleList.value,
+                  widget.controller.currentSaleList.value = [
+                    ...widget.controller.currentSaleList.value,
                     SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text))
                   ];
-                  storedValueNotifier.value += product.price * double.parse(quantity.text);
+                  widget.controller.storedValueNotifier.value += product.price * double.parse(quantity.text);
                   Navigator.pop(context);
                 });
             }, child: Text(l10n.add))
@@ -101,13 +92,13 @@ class _CheckoutState extends State<Checkout> {
         onPlusPressed: onPlusPressed,
         value: widget.controller.input,
         partValues: widget.controller.partValues,
-        storedValue: storedValueNotifier.value),
+        storedValue: widget.controller.storedValueNotifier.value),
     () => InventoryWidget(
         onProductTap: _onProductTapped,
         refreshOnAddedFavorite: _onAddProductComplete,),
     () => FavoritesWidget(
-      products: _favoriteProducts,
-      isLoading: _isLoadingProducts,
+      products: widget.controller.favoriteProducts,
+      isLoading: widget.controller.isLoadingProducts,
       onProductTap: _onProductTapped,
       onProductAdded: _onAddProductComplete,
     ),
@@ -123,9 +114,9 @@ class _CheckoutState extends State<Checkout> {
   void onClear() {
     setState(() {
       widget.controller.input = "";
-      storedValueNotifier.value = 0;
+      widget.controller.storedValueNotifier.value = 0;
       widget.controller.partValues = "";
-      _currentSaleList.value = [];
+      widget.controller.currentSaleList.value = [];
     });
   }
 
@@ -133,9 +124,9 @@ class _CheckoutState extends State<Checkout> {
     if(widget.controller.input.isEmpty) return;
     setState(() {
       final current = double.parse(widget.controller.input);
-      storedValueNotifier.value += current;
-      _currentSaleList.value = [
-       ..._currentSaleList.value,
+      widget.controller.storedValueNotifier.value += current;
+      widget.controller.currentSaleList.value = [
+       ...widget.controller.currentSaleList.value,
         SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
       ];
       widget.controller.input = "";
@@ -144,10 +135,10 @@ class _CheckoutState extends State<Checkout> {
 
   void resetSale(){
     setState(() {
-      storedValueNotifier.value = 0;
+      widget.controller.storedValueNotifier.value = 0;
       widget.controller.input = "";
       widget.controller.partValues = "";
-      _currentSaleList.value = [];
+      widget.controller.currentSaleList.value = [];
     });
   }
 
@@ -156,31 +147,31 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       switch (discount) {
         case "5%":
-          final double fivePercent = -storedValueNotifier.value * 0.05;
+          final double fivePercent = -widget.controller.storedValueNotifier.value * 0.05;
           setState(() {
-            storedValueNotifier.value *= 0.95;
-            _currentSaleList.value = [
-              ..._currentSaleList.value,
+            widget.controller.storedValueNotifier.value *= 0.95;
+            widget.controller.currentSaleList.value = [
+              ...widget.controller.currentSaleList.value,
             SaleItem(productId: null, name: "5% ${l10n.discount}: ", price: fivePercent, quantity: 1)
             ];
           });
           break;
         case "10%":
-          final double tenPercent = -storedValueNotifier.value * 0.1;
+          final double tenPercent = -widget.controller.storedValueNotifier.value * 0.1;
           setState(() {
-            storedValueNotifier.value *= 0.90;
-            _currentSaleList.value = [
-              ..._currentSaleList.value,
+            widget.controller.storedValueNotifier.value *= 0.90;
+            widget.controller.currentSaleList.value = [
+              ...widget.controller.currentSaleList.value,
               SaleItem(productId: null, name: "10% ${l10n.discount}: ", price: tenPercent, quantity: 1)
             ];
           });
           break;
         case "15%":
-          final double fifteenPercent = -storedValueNotifier.value * 0.15;
+          final double fifteenPercent = -widget.controller.storedValueNotifier.value * 0.15;
           setState(() {
-            storedValueNotifier.value *=0.85;
-            _currentSaleList.value = [
-              ..._currentSaleList.value,
+            widget.controller.storedValueNotifier.value *=0.85;
+            widget.controller.currentSaleList.value = [
+              ...widget.controller.currentSaleList.value,
               SaleItem(productId: null, name: "15% ${l10n.discount}: ", price: fifteenPercent, quantity: 1)
             ];
           });
@@ -198,7 +189,7 @@ class _CheckoutState extends State<Checkout> {
     Navigator.pop(context);
 
     await DatabaseService.instance.processSale(
-        items: _currentSaleList.value,
+        items: widget.controller.currentSaleList.value,
         amountReceived: amountReceived);
     if(!mounted) return;
 
@@ -206,10 +197,10 @@ class _CheckoutState extends State<Checkout> {
       context: context,
       builder: (_) => Dialog.fullscreen(
         child: ReceiptWidget(
-          amountToPay: storedValueNotifier.value,
+          amountToPay: widget.controller.storedValueNotifier.value,
           onNewSale: resetSale,
           amountReceived: amountReceived,
-          soldProducts: _currentSaleList,
+          soldProducts: widget.controller.currentSaleList,
         ),
       ),
     );
@@ -237,7 +228,7 @@ class _CheckoutState extends State<Checkout> {
             ),
             SizedBox(height: 10),
             TextField(
-              controller: controller,
+              controller: widget.controller.controller,
             decoration: InputDecoration(
               constraints: BoxConstraints(maxWidth: 100),
               suffixIcon: Icon(Icons.percent),
@@ -251,18 +242,18 @@ class _CheckoutState extends State<Checkout> {
             ),
                 onPressed: () => {
               setState(() {
-              customDiscount = -storedValueNotifier.value * (double.parse(controller.text) / 100);
-                  _currentSaleList.value = [
-                    ..._currentSaleList.value,
+              customDiscount = -widget.controller.storedValueNotifier.value * (double.parse(widget.controller.controller.text) / 100);
+              widget.controller.currentSaleList.value = [
+                    ...widget.controller.currentSaleList.value,
                     SaleItem(
                       productId: null,
-                      name: "${controller.text}% ${l10n.discount}",
+                      name: "${widget.controller.controller.text}% ${l10n.discount}",
                       price: customDiscount,
                       quantity: 1)
                   ];
 
-                  storedValueNotifier.value *= 1.0 - (double.parse(controller.text) / 100);
-                  controller.text = "";
+              widget.controller.storedValueNotifier.value *= 1.0 - (double.parse(widget.controller.controller.text) / 100);
+              widget.controller.controller.text = "";
               }),
                 Navigator.pop(context)},
                 child: Text(l10n.addDiscount, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),))
@@ -270,14 +261,6 @@ class _CheckoutState extends State<Checkout> {
         ))
       ));
     });
-  }
-
-  @override
-  void dispose() {
-    storedValueNotifier.dispose();
-    _currentSaleList.dispose();
-    controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -301,16 +284,16 @@ class _CheckoutState extends State<Checkout> {
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:
-            getChargeButtonText(currentSaleList: _currentSaleList.value,
+            getChargeButtonText(currentSaleList: widget.controller.currentSaleList.value,
                 input: widget.controller.input,
                 review: l10n.review, items: l10n.items, charge: l10n.charge),
                 onClicked: () {
               if(widget.controller.input.isNotEmpty){
                 setState(() {
                   final customAmount = double.parse(widget.controller.input);
-                  storedValueNotifier.value += customAmount;
-                  _currentSaleList.value = [
-                    ..._currentSaleList.value,
+                  widget.controller.storedValueNotifier.value += customAmount;
+                  widget.controller.currentSaleList.value = [
+                    ...widget.controller.currentSaleList.value,
                     SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
                   ];
                   widget.controller.input = "";
@@ -320,10 +303,10 @@ class _CheckoutState extends State<Checkout> {
                   context: context,
                   builder: (_) =>
                     CheckoutBottomSheet(
-                      itemsCount: _currentSaleList.value.length,
-                      currentSaleItems: _currentSaleList.value,
-                      storedValueNotifier: storedValueNotifier,
-                      saleItemNotifier: _currentSaleList,
+                      itemsCount: widget.controller.currentSaleList.value.length,
+                      currentSaleItems: widget.controller.currentSaleList.value,
+                      storedValueNotifier: widget.controller.storedValueNotifier,
+                      saleItemNotifier: widget.controller.currentSaleList,
                       onNewSale: resetSale,
                       addDiscount: addDiscount,
                       onCalculate: _onCalculatePressed,),

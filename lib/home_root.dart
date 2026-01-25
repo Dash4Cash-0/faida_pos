@@ -18,6 +18,12 @@ class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
   late final CheckoutController _controller;
 
+  @override
+  void initState(){
+    super.initState();
+    _controller = CheckoutController();
+  }
+
   late final _screens = [
     Checkout(controller: _controller,),
     Transactions(),

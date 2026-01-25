@@ -36,7 +36,7 @@ class TodayWidget extends StatelessWidget {
                 if (sales.isEmpty) {
                   return Text("No sales today");
                 }
-                return Expanded(child: ListView.separated(
+                return ListView.separated(
                     itemCount: sales.length,
                     separatorBuilder: (_, __) => Divider(),
                     itemBuilder: (context, index) {
@@ -58,8 +58,7 @@ class TodayWidget extends StatelessWidget {
                         ],
                       );
                     }
-                    )
-                );
+                    );
               }
                   )
               )),
