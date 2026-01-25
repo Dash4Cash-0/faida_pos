@@ -33,6 +33,12 @@ class _HomeRootState extends State<HomeRoot> {
   ];
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
