@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/sale.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ class TodayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context)  {
+    final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).languageCode;
     DateTime now = DateTime.now();
     String dateFormat = DateFormat('EEEE, d MMMM yyyy', locale).format(now);
@@ -34,7 +36,7 @@ class TodayWidget extends StatelessWidget {
                   ValueListenableBuilder(
                       valueListenable: soldItems, builder: (context, sales, _) {
                 if (sales.isEmpty) {
-                  return Text("No sales today");
+                  return Text(l10n.noSalesToday);
                 }
                 return ListView.separated(
                     itemCount: sales.length,

@@ -65,5 +65,6 @@
   "ok": "Ok",
   "receivedAmountError": "Please enter amount received",
   "numberError": "Please enter amount with numbers",
-  "enterCorrectAmount": "Please enter at least"
+  "enterCorrectAmount": "Please enter at least",
+  "noSalesToday": "No sales today"
 }
