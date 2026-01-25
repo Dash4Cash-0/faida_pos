@@ -5,6 +5,14 @@ class WeekWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final getWeek = DateTime.now().day;
+    return SafeArea(child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: 20),
+        Center(child:
+        Text("Week: "))
+      ],
+    ));
   }
 }
