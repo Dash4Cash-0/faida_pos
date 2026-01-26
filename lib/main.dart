@@ -1,5 +1,5 @@
-import 'package:faida_pos/home_root.dart';
-import 'package:faida_pos/screens/app_initializer.dart';
+//import 'package:faida_pos/home_root.dart';
+//import 'package:faida_pos/screens/app_initializer.dart';
 import 'package:faida_pos/utils/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -54,31 +54,6 @@ class _AllProductsState extends State<AllProducts> {
     }).toList();
   }
 
-  void _showOutOfStockDialog(Product p) {
-    showDialog(context:
-    context, builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.red,
-        title: Text(l10n.outOfStock),
-        content: Text("${p.name} ${l10n.isOutOfStock}",
-            style: TextStyle(fontSize: 16)),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                side: BorderSide(
-                    color: Colors.black,
-                    width: 1, style:
-                BorderStyle.solid)
-            ),
-            child: Text(l10n.ok),)
-        ],
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -109,13 +84,8 @@ class _AllProductsState extends State<AllProducts> {
 
 
                   return ListTile(
-                    onTap: () async {
-                      if(p.inStock == 0){
-                        null;
-                        _showOutOfStockDialog(p);
-                      } else {
+                    onTap: () {
                         widget.onProductTap(p);
-                      }
                     },
                     onLongPress: () async {
                       Navigator.push(context,
@@ -126,7 +96,7 @@ class _AllProductsState extends State<AllProducts> {
                                       onItemAdd: widget.onProductTap,
                                       product: p,
                                       refreshList: _refresh,
-                                      outOfStockAlert: _showOutOfStockDialog)));
+                                      )));
                     },
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),

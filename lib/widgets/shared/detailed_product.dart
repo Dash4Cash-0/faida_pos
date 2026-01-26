@@ -10,15 +10,13 @@ class DetailedProduct extends StatefulWidget {
   final VoidCallback refreshList;
   final Function(Product) onItemAdd;
   final VoidCallback refreshOnAddedFavorite;
-  final Function(Product) outOfStockAlert;
 
   const DetailedProduct({
     super.key, 
     required this.product,
     required this.refreshList,
     required this.onItemAdd,
-    required this.refreshOnAddedFavorite,
-    required this.outOfStockAlert});
+    required this.refreshOnAddedFavorite,});
 
   @override
   State<DetailedProduct> createState() => _DetailedProductState();
@@ -32,7 +30,6 @@ class _DetailedProductState extends State<DetailedProduct> {
   late double costPerUnit;
   late bool isFavorite;
   bool isEditing = false;
-  late bool isOutOfStock = widget.product.inStock == 0;
 
 
   @override
@@ -136,9 +133,7 @@ class _DetailedProductState extends State<DetailedProduct> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                  onPressed: isOutOfStock
-                  ? () => widget.outOfStockAlert(widget.product)
-                  : () => widget.onItemAdd(widget.product)
+                  onPressed: () => widget.onItemAdd(widget.product)
                   ,style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                   backgroundColor: Colors.white,

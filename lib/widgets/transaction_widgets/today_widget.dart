@@ -40,7 +40,7 @@ class TodayWidget extends StatelessWidget {
                 }
                 return ListView.separated(
                     itemCount: sales.length,
-                    separatorBuilder: (_, __) => Divider(),
+                    separatorBuilder: (_, _) => Divider(),
                     itemBuilder: (context, index) {
                       final sale = sales[index];
                       return Row(

@@ -117,10 +117,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418"
+      sha256: d07d37192dbf97461359c1518788f203b0c9102cfd2c35a716b823741219542c
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   file:
     dependency: transitive
     description:
@@ -313,10 +313,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "5e9bf126c37c117cf8094215373c6d561117a3cfb50ebc5add1a61dc6e224677"
+      sha256: "297e42bd236c4ac4b091d4277292159b3280545e030cae2be3d503f9ecf7e6a1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.13+10"
+    version: "0.8.13+12"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -461,6 +461,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.4"
+  objective_c:
+    dependency: transitive
+    description:
+      name: objective_c
+      sha256: "7fd0c4d8ac8980011753b9bdaed2bf15111365924cdeeeaeb596214ea2b03537"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.2.4"
   path:
     dependency: "direct main"
     description:
@@ -489,10 +497,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: "6d13aece7b3f5c5a9731eaf553ff9dcbc2eff41087fd2df587fd0fed9a3eb0c4"
+      sha256: "2a376b7d6392d80cd3705782d2caa734ca4727776db0b6ec36ef3f1855197699"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.6.0"
   path_provider_linux:
     dependency: transitive
     description:
@@ -811,5 +819,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.10.0-0 <4.0.0"
-  flutter: ">=3.35.0"
+  dart: ">=3.10.3 <4.0.0"
+  flutter: ">=3.38.4"

@@ -42,43 +42,82 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void _showOutOfStockDialog(Product p) {
+    showDialog(context:
+    context, builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        title: Text(l10n.outOfStock),
+        content: Text("${p.name} ${l10n.isOutOfStock}",
+            style: TextStyle(fontSize: 16)),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: BorderSide(
+                    color: Colors.black,
+                    width: 1, style:
+                BorderStyle.solid)
+            ),
+            child: Text(l10n.ok),)
+        ],
+      );
+    });
+  }
+
   void _onProductTapped(Product product) {
     final quantity = TextEditingController();
-      showDialog(context: context, builder: (_) => Dialog(
-        backgroundColor: Colors.white,
-        child: SizedBox(width: 200, height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: quantity,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(border: OutlineInputBorder(),
-              labelText: l10n.enterQuantity),
+    if(product.inStock == 0){
+      _showOutOfStockDialog(product);
+    }else {
+      showDialog(context: context, builder: (_) =>
+          Dialog(
+            backgroundColor: Colors.white,
+            child: SizedBox(width: 200, height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: quantity,
+                    keyboardType: TextInputType.numberWithOptions(
+                        decimal: true),
+                    decoration: InputDecoration(border: OutlineInputBorder(),
+                        labelText: l10n.enterQuantity),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: BorderSide(color: Colors.black,
+                              width: 1,
+                              style: BorderStyle.solid)),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("${product.name} ${l10n.added}"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        setState(() {
+                          widget.controller.currentSaleList.value = [
+                            ...widget.controller.currentSaleList.value,
+                            SaleItem(productId: product.id,
+                                name: product.name,
+                                price: product.price,
+                                quantity: double.parse(quantity.text))
+                          ];
+                          widget.controller.storedValueNotifier.value +=
+                              product.price * double.parse(quantity.text);
+                          Navigator.pop(context);
+                        });
+                      }, child: Text(l10n.add))
+                ],
+              ),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)),
-                onPressed: (){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:Text("${product.name} ${l10n.added}"),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                setState(() {
-                  widget.controller.currentSaleList.value = [
-                    ...widget.controller.currentSaleList.value,
-                    SaleItem(productId: product.id, name: product.name, price: product.price, quantity: double.parse(quantity.text))
-                  ];
-                  widget.controller.storedValueNotifier.value += product.price * double.parse(quantity.text);
-                  Navigator.pop(context);
-                });
-            }, child: Text(l10n.add))
-          ],
-        ),
-        ),
-      ));
+          ));
+    }
   }
 
   void _onAddProductComplete() {
