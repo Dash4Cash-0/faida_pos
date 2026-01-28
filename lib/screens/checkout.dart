@@ -67,12 +67,12 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
-  void _onProductTapped(Product product) {
+  Future<void> _onProductTapped(Product product) async {
     final quantity = TextEditingController();
     if(product.inStock == 0){
       _showOutOfStockDialog(product);
     }else {
-      showDialog(context: context, builder: (_) =>
+      await showDialog(context: context, builder: (_) =>
           Dialog(
             backgroundColor: Colors.white,
             child: SizedBox(width: 200, height: 200,
@@ -110,8 +110,8 @@ class _CheckoutState extends State<Checkout> {
                           ];
                           widget.controller.storedValueNotifier.value +=
                               product.price * double.parse(quantity.text);
-                          Navigator.pop(context);
                         });
+                          Navigator.pop(context);
                       }, child: Text(l10n.add))
                 ],
               ),
@@ -230,6 +230,7 @@ class _CheckoutState extends State<Checkout> {
     await DatabaseService.instance.processSale(
         items: widget.controller.currentSaleList.value,
         amountReceived: amountReceived);
+
     if(!mounted) return;
 
     showDialog(

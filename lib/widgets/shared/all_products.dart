@@ -84,10 +84,10 @@ class _AllProductsState extends State<AllProducts> {
 
 
                   return ListTile(
-                    onTap: () {
-                        widget.onProductTap(p);
+                    onTap: () async {
+                        await widget.onProductTap(p);
                     },
-                    onLongPress: () async {
+                    onLongPress: () {
                       Navigator.push(context,
                           MaterialPageRoute<void>(
                               builder: (context) =>
