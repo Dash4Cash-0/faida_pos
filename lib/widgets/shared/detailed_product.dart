@@ -7,14 +7,12 @@ import 'delete_product.dart';
 
 class DetailedProduct extends StatefulWidget {
   final Product product;
-  final VoidCallback refreshList;
   final Function(Product) onItemAdd;
   final VoidCallback refreshOnAddedFavorite;
 
   const DetailedProduct({
     super.key, 
     required this.product,
-    required this.refreshList,
     required this.onItemAdd,
     required this.refreshOnAddedFavorite,});
 
@@ -159,12 +157,9 @@ class _DetailedProductState extends State<DetailedProduct> {
                         action: SnackBarAction(label: l10n.undo,
                             onPressed: () async {
                               await DatabaseService.instance.insertProduct(deletedProduct);
-                              widget.refreshList();
                             }),
                         duration: Duration(seconds: 5)));
                 }
-                widget.refreshList();
-
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,

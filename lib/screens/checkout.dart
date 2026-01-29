@@ -124,24 +124,7 @@ class _CheckoutState extends State<Checkout> {
     _loadFavoriteProducts();
   }
 
-  late final tabs = [
-    () => NumpadTabWidget(
-        onNumPressed: onNumPressed,
-        onClear: onClear,
-        onPlusPressed: onPlusPressed,
-        value: widget.controller.input,
-        partValues: widget.controller.partValues,
-        storedValue: widget.controller.storedValueNotifier.value),
-    () => InventoryWidget(
-        onProductTap: _onProductTapped,
-        refreshOnAddedFavorite: _onAddProductComplete,),
-    () => FavoritesWidget(
-      products: widget.controller.favoriteProducts,
-      isLoading: widget.controller.isLoadingProducts,
-      onProductTap: _onProductTapped,
-      onProductAdded: _onAddProductComplete,
-    ),
-  ];
+
 
 
   void onNumPressed(String digit){
@@ -226,11 +209,38 @@ class _CheckoutState extends State<Checkout> {
   void _onCalculatePressed(double amountReceived) async {
 
     Navigator.pop(context);
-
+  try{
     await DatabaseService.instance.processSale(
         items: widget.controller.currentSaleList.value,
         amountReceived: amountReceived);
+    widget.controller.productController
+        .commitSale(widget.controller.currentSaleList.value);
 
+  } catch(e){
+    if(!mounted) return;
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          backgroundColor: Colors.red,
+          title: Text("Error"),
+          content: Text("Something went wrong, please try again..",
+          style: TextStyle(fontSize: 16)),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  side: BorderSide(
+                      color: Colors.black,
+                      width: 1, style:
+                  BorderStyle.solid)
+              ),
+              child: Text(l10n.ok),)
+          ],
+        ));
+    return;
+  }
     if(!mounted) return;
 
     showDialog(
@@ -244,6 +254,7 @@ class _CheckoutState extends State<Checkout> {
         ),
       ),
     );
+
   }
 
   void _showCustomDialog(){
@@ -305,6 +316,26 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+
+    late final tabs = [
+          () => NumpadTabWidget(
+          onNumPressed: onNumPressed,
+          onClear: onClear,
+          onPlusPressed: onPlusPressed,
+          value: widget.controller.input,
+          partValues: widget.controller.partValues,
+          storedValue: widget.controller.storedValueNotifier.value),
+          () => InventoryWidget(
+        productController: widget.controller.productController,
+        onProductTap: _onProductTapped,
+        refreshOnAddedFavorite: _onAddProductComplete,),
+          () => FavoritesWidget(
+        products: widget.controller.favoriteProducts,
+        isLoading: widget.controller.isLoadingProducts,
+        onProductTap: _onProductTapped,
+        onProductAdded: _onAddProductComplete,
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -1,19 +1,22 @@
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
-import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/widgets/shared/search_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'detailed_product.dart';
 
 class AllProducts extends StatefulWidget {
   final Function(Product) onProductTap;
   final VoidCallback refreshOnAddedFavorite;
+  final ProductController productController;
 
   const AllProducts({
     super.key,
     required this.onProductTap,
-    required this.refreshOnAddedFavorite
+    required this.refreshOnAddedFavorite,
+    required this.productController
   });
 
   @override
@@ -21,22 +24,14 @@ class AllProducts extends StatefulWidget {
 }
 
 class _AllProductsState extends State<AllProducts> {
-  late Future<List<Product>> _productsFuture;
-  List<Product> _allProducts = [];
   String _searchText = "";
   late final l10n = AppLocalizations.of(context)!;
+
 
 
   @override
   void initState(){
     super.initState();
-    _productsFuture = DatabaseService.instance.getAllProducts();
-  }
-
-  void _refresh(){
-    setState(() {
-      _productsFuture = DatabaseService.instance.getAllProducts();
-    });
   }
 
   void _onSearch(String text) {
@@ -45,37 +40,33 @@ class _AllProductsState extends State<AllProducts> {
     });
   }
 
-  List<Product> _filteredProducts(){
-    if(_searchText.isEmpty) return _allProducts;
-
-    return _allProducts.where((p) {
-      return p.name.toLowerCase().contains(_searchText) ||
-      p.description.toLowerCase().contains(_searchText);
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         children: [
           SearchWidget(onSearch: _onSearch),
-          Expanded(child:
-          FutureBuilder<List<Product>>(
-                  future: _productsFuture,
-                  builder: (context, snapshot) {
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator());
-                }
-                if(snapshot.hasError){
-                  return Center(child: Text("${l10n.error}: ${snapshot.error}"));
-                }
-                _allProducts = snapshot.data!;
-                final products = _filteredProducts();
+          Expanded(child:ChangeNotifierProvider.value(
+            value: widget.productController,
+            child:
+          Consumer<ProductController>(
+                  builder: (context, productController, _) {
+                    final allProducts = productController.products;
 
-                if(products.isEmpty){
-                  return Center(child: Text(l10n.noItems));
-                }
+                    if (allProducts.isEmpty) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final products = _searchText.isEmpty
+                        ? allProducts
+                        : allProducts.where((p) {
+                      return p.name.toLowerCase().contains(_searchText) ||
+                          p.description.toLowerCase().contains(_searchText);
+                    }).toList();
+
+                    if (products.isEmpty) {
+                      return Center(child: Text(l10n.noItems));
+                    }
 
                 return ListView.builder(padding: EdgeInsets.all(8),
                     itemCount: products.length,
@@ -95,7 +86,6 @@ class _AllProductsState extends State<AllProducts> {
                                       refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
                                       onItemAdd: widget.onProductTap,
                                       product: p,
-                                      refreshList: _refresh,
                                       )));
                     },
                     title: Text(p.name),
@@ -107,6 +97,7 @@ class _AllProductsState extends State<AllProducts> {
                     );
               }
             )
+          )
           )
         ],
       )
