@@ -62,7 +62,7 @@ class ReceiptWidget extends StatelessWidget {
 
                 return ListView.separated(
                     itemCount: items.length,
-                    separatorBuilder: (_,__) => Divider(),
+                    separatorBuilder: (_,_) => Divider(),
                     itemBuilder: (context, index){
                       final item = items[index];
 

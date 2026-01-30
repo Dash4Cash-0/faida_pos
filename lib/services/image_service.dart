@@ -43,7 +43,7 @@ class ImageService {
         await file.delete();
       }
     } catch (e) {
-      print('Failed to delete image: $e');
+      return;
     }
   }
 

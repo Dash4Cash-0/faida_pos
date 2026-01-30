@@ -109,7 +109,6 @@ class DatabaseService {
         whereArgs: [startOfDay.toIso8601String(),
         startTomorrow.toIso8601String()],
     );
-    print('Today sales maps: $maps');
     return maps.map((map) => Sale.fromMap(map)).toList();
   }
 

@@ -4,7 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:faida_pos/home_root.dart';
 import 'package:faida_pos/services/app_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PinLock extends StatefulWidget {
   const PinLock({super.key});
@@ -130,18 +129,18 @@ class _PinLockState extends State<PinLock> {
   Widget _buildNumRow(List<String> numbers) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: numbers.map((num) {
-        if (num.isEmpty) return SizedBox(width: 80);
+      children: numbers.map((number) {
+        if (number.isEmpty) return SizedBox(width: 80);
 
         return InkWell(
           onTap: () {
-            if (num == '⌫') {
+            if (number == '⌫') {
               _onBackspace();
             }
-            if (num == 'C'){
+            if (number == 'C'){
               _onClear();
             } else {
-              _onNumberPressed(num);
+              _onNumberPressed(number);
             }
           },
           borderRadius: BorderRadius.circular(40),
@@ -154,7 +153,7 @@ class _PinLockState extends State<PinLock> {
               border: Border.all(color: Colors.grey[300]!),
             ),
             child: Text(
-              num,
+              number,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
             ),
           ),

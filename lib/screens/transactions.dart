@@ -38,7 +38,7 @@ int _currentIndex = 0;
   }
 
   Future<void> _loadTodaySales() async {
-    _salesToday.value = await DatabaseService.instance.getTodaySales();;
+    _salesToday.value = await DatabaseService.instance.getTodaySales();
   }
 
   @override

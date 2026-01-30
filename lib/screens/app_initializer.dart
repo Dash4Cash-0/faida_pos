@@ -1,7 +1,6 @@
 import 'package:faida_pos/security/pin_setup.dart';
 import 'package:faida_pos/services/app_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../security/pin_lock.dart';
 import 'language_selection.dart';
 
