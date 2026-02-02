@@ -29,8 +29,8 @@ class WeekWidget extends StatelessWidget {
           final date = WeekDates().getWeekDates(DateTime.now())[index];
           final day = DateFormat("EEEE", locale).format(date);
 
-          return WeekdayButton(label: "$day ${date.day}/${date.month}\tTotal: 5"
-              , onClicked: () => onClickedDay());
+          return WeekdayButton(dateLabel: "$day ${date.day}/${date.month}"
+              , onClicked: () {});
         })
         )
     ),

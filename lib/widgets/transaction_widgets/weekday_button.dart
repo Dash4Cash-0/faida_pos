@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class WeekdayButton extends StatelessWidget {
 
-  final String label;
+  final String dateLabel;
+  //final String? saleTotal;
   final VoidCallback onClicked;
 
   const WeekdayButton({super.key,
-    required this.label,
+    required this.dateLabel,
+    //required this.saleTotal,
     required this.onClicked});
 
   @override
@@ -16,16 +18,19 @@ class WeekdayButton extends StatelessWidget {
         child: Column(
           children: [
             Divider(height: 10, thickness: 2, indent: 0,endIndent: 0),
-            SizedBox(width: double.infinity,
-                child:
-                TextButton(
-                    onPressed: onClicked, style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
+              Row(mainAxisAlignment: MainAxisAlignment.start,
+                  children:[
+                    Expanded(child:
+                    TextButton(
+                        onPressed: onClicked, style: TextButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 16)
+                    ),
+                        child: Text(dateLabel, style: TextStyle(fontSize: 18)))),
+                    Text("Sales: 10", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
 
-                    padding: EdgeInsets.symmetric(vertical: 16)
-                ),
-                    child: Text(label, style: TextStyle(fontSize: 18)))),
+            ]),
             Divider(height: 10, thickness: 2, indent: 0,endIndent: 0),
           ],
         )
