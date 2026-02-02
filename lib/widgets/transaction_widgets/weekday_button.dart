@@ -22,9 +22,10 @@ class WeekdayButton extends StatelessWidget {
                     onPressed: onClicked, style: TextButton.styleFrom(
                     foregroundColor: Colors.black,
                     backgroundColor: Colors.white,
+
                     padding: EdgeInsets.symmetric(vertical: 16)
                 ),
-                    child: Text(label, style: TextStyle(fontSize: 18),))),
+                    child: Text(label, style: TextStyle(fontSize: 18)))),
             Divider(height: 10, thickness: 2, indent: 0,endIndent: 0),
           ],
         )
