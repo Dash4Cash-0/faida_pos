@@ -1,5 +1,5 @@
 import 'package:faida_pos/utils/transaction_utils/week_dates.dart';
-import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
+import 'package:faida_pos/widgets/transaction_widgets/weekday_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +29,7 @@ class WeekWidget extends StatelessWidget {
           final date = WeekDates().getWeekDates(DateTime.now())[index];
           final day = DateFormat("EEEE", locale).format(date);
 
-          return MenuButton(label: "$day ${date.day}/${date.month}\tTotal: 5"
+          return WeekdayButton(label: "$day ${date.day}/${date.month}\tTotal: 5"
               , onClicked: () => onClickedDay());
         })
         )
