@@ -1,20 +1,21 @@
 import 'dart:io';
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import 'delete_product.dart';
 
 class DetailedProduct extends StatefulWidget {
-  final Product product;
+  final int productId;
   final Function(Product) onItemAdd;
-  final VoidCallback refreshOnAddedFavorite;
+  //final VoidCallback refreshOnAddedFavorite;
 
   const DetailedProduct({
     super.key, 
-    required this.product,
-    required this.onItemAdd,
-    required this.refreshOnAddedFavorite,});
+    required this.productId,
+    required this.onItemAdd,});
 
   @override
   State<DetailedProduct> createState() => _DetailedProductState();
@@ -28,22 +29,51 @@ class _DetailedProductState extends State<DetailedProduct> {
   late double costPerUnit;
   late bool isFavorite;
   bool isEditing = false;
+  late Product _product;
+  bool _initialized = false;
 
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    currentStockController = TextEditingController(text: widget.product.inStock.toString());
-    nameController = TextEditingController(text: widget.product.name);
-    descController = TextEditingController(text: widget.product.description);
-    priceController = TextEditingController(text: widget.product.price.toString());
-    isFavorite = widget.product.isFavorite;
+  }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_initialized) return;
+
+    final product =
+    context.read<ProductController>().getById(widget.productId);
+
+    if (product == null) return;
+
+    _product = product;
+
+    currentStockController =
+        TextEditingController(text: _product.inStock.toString());
+    nameController = TextEditingController(text: _product.name);
+    descController = TextEditingController(text: _product.description);
+    priceController =
+        TextEditingController(text: _product.price.toString());
+    isFavorite = _product.isFavorite;
+
+    _initialized = true;
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final product =
+    context.watch<ProductController>().getById(widget.productId);
+
+    if (product == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -119,10 +149,10 @@ class _DetailedProductState extends State<DetailedProduct> {
                   isFavorite = value ?? false;
                 });
           }),
-          if(widget.product.image != null)
+          if(product.image != null)
             Expanded(
                 child: Image.file(
-                  File(widget.product.image!),
+                  File(product.image!),
                   fit: BoxFit.cover)
             ) else
               Expanded(child: Text(l10n.noImage)),
@@ -131,7 +161,7 @@ class _DetailedProductState extends State<DetailedProduct> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                  onPressed: () => widget.onItemAdd(widget.product)
+                  onPressed: () => widget.onItemAdd(product)
                   ,style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
@@ -145,7 +175,7 @@ class _DetailedProductState extends State<DetailedProduct> {
               ElevatedButton(onPressed: () async {
 
                 final Product? deletedProduct = await showDialog<Product>(context: context,
-                    builder: (_) => DeleteProduct(productId: widget.product.id));
+                    builder: (_) => DeleteProduct(productId: product.id));
 
                 if(!context.mounted) return;
 
@@ -178,15 +208,17 @@ class _DetailedProductState extends State<DetailedProduct> {
   }
 
   Future<void> _saveChanges() async {
-    await DatabaseService.instance.updateProduct(
-        Product(id: widget.product.id,
+    final updated =
+        Product(id: widget.productId,
             name: nameController.text,
             description: descController.text,
             price: double.parse(priceController.text),
             inStock: double.parse(currentStockController.text),
-            image: widget.product.image,
-            isFavorite: isFavorite));
-    widget.refreshOnAddedFavorite();
+            image: _product.image,
+            isFavorite: isFavorite);
+    //widget.refreshOnAddedFavorite();
+    await context.read<ProductController>().updateProduct(updated);
+
   }
 }
 

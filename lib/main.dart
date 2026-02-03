@@ -1,15 +1,19 @@
 //import 'package:faida_pos/home_root.dart';
 //import 'package:faida_pos/screens/app_initializer.dart';
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/utils/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:window_size/window_size.dart' as window_size;
 import 'package:faida_pos/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final productController = ProductController();
+  await productController.load();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
@@ -23,7 +27,10 @@ void main() async {
     );
   }
 
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider.value(
+    value: productController,
+    child: const MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {

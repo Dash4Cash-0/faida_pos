@@ -21,4 +21,22 @@ class ProductController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> updateProduct(Product updated) async {
+    await DatabaseService.instance.updateProduct(updated);
+
+    final index = products.indexWhere((p) => p.id == updated.id);
+    if (index != -1) {
+      products[index] = updated;
+      notifyListeners();
+    }
+  }
+
+  Product? getById(int id) {
+    try {
+      return products.firstWhere((p) => p.id == id);
+    } catch (_) {
+      return null;
+    }
+  }
 }

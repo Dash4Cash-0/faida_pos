@@ -46,9 +46,7 @@ class _AllProductsState extends State<AllProducts> {
       child: Column(
         children: [
           SearchWidget(onSearch: _onSearch),
-          Expanded(child:ChangeNotifierProvider.value(
-            value: widget.productController,
-            child:
+          Expanded(child:
           Consumer<ProductController>(
                   builder: (context, productController, _) {
                     final allProducts = productController.products;
@@ -73,23 +71,20 @@ class _AllProductsState extends State<AllProducts> {
                     itemBuilder: (context, index) {
                   final p = products[index];
 
-                  bool showRedOutOfStockTile = false;
-                  if(p.inStock == 0){
-                    showRedOutOfStockTile = true;
-                  }
                   return ListTile(
-                    tileColor: showRedOutOfStockTile ? Colors.red : Colors.white,
+                    tileColor: p.inStock == 0 ? Colors.red : Colors.white,
                     onTap: () async {
                         await widget.onProductTap(p);
                     },
                     onLongPress: () {
+                      if(p.id == null) return;
                       Navigator.push(context,
                           MaterialPageRoute<void>(
                               builder: (context) =>
                                   DetailedProduct(
-                                      refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
+                                      //refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
                                       onItemAdd: widget.onProductTap,
-                                      product: p,
+                                      productId: p.id!,
                                       )));
                     },
 
@@ -102,7 +97,6 @@ class _AllProductsState extends State<AllProducts> {
                     );
               }
             )
-          )
           )
         ],
       )
