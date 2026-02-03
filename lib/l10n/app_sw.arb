@@ -66,6 +66,9 @@
   "receivedAmountError": "Tafadhali ingiza kiasi kilichopokelewa",
   "numberError": "Tafadhali ingiza kiasi kwa kutumia nambari",
   "enterCorrectAmount": "Tafadhali ingiza angalau",
-  "noSalesToday": "Hakuna mauzo leo"
+  "noSalesToday": "Hakuna mauzo leo",
+  "week": "Wiki",
+  "weekSales": "Mauzo wiki hii",
+  "sales": "Mauzo"
 
 }

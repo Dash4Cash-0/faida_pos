@@ -66,5 +66,8 @@
   "receivedAmountError": "Please enter amount received",
   "numberError": "Please enter amount with numbers",
   "enterCorrectAmount": "Please enter at least",
-  "noSalesToday": "No sales today"
+  "noSalesToday": "No sales today",
+  "week": "Week",
+  "weekSales": "Sales this week",
+  "sales": "Sales"
 }

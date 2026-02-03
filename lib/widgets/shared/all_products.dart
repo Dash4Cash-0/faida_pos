@@ -73,8 +73,12 @@ class _AllProductsState extends State<AllProducts> {
                     itemBuilder: (context, index) {
                   final p = products[index];
 
-
+                  bool showRedOutOfStockTile = false;
+                  if(p.inStock == 0){
+                    showRedOutOfStockTile = true;
+                  }
                   return ListTile(
+                    tileColor: showRedOutOfStockTile ? Colors.red : Colors.white,
                     onTap: () async {
                         await widget.onProductTap(p);
                     },
@@ -88,6 +92,7 @@ class _AllProductsState extends State<AllProducts> {
                                       product: p,
                                       )));
                     },
+
                     title: Text(p.name),
                     subtitle: Text(p.description.length > 20 ? "${p.description.substring(0,20)}..." : p.description),
                     trailing: Text("${p.price} TZS\n"
