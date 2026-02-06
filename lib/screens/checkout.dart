@@ -125,8 +125,6 @@ class _CheckoutState extends State<Checkout> {
   }
 
 
-
-
   void onNumPressed(String digit){
     setState (() {
       widget.controller.input += digit;
@@ -314,6 +312,44 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void onQuickSale(){
+    showDialog(
+        context: context,
+        builder: (_) => Dialog(
+          backgroundColor: Colors.white,
+          constraints: BoxConstraints(maxHeight: 200, maxWidth: 250),
+          child: Column(
+            children: [
+              Text("TZS ${widget.controller.storedValueNotifier.value}",
+                  style: TextStyle(fontSize: 20)),
+                  SizedBox(height: 20),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(onPressed: (){},
+                            style: ElevatedButton.styleFrom(
+                                fixedSize: Size(100, 30),
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                side: BorderSide(
+                                  color: Colors.black,width: 1,
+                                  style: BorderStyle.solid,)), child: Text(l10n.yes)),
+                          ElevatedButton(onPressed: () =>
+                              Navigator.pop(context),style: ElevatedButton.styleFrom(
+                                  fixedSize: Size(100, 30),
+                                  foregroundColor: Colors.black,
+                                  backgroundColor: Colors.white,
+                                  side: BorderSide(
+                                    color: Colors.black,width: 1,
+                                    style: BorderStyle.solid,)),
+                              child: Text(l10n.no)),
+                        ],
+                      )
+            ],
+          )
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -352,6 +388,8 @@ class _CheckoutState extends State<Checkout> {
               setState(() => widget.controller.currentIndex = index);
                 }),
             Expanded(child: tabs[widget.controller.currentIndex]()),
+            CheckoutButtonWidget(label: l10n.quickSale,
+                onClicked: () => onQuickSale()),
             Align(alignment: Alignment.bottomCenter,
               child:
             CheckoutButtonWidget(label:

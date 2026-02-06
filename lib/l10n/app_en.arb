@@ -69,5 +69,6 @@
   "noSalesToday": "No sales today",
   "week": "Week",
   "weekSales": "Sales this week",
-  "sales": "Sales"
+  "sales": "Sales",
+  "quickSale": "Quick Sale"
 }
