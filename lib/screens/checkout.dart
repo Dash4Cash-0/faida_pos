@@ -313,39 +313,53 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void onQuickSale(){
+    if(widget.controller.input.isNotEmpty) {
+      setState(() {
+        final current = double.parse(widget.controller.input);
+        widget.controller.storedValueNotifier.value += current;
+      });
+    }
     showDialog(
         context: context,
         builder: (_) => Dialog(
           backgroundColor: Colors.white,
-          constraints: BoxConstraints(maxHeight: 200, maxWidth: 250),
-          child: Column(
+          constraints: BoxConstraints(maxHeight: 200, minWidth: 250),
+          child:Padding(padding: EdgeInsets.all(10),
+            child: Column( mainAxisSize: MainAxisSize.min,
             children: [
+              Text("Complete Transaction?",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              Spacer(),
               Text("TZS ${widget.controller.storedValueNotifier.value}",
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 20),
+                  Spacer(),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton(onPressed: (){},
+                          Expanded(
+                            child: ElevatedButton(onPressed: (){},
                             style: ElevatedButton.styleFrom(
-                                fixedSize: Size(100, 30),
                                 foregroundColor: Colors.black,
                                 backgroundColor: Colors.white,
                                 side: BorderSide(
                                   color: Colors.black,width: 1,
                                   style: BorderStyle.solid,)), child: Text(l10n.yes)),
-                          ElevatedButton(onPressed: () =>
-                              Navigator.pop(context),style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(100, 30),
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: Colors.white,
-                                  side: BorderSide(
-                                    color: Colors.black,width: 1,
-                                    style: BorderStyle.solid,)),
-                              child: Text(l10n.no)),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(onPressed: () =>
+                                Navigator.pop(context),style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    backgroundColor: Colors.white,
+                                    side: BorderSide(
+                                      color: Colors.black,width: 1,
+                                      style: BorderStyle.solid,)),
+                                child: Text(l10n.no)),
+                          )
                         ],
                       )
             ],
           )
+            ,)
           ),
         );
   }
