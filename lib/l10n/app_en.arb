@@ -71,5 +71,6 @@
   "weekSales": "Sales this week",
   "sales": "Sales",
   "quickSale": "Quick Sale",
-  "compQuick": "Complete Sale?"
+  "compQuick": "Complete Sale?",
+  "wentWrong": "Something went wrong, please try again.."
 }

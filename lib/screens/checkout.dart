@@ -220,8 +220,8 @@ class _CheckoutState extends State<Checkout> {
         context: context,
         builder: (_) => AlertDialog(
           backgroundColor: Colors.red,
-          title: Text("Error"),
-          content: Text("Something went wrong, please try again..",
+          title: Text(l10n.error),
+          content: Text(l10n.wentWrong,
           style: TextStyle(fontSize: 16)),
           actions: [
             ElevatedButton(
@@ -336,7 +336,39 @@ class _CheckoutState extends State<Checkout> {
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
-                            child: ElevatedButton(onPressed: (){},
+                            child: ElevatedButton(onPressed: () async {
+                              try{
+                                await DatabaseService.instance.processQuickSale(
+                                    amountReceived:
+                                    widget.controller.storedValueNotifier.value);
+                              }catch(e){
+                                if(!mounted) return;
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      backgroundColor: Colors.red,
+                                      title: Text(l10n.error),
+                                      content: Text(l10n.wentWrong,
+                                          style: TextStyle(fontSize: 16)),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.black,
+                                              backgroundColor: Colors.white,
+                                              side: BorderSide(
+                                                  color: Colors.black,
+                                                  width: 1, style:
+                                              BorderStyle.solid)
+                                          ),
+                                          child: Text(l10n.ok),)
+                                      ],
+                                    ));
+                                return;
+                              }
+                              if(!mounted)return;
+                              Navigator.pop(context);
+                            },
                             style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.black,
                                 backgroundColor: Colors.white,

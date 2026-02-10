@@ -178,6 +178,22 @@ class DatabaseService {
     return result > 0;
   }
 
+  Future<void> processQuickSale({
+    required double amountReceived
+}) async {
+    final db  = await instance.db;
+
+    await db.transaction((txn) async {
+      await txn.insert('sales',
+          {
+            'total': amountReceived,
+            'amountReceived': amountReceived,
+            'change': 0,
+            'createdAt':DateTime.now().toIso8601String(),
+          });
+    });
+  }
+
   Future<void> processSale({
     required List<SaleItem> items,
     required double amountReceived
