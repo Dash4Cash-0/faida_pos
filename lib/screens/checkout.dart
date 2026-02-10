@@ -327,7 +327,7 @@ class _CheckoutState extends State<Checkout> {
           child:Padding(padding: EdgeInsets.all(10),
             child: Column( mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Complete Transaction?",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              Text(l10n.compQuick,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               Spacer(),
               Text("TZS ${widget.controller.storedValueNotifier.value}",
                   textAlign: TextAlign.center,

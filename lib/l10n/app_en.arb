@@ -70,5 +70,6 @@
   "week": "Week",
   "weekSales": "Sales this week",
   "sales": "Sales",
-  "quickSale": "Quick Sale"
+  "quickSale": "Quick Sale",
+  "compQuick": "Complete Sale?"
 }
