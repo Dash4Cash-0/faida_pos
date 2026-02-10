@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 class TodayWidget extends StatelessWidget {
   final ValueNotifier <List<Sale>> soldItems;
+  final VoidCallback showDetailedSale;
 
 
   const TodayWidget({
-    super.key, required
-    this.soldItems});
+    super.key,
+    required this.soldItems,
+    required this.showDetailedSale});
 
   @override
   Widget build(BuildContext context)  {
@@ -46,12 +48,17 @@ class TodayWidget extends StatelessWidget {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Text(
-                              "TZS ${sale.total}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          Icon(color: Colors.green, Icons.sell),
+                          Expanded(child:
+                              TextButton(
+                                  onPressed: showDetailedSale,
+                                  child: Text(
+                                    "TZS ${sale.total}",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)
+                                  )
+                              )
                           ),
                           Text(
                             DateFormat.Hm(locale)

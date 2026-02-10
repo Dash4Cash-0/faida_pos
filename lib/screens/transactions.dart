@@ -24,7 +24,9 @@ class _TransactionsState extends State<Transactions> {
   = ValueNotifier<List<Sale>>([]);
 
   late final tabs = [
-    () => TodayWidget(soldItems: _salesToday),
+    () => TodayWidget(
+      soldItems: _salesToday,
+      showDetailedSale: _showDetailedSale,),
     () => WeekWidget(),
     () => CalendarWidget()
   ];
@@ -35,6 +37,10 @@ int _currentIndex = 0;
   void initState(){
     super.initState();
     _loadTodaySales();
+  }
+
+  void _showDetailedSale(){
+
   }
 
   Future<void> _loadTodaySales() async {
