@@ -7,8 +7,10 @@ import 'package:faida_pos/widgets/transaction_widgets/calendar_widget.dart';
 import 'package:faida_pos/widgets/transaction_widgets/today_widget.dart';
 import 'package:faida_pos/widgets/transaction_widgets/week_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/sale.dart';
+import '../models/sale_item.dart';
 
 class Transactions extends StatefulWidget {
   const Transactions({super.key});
@@ -39,7 +41,83 @@ int _currentIndex = 0;
     _loadTodaySales();
   }
 
-  void _showDetailedSale(){
+  void _showDetailedSale(Sale sale) async{
+    List<SaleItem> saleItems = [];
+
+    if(sale.id != null){
+      saleItems = await DatabaseService.instance.getSaleItems(sale.id!);
+    }
+
+    final isQuickSale = saleItems.isEmpty;
+    if(!mounted) return;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(child:
+            Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: Text("Sale Details"),
+              leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.close)),
+            ),backgroundColor: Colors.white,
+              body: Padding(padding: EdgeInsets.all(16),
+                child: Column(
+                    children: [
+                   Text('Total: TZS ${sale.total}',
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 20)),
+                      SizedBox(height: 8),
+                      Text('Date: ${DateFormat('EEEE, d MMMM yyyy HH:mm').format(sale.createdAt)}'),
+                      if(!isQuickSale) ...[
+                        Text("Amount Received: TZS ${sale.amountReceived}"),
+                        Text("Change: TZS ${sale.change}")
+                      ],
+                      SizedBox(height: 16),
+                      Divider(),
+                      SizedBox(height: 8),
+                      if(isQuickSale) ...[
+                        Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.flash_on, size: 48, color: Colors.orange),
+                              SizedBox(height: 8),
+                              Text("Quick Sale",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(height: 4),
+                              Text("No item details available")
+                            ],
+                          ),
+                        ),
+                      ] else ... [
+                        Text("Items:", 
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+                        Expanded(child: 
+                        ListView.builder(itemCount: saleItems.length,
+                            itemBuilder: (context, index) {
+                          final item = saleItems[index];
+                          return ListTile(
+                            title: Text(item.name),
+                            subtitle: Text("Quantity: ${item.quantity} x TZS ${item.price}"),
+                            trailing: Text(
+                              "TZS ${item.subtotal}",style: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                            ),
+                          );
+                            }))
+                      ]
+                ])),
+          )
+          );
+        });
 
   }
 

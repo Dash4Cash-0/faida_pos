@@ -112,6 +112,16 @@ class DatabaseService {
     return maps.map((map) => Sale.fromMap(map)).toList();
   }
 
+  Future<List<SaleItem>> getSaleItems(int saleId) async {
+    final db = await instance.db;
+    final result = await db.query(
+      'sale_items',
+      where: 'saleId = ?',
+      whereArgs: [saleId],
+    );
+    return result.map((map) => SaleItem.fromMap(map)).toList();
+  }
+
   Future<int> updateProduct(Product product) async {
     Database db = await instance.db;
     return await db.update('products', product.toMap(), where: 'id = ?', whereArgs: [product.id]);

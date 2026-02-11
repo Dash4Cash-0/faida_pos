@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 class TodayWidget extends StatelessWidget {
   final ValueNotifier <List<Sale>> soldItems;
-  final VoidCallback showDetailedSale;
+  final Function(Sale) showDetailedSale;
 
 
   const TodayWidget({
@@ -51,7 +51,7 @@ class TodayWidget extends StatelessWidget {
                           Icon(color: Colors.green, Icons.sell),
                           Expanded(child:
                               TextButton(
-                                  onPressed: showDetailedSale,
+                                  onPressed: () => showDetailedSale(sale),
                                   child: Text(
                                     "TZS ${sale.total}",
                                     style: const TextStyle(
