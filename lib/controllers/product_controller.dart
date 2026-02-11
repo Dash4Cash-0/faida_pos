@@ -16,8 +16,14 @@ class ProductController extends ChangeNotifier {
 
   void commitSale(List<SaleItem> items) {
     for(final item in items){
-      var p = products.firstWhere((p) => p.id == item.productId);
-      p.inStock -= item.quantity;
+      if(item.productId == null) continue;
+      try{
+        var p = products.firstWhere((p) => p.id == item.productId);
+        p.inStock -= item.quantity;
+
+      }catch(e){
+        print("Product ${item.productId} not found");
+      }
     }
     notifyListeners();
   }

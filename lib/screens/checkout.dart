@@ -216,12 +216,14 @@ class _CheckoutState extends State<Checkout> {
 
   } catch(e){
     if(!mounted) return;
+    print('ERROR in processSale: $e');
+    print('Stack trace: ${StackTrace.current}');
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
           backgroundColor: Colors.red,
           title: Text(l10n.error),
-          content: Text(l10n.wentWrong,
+          content: Text("${l10n.wentWrong} \n\nDEBUG: $e",
           style: TextStyle(fontSize: 16)),
           actions: [
             ElevatedButton(
