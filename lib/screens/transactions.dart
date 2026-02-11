@@ -43,6 +43,7 @@ int _currentIndex = 0;
 
   void _showDetailedSale(Sale sale) async{
     List<SaleItem> saleItems = [];
+    final l10n = AppLocalizations.of(context)!;
 
     if(sale.id != null){
       saleItems = await DatabaseService.instance.getSaleItems(sale.id!);
@@ -57,7 +58,7 @@ int _currentIndex = 0;
             Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              title: Text("Sale Details"),
+              title: Text(l10n.saleDetails),
               leading: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close)),
@@ -65,15 +66,15 @@ int _currentIndex = 0;
               body: Padding(padding: EdgeInsets.all(16),
                 child: Column(
                     children: [
-                   Text('Total: TZS ${sale.total}',
+                   Text('${l10n.total}: TZS ${sale.total}',
                      style: TextStyle(
                          fontWeight: FontWeight.bold,
                          fontSize: 20)),
                       SizedBox(height: 8),
-                      Text('Date: ${DateFormat('EEEE, d MMMM yyyy HH:mm').format(sale.createdAt)}'),
+                      Text('${l10n.date}: ${DateFormat('EEEE, d MMMM yyyy HH:mm').format(sale.createdAt)}'),
                       if(!isQuickSale) ...[
-                        Text("Amount Received: TZS ${sale.amountReceived}"),
-                        Text("Change: TZS ${sale.change}")
+                        Text("${l10n.amountReceived}: TZS ${sale.amountReceived}"),
+                        Text("${l10n.change}: TZS ${sale.change}")
                       ],
                       SizedBox(height: 16),
                       Divider(),
@@ -84,17 +85,17 @@ int _currentIndex = 0;
                             children: [
                               Icon(Icons.flash_on, size: 48, color: Colors.orange),
                               SizedBox(height: 8),
-                              Text("Quick Sale",
+                              Text(l10n.quickSale,
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               SizedBox(height: 4),
-                              Text("No item details available")
+                              Text(l10n.noItemDetails)
                             ],
                           ),
                         ),
                       ] else ... [
-                        Text("Items:", 
+                        Text(l10n.itemsCap,
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold)),
@@ -105,7 +106,7 @@ int _currentIndex = 0;
                           final item = saleItems[index];
                           return ListTile(
                             title: Text(item.name),
-                            subtitle: Text("Quantity: ${item.quantity} x TZS ${item.price}"),
+                            subtitle: Text("${l10n.quantity}: ${item.quantity} x TZS ${item.price}"),
                             trailing: Text(
                               "TZS ${item.subtotal}",style: TextStyle(
                               fontWeight: FontWeight.bold

@@ -72,5 +72,10 @@
   "sales": "Sales",
   "quickSale": "Quick Sale",
   "compQuick": "Complete Sale?",
-  "wentWrong": "Something went wrong, please try again.."
+  "wentWrong": "Something went wrong, please try again..",
+  "quantity" : "Quantity",
+  "change": "Change",
+  "date": "Date",
+  "noItemDetails": "No item details available",
+  "saleDetails": "Sale Details"
 }

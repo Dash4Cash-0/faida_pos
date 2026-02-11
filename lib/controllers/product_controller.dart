@@ -1,6 +1,6 @@
 import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/services/database_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/product.dart';
 
@@ -22,7 +22,9 @@ class ProductController extends ChangeNotifier {
         p.inStock -= item.quantity;
 
       }catch(e){
-        print("Product ${item.productId} not found");
+        if (kDebugMode) {
+          print("Product ${item.productId} not found");
+        }
       }
     }
     notifyListeners();
