@@ -25,12 +25,19 @@ class _TransactionsState extends State<Transactions> {
   late final ValueNotifier<List<Sale>> _salesToday
   = ValueNotifier<List<Sale>>([]);
 
+  late final ValueNotifier<Set<DateTime>> _daysWithSales
+  = ValueNotifier<Set<DateTime>>({});
+
+  DateTime _focusedDay = DateTime.now();
+
   late final tabs = [
     () => TodayWidget(
       soldItems: _salesToday,
       showDetailedSale: _showDetailedSale),
     () => WeekWidget(),
-    () => CalendarWidget()
+    () => CalendarWidget(
+        daysWithSales: _daysWithSales,
+        onMonthChanged: _loadSalesForMonth,)
   ];
 
 int _currentIndex = 0;
@@ -39,6 +46,7 @@ int _currentIndex = 0;
   void initState(){
     super.initState();
     _loadTodaySales();
+    _loadCurrentMonthSales();
   }
 
   void _showDetailedSale(Sale sale) async{
@@ -126,6 +134,40 @@ int _currentIndex = 0;
     _salesToday.value = await DatabaseService.instance.getTodaySales();
   }
 
+  Future<void> _loadCurrentMonthSales() async {
+    final now = DateTime.now();
+    await _loadSalesForMonth(now);
+  }
+
+  Future<void> _loadSalesForMonth(DateTime month) async {
+    _focusedDay = month;
+
+    final firstDay = DateTime(month.year, month.month, 1);
+    final lastDay = DateTime(month.year, month.month + 1, 0, 23, 59, 59);
+    final sales = await DatabaseService.instance.getSalesInDateRange(firstDay, lastDay);
+
+    print('Loading sales for month: ${month.month}/${month.year}');
+    print('Date range: $firstDay to $lastDay');
+    print('Found ${sales.length} sales in this month');
+
+    final uniqueDates = sales.map((sale) {
+      final date = sale.createdAt;
+      return DateTime(date.year,date.month,date.day);
+    }).toSet();
+    print('Unique dates with sales: $uniqueDates');
+    _daysWithSales.value = uniqueDates;
+  }
+
+  void _onTabChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+    if (index == 2) {
+      _loadSalesForMonth(_focusedDay);
+    }
+  }
+
+
   @override
   void dispose() {
     _salesToday.dispose();
@@ -144,11 +186,7 @@ int _currentIndex = 0;
             children: [
                   TabsWidget(
                   currentIndex: _currentIndex,
-                  onSelectedTab: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
+                  onSelectedTab: _onTabChanged,
                   tabs: [
                     TabConfig(l10n.today),
                     TabConfig(l10n.thisWeek),

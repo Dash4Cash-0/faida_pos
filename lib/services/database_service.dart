@@ -204,6 +204,17 @@ class DatabaseService {
     });
   }
 
+  Future<List<Sale>> getSalesInDateRange(DateTime startDate, DateTime endDate) async {
+    final db = await instance.db;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'sales',
+      where: 'createdAt >= ? AND createdAt <= ?',
+      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String()],
+      orderBy: 'createdAt DESC',
+    );
+    return List.generate(maps.length, (i) => Sale.fromMap(maps[i]));
+  }
+
   Future<void> processSale({
     required List<SaleItem> items,
     required double amountReceived
