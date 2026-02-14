@@ -28,7 +28,7 @@ class _TransactionsState extends State<Transactions> {
   late final tabs = [
     () => TodayWidget(
       soldItems: _salesToday,
-      showDetailedSale: _showDetailedSale,),
+      showDetailedSale: _showDetailedSale),
     () => WeekWidget(),
     () => CalendarWidget()
   ];
