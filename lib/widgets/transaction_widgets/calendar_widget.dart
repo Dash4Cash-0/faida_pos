@@ -34,16 +34,20 @@ class _CalendarWidget extends State<CalendarWidget> {
               return isSameDay(_selectedDay, day);
             },
             onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
+              if(!isSameDay(_selectedDay, selectedDay)){
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+              }
             },
             calendarFormat: _calendarFormat,
             onFormatChanged: (format) {
-              setState(() {
-                _calendarFormat = format;
-              });
+              if(_calendarFormat != format){
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+              }
             }, onPageChanged: (focusedDay){
               _focusedDay = focusedDay;
         },)
