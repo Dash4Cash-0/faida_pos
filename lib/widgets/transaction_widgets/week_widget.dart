@@ -5,7 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class WeekWidget extends StatelessWidget {
-  const WeekWidget({super.key});
+  final ValueNotifier<Map<DateTime, int>> showSalesByDate;
+  final Function(DateTime) loadWeekdaySales;
+
+
+  const WeekWidget({
+    super.key,
+    required this.showSalesByDate,
+    required this.loadWeekdaySales});
 
 
   void onClickedDay(BuildContext context, String buttonDate) {
@@ -27,7 +34,6 @@ class WeekWidget extends StatelessWidget {
         ),
       ),
     ));
-
 }
 
   @override
@@ -35,30 +41,41 @@ class WeekWidget extends StatelessWidget {
     final currentWeek = WeekDates().weekNumber(DateTime.now());
     final locale = Localizations.localeOf(context).languageCode;
     final l10n = AppLocalizations.of(context)!;
-    return SafeArea(child: Column(
-
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(height: 20),
-        Center(child:
-        Text("${l10n.week}: $currentWeek",
-          style: Theme.of(context).textTheme.headlineSmall,)),
-        Text("${l10n.weekSales}: 10", style:
-        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(height: 20),
-        Expanded(child:ListView
-          (children: List.generate(7, (index) {
-          final date = WeekDates().getWeekDates(DateTime.now())[index];
-          final day = DateFormat("EEEE", locale).format(date);
-          final buttonDate = "$day ${date.day}/${date.month}";
-
-          return WeekdayButton(dateLabel: buttonDate,
-              saleTotal: 1
-              , onClicked: () => onClickedDay(context, buttonDate));
-        })
-        )
-    )
-      ],
-    ));
+    return SafeArea(
+        child:ValueListenableBuilder<Map<DateTime,int>>(
+            valueListenable: showSalesByDate,
+            builder: (context,counts,_) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20),
+                  Center(child:
+                  Text("${l10n.week}: $currentWeek",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .headlineSmall,)),
+                  Text("${l10n.weekSales}: 10", style:
+                  TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 20),
+                  Expanded(
+                      child: ListView(
+                          children: List.generate(7, (index) {
+                            final date = WeekDates().getWeekDates(DateTime.now())[index];
+                            final day = DateFormat("EEEE", locale).format(date);
+                            final buttonDate = "$day ${date.day}/${date.month}";
+                            final normalized = DateTime(date.year, date.month, date.day);
+                            final count = counts[normalized] ?? 0;
+                            return WeekdayButton(
+                                dateLabel: buttonDate,
+                                saleTotal: count, onClicked: () =>
+                                    onClickedDay(context, buttonDate));
+                          })
+                      )
+                  )
+                ],
+              );
+            }
+              ));
+            }
   }
-}

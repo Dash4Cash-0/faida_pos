@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../models/sale.dart';
 import '../models/sale_item.dart';
+import '../utils/transaction_utils/week_dates.dart';
 
 class Transactions extends StatefulWidget {
   const Transactions({super.key});
@@ -28,14 +29,18 @@ class _TransactionsState extends State<Transactions> {
   late final ValueNotifier<Set<DateTime>> _daysWithSales
   = ValueNotifier<Set<DateTime>>({});
 
+  final ValueNotifier<Map<DateTime, int>> _salesCountByDate =
+  ValueNotifier({});
+  final dates = WeekDates().getWeekDates(DateTime.now());
   DateTime _focusedDay = DateTime.now();
-  int numberOfSalesOnDay = 0;
 
   late final tabs = [
     () => TodayWidget(
       soldItems: _showSalesByDate,
       showDetailedSale: _showDetailedSale),
-    () => WeekWidget(),
+    () => WeekWidget(
+        showSalesByDate: _salesCountByDate,
+      loadWeekdaySales: _loadSalesForDate,),
     () => CalendarWidget(
         daysWithSales: _daysWithSales,
         onMonthChanged: _loadSalesForMonth,
@@ -51,6 +56,7 @@ int _currentIndex = 0;
     super.initState();
     _loadTodaySales();
     _loadCurrentMonthSales();
+    _loadWeekSales(dates);
   }
 
   void _showDetailedSale(Sale sale) async{
@@ -147,7 +153,16 @@ int _currentIndex = 0;
   Future<void>_loadSalesForDate(DateTime date) async {
     final sales = await DatabaseService.instance.getSalesByDate(date);
     _showSalesByDate.value = sales;
-    numberOfSalesOnDay = _showSalesByDate.value.length;
+  }
+
+  Future<void> _loadWeekSales(List<DateTime> dates) async{
+    final Map<DateTime, int> counts = {};
+
+    for(final date in dates){
+      final sales = await DatabaseService.instance.getSalesByDate(date);
+      counts[DateTime(date.year, date.month, date.day)] = sales.length;
+    }
+    _salesCountByDate.value = counts;
   }
 
   Future<void> _loadSalesForMonth(DateTime month) async {
