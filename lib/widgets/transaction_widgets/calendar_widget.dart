@@ -9,13 +9,15 @@ class CalendarWidget extends StatefulWidget {
   final ValueNotifier<List<Sale>> salesOnSelected;
   final Function(DateTime) onMonthChanged;
   final Function(DateTime) onSelectedChanged;
+  final Function(Sale) detailedSale;
 
   const CalendarWidget({
     super.key,
     required this.daysWithSales,
     required this.onMonthChanged,
     required this.salesOnSelected,
-    required this.onSelectedChanged });
+    required this.onSelectedChanged,
+    required this.detailedSale});
 
 
   @override
@@ -109,6 +111,17 @@ class _CalendarWidget extends State<CalendarWidget> {
                 }
               )
               ),
+              Divider(),
+              ValueListenableBuilder<List<Sale>>(
+                valueListenable: widget.salesOnSelected,
+                builder: (context, sales, _) {
+                  return Text(
+                    "${l10n.sales}: ${sales.length}",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  );
+                },
+              ),
+              Divider(),
               Expanded(
                   child: Padding(padding: EdgeInsets.all(9),
                       child:
@@ -129,7 +142,7 @@ class _CalendarWidget extends State<CalendarWidget> {
                                   Icon(color: Colors.green, Icons.sell),
                                   Expanded(child:
                                   TextButton(
-                                      onPressed: () {},
+                                      onPressed: () => widget.detailedSale(sale),
                                       child: Text(
                                           "TZS ${sale.total}",
                                           style: const TextStyle(

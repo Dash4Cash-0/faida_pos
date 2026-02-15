@@ -29,6 +29,7 @@ class _TransactionsState extends State<Transactions> {
   = ValueNotifier<Set<DateTime>>({});
 
   DateTime _focusedDay = DateTime.now();
+  int numberOfSalesOnDay = 0;
 
   late final tabs = [
     () => TodayWidget(
@@ -39,7 +40,8 @@ class _TransactionsState extends State<Transactions> {
         daysWithSales: _daysWithSales,
         onMonthChanged: _loadSalesForMonth,
         salesOnSelected: _showSalesByDate,
-        onSelectedChanged:_loadSalesForDate)
+        onSelectedChanged:_loadSalesForDate,
+        detailedSale: _showDetailedSale)
   ];
 
 int _currentIndex = 0;
@@ -145,6 +147,7 @@ int _currentIndex = 0;
   Future<void>_loadSalesForDate(DateTime date) async {
     final sales = await DatabaseService.instance.getSalesByDate(date);
     _showSalesByDate.value = sales;
+    numberOfSalesOnDay = _showSalesByDate.value.length;
   }
 
   Future<void> _loadSalesForMonth(DateTime month) async {
@@ -167,6 +170,9 @@ int _currentIndex = 0;
     });
     if (index == 2) {
       _loadSalesForMonth(_focusedDay);
+    }
+    if (index == 0){
+      _loadTodaySales();
     }
   }
 
