@@ -31,6 +31,25 @@ class _CalendarWidget extends State<CalendarWidget> {
           return Column(
             children: [
               TableCalendar(
+                  calendarStyle: CalendarStyle(
+                    selectedTextStyle: TextStyle(
+                      color: Colors.black
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: TextStyle(
+                      color: Colors.black
+                    ),
+                    todayDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.5
+                      )
+                    )
+                  ),
                   locale: locale,
                   focusedDay: _focusedDay,
                   firstDay: firstDate,
