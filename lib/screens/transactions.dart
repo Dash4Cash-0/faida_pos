@@ -22,7 +22,7 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
 
-  late final ValueNotifier<List<Sale>> _salesToday
+  late final ValueNotifier<List<Sale>> _showSalesByDate
   = ValueNotifier<List<Sale>>([]);
 
   late final ValueNotifier<Set<DateTime>> _daysWithSales
@@ -32,12 +32,14 @@ class _TransactionsState extends State<Transactions> {
 
   late final tabs = [
     () => TodayWidget(
-      soldItems: _salesToday,
+      soldItems: _showSalesByDate,
       showDetailedSale: _showDetailedSale),
     () => WeekWidget(),
     () => CalendarWidget(
         daysWithSales: _daysWithSales,
-        onMonthChanged: _loadSalesForMonth,)
+        onMonthChanged: _loadSalesForMonth,
+        salesOnSelected: _showSalesByDate,
+        onSelectedChanged:_loadSalesForDate)
   ];
 
 int _currentIndex = 0;
@@ -131,12 +133,18 @@ int _currentIndex = 0;
   }
 
   Future<void> _loadTodaySales() async {
-    _salesToday.value = await DatabaseService.instance.getTodaySales();
+    final sales = await DatabaseService.instance.getSalesByDate(DateTime.now());
+    _showSalesByDate.value = sales;
   }
 
   Future<void> _loadCurrentMonthSales() async {
     final now = DateTime.now();
     await _loadSalesForMonth(now);
+  }
+
+  Future<void>_loadSalesForDate(DateTime date) async {
+    final sales = await DatabaseService.instance.getSalesByDate(date);
+    _showSalesByDate.value = sales;
   }
 
   Future<void> _loadSalesForMonth(DateTime month) async {
@@ -146,15 +154,10 @@ int _currentIndex = 0;
     final lastDay = DateTime(month.year, month.month + 1, 0, 23, 59, 59);
     final sales = await DatabaseService.instance.getSalesInDateRange(firstDay, lastDay);
 
-    print('Loading sales for month: ${month.month}/${month.year}');
-    print('Date range: $firstDay to $lastDay');
-    print('Found ${sales.length} sales in this month');
-
     final uniqueDates = sales.map((sale) {
       final date = sale.createdAt;
       return DateTime(date.year,date.month,date.day);
     }).toSet();
-    print('Unique dates with sales: $uniqueDates');
     _daysWithSales.value = uniqueDates;
   }
 
@@ -170,7 +173,7 @@ int _currentIndex = 0;
 
   @override
   void dispose() {
-    _salesToday.dispose();
+    _showSalesByDate.dispose();
     super.dispose();
   }
 

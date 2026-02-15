@@ -97,10 +97,10 @@ class DatabaseService {
     return maps.map((map) => Product.fromMap(map)).toList();
   }
 
-  Future<List<Sale>> getTodaySales() async {
+  Future<List<Sale>> getSalesByDate(DateTime date) async {
     Database db = await instance.db;
-    final now = DateTime.now();
-    final startOfDay = DateTime(now.year, now.month, now.day);
+
+    final startOfDay = DateTime(date.year, date.month, date.day);
     final startTomorrow = startOfDay.add(Duration(days: 1));
 
     final maps = await db.query(

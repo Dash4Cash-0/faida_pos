@@ -70,7 +70,8 @@ class TodayWidget extends StatelessWidget {
                     );
               }
                   )
-              )),
+              )
+            ),
           ],
       )),
     );

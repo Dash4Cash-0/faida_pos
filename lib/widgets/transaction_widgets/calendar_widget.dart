@@ -1,25 +1,35 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../models/sale.dart';
 class CalendarWidget extends StatefulWidget {
   final ValueNotifier <Set<DateTime>> daysWithSales;
+  final ValueNotifier<List<Sale>> salesOnSelected;
   final Function(DateTime) onMonthChanged;
+  final Function(DateTime) onSelectedChanged;
 
   const CalendarWidget({
     super.key,
     required this.daysWithSales,
-    required this.onMonthChanged});
+    required this.onMonthChanged,
+    required this.salesOnSelected,
+    required this.onSelectedChanged });
 
 
   @override
   State<CalendarWidget> createState() => _CalendarWidget();
 }
 class _CalendarWidget extends State<CalendarWidget> {
+
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     DateTime firstDate = DateTime.utc(DateTime.now().year - 30);
     DateTime lastDate = DateTime.utc(DateTime.now().year + 30);
     final locale = Localizations.localeOf(context).languageCode;
@@ -60,6 +70,7 @@ class _CalendarWidget extends State<CalendarWidget> {
                   onDaySelected: (selectedDay, focusedDay) {
                     if(!isSameDay(_selectedDay, selectedDay)){
                         setState(() {
+                          widget.onSelectedChanged(selectedDay);
                           _selectedDay = selectedDay;
                           _focusedDay = focusedDay;
                         });
@@ -96,7 +107,49 @@ class _CalendarWidget extends State<CalendarWidget> {
                   }
                   return null;
                 }
-              ))
+              )
+              ),
+              Expanded(
+                  child: Padding(padding: EdgeInsets.all(9),
+                      child:
+                      ValueListenableBuilder(
+                          valueListenable: widget.salesOnSelected,
+                          builder: (context, sales, _) {
+                        if (sales.isEmpty) {
+                          return Text(l10n.noSalesToday);
+                        }
+                        return ListView.separated(
+                            itemCount: sales.length,
+                            separatorBuilder: (_, _) => Divider(),
+                            itemBuilder: (context, index) {
+                              final sale = sales[index];
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(color: Colors.green, Icons.sell),
+                                  Expanded(child:
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                          "TZS ${sale.total}",
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)
+                                      )
+                                  )
+                                  ),
+                                  Text(
+                                    DateFormat.Hm(locale)
+                                        .format(sale.createdAt),
+                                  ),
+                                ],
+                              );
+                            }
+                        );
+                      }
+                      )
+                  )
+              ),
             ],
           );
         }

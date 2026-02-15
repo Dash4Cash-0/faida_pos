@@ -82,7 +82,6 @@ class _AllProductsState extends State<AllProducts> {
                           MaterialPageRoute<void>(
                               builder: (context) =>
                                   DetailedProduct(
-                                      //refreshOnAddedFavorite: widget.refreshOnAddedFavorite,
                                       onItemAdd: widget.onProductTap,
                                       productId: p.id!,
                                       )));
