@@ -31,6 +31,7 @@ class _TransactionsState extends State<Transactions> {
 
   final ValueNotifier<Map<DateTime, int>> _salesCountByDate =
   ValueNotifier({});
+
   final dates = WeekDates().getWeekDates(DateTime.now());
   DateTime _focusedDay = DateTime.now();
 
