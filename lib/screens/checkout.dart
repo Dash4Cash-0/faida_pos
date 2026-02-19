@@ -27,6 +27,7 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   late final l10n = AppLocalizations.of(context)!;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState(){
@@ -68,7 +69,7 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Future<void> _onProductTapped(Product product) async {
-    final quantity = TextEditingController();
+    TextEditingController quantity = TextEditingController();
     if(product.inStock == 0){
       _showOutOfStockDialog(product);
     }else {
@@ -76,15 +77,27 @@ class _CheckoutState extends State<Checkout> {
           Dialog(
             backgroundColor: Colors.white,
             child: SizedBox(width: 200, height: 200,
-              child: Column(
+              child: Form(key: _formKey,
+                child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
                     controller: quantity,
                     keyboardType: TextInputType.numberWithOptions(
                         decimal: true),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(border: OutlineInputBorder(),
                         labelText: l10n.enterQuantity),
+                    validator: (value) {
+                      if(value == null || value.isEmpty){
+                        return "Enter quantity";
+                      }
+                      if(double.parse(value) > product.inStock){
+                        return "Inventory too low,\n"
+                            "In Stock:(${product.inStock})";
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
@@ -94,29 +107,33 @@ class _CheckoutState extends State<Checkout> {
                               width: 1,
                               style: BorderStyle.solid)),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("${product.name} ${l10n.added}"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        setState(() {
-                          widget.controller.currentSaleList.value = [
-                            ...widget.controller.currentSaleList.value,
-                            SaleItem(productId: product.id,
-                                name: product.name,
-                                price: product.price,
-                                quantity: double.parse(quantity.text))
-                          ];
-                          widget.controller.storedValueNotifier.value +=
-                              product.price * double.parse(quantity.text);
-                        });
+                        if(_formKey.currentState?.validate() == true) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${product.name} ${l10n.added}"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          setState(() {
+                            widget.controller.currentSaleList.value = [
+                              ...widget.controller.currentSaleList.value,
+                              SaleItem(productId: product.id,
+                                  name: product.name,
+                                  price: product.price,
+                                  quantity: double.parse(quantity.text))
+                            ];
+                            widget.controller.storedValueNotifier.value +=
+                                product.price * double.parse(quantity.text);
+                          });
+                        }
                           Navigator.pop(context);
                       }, child: Text(l10n.add))
                 ],
               ),
             ),
-          ));
+            )
+          )
+          );
     }
   }
 
