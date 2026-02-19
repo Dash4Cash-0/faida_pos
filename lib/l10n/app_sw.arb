@@ -77,5 +77,6 @@
   "change": "Chenji",
   "date": "Tarehe",
   "noItemDetails": "Hakuna maelezo ya bidhaa yaliyopatikana",
-  "saleDetails": "Maelezo ya Mauzo"
+  "saleDetails": "Maelezo ya Mauzo",
+  "lowStock": "Hisa chache"
 }

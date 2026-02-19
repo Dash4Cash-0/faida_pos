@@ -77,5 +77,6 @@
   "change": "Change",
   "date": "Date",
   "noItemDetails": "No item details available",
-  "saleDetails": "Sale Details"
+  "saleDetails": "Sale Details",
+  "lowStock": "Inventory is too low"
 }

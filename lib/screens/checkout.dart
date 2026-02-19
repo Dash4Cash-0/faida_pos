@@ -89,12 +89,12 @@ class _CheckoutState extends State<Checkout> {
                     decoration: InputDecoration(border: OutlineInputBorder(),
                         labelText: l10n.enterQuantity),
                     validator: (value) {
-                      if(value == null || value.isEmpty){
-                        return "Enter quantity";
+                      if(value == null || value.isEmpty || double.parse(value) <= 0){
+                        return l10n.enterQuantity;
                       }
                       if(double.parse(value) > product.inStock){
-                        return "Inventory too low,\n"
-                            "In Stock:(${product.inStock})";
+                        return "${l10n.lowStock}\n"
+                            "${l10n.inStock}:${product.inStock.round()}";
                       }
                       return null;
                     },

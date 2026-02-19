@@ -51,12 +51,10 @@ class WeekWidget extends StatelessWidget {
                   SizedBox(height: 20),
                   Center(child:
                   Text("${l10n.week}: $currentWeek",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineSmall,)),
-                  Text("${l10n.weekSales}: 10", style:
-                  TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: Theme.of(context).textTheme.headlineSmall,)),
+                  Text("${l10n.weekSales}: "
+                      "${showSalesByDate.value.values.fold(0, (sum, count) => sum + count )}",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Expanded(
                       child: ListView(
