@@ -40,8 +40,10 @@ class _TransactionsState extends State<Transactions> {
       soldItems: _showSalesByDate,
       showDetailedSale: _showDetailedSale),
     () => WeekWidget(
+        salesOnSelected: _showSalesByDate,
+        detailedSale: _showDetailedSale,
         showSalesByDate: _salesCountByDate,
-      loadWeekdaySales: _loadSalesForDate,),
+        loadWeekdaySales: _loadSalesForDate,),
     () => CalendarWidget(
         daysWithSales: _daysWithSales,
         onMonthChanged: _loadSalesForMonth,
@@ -186,6 +188,7 @@ int _currentIndex = 0;
     });
     if (index == 2) {
       _loadSalesForMonth(_focusedDay);
+      _loadTodaySales();
     }
     if (index == 0){
       _loadTodaySales();
@@ -196,6 +199,8 @@ int _currentIndex = 0;
   @override
   void dispose() {
     _showSalesByDate.dispose();
+    _daysWithSales.dispose();
+    _salesCountByDate.dispose();
     super.dispose();
   }
 

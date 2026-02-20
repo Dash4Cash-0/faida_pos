@@ -4,18 +4,27 @@ import 'package:faida_pos/widgets/transaction_widgets/weekday_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/sale.dart';
+
 class WeekWidget extends StatelessWidget {
   final ValueNotifier<Map<DateTime, int>> showSalesByDate;
+  final ValueNotifier<List<Sale>> salesOnSelected;
   final Function(DateTime) loadWeekdaySales;
+  final Function(Sale) detailedSale;
 
 
   const WeekWidget({
     super.key,
     required this.showSalesByDate,
-    required this.loadWeekdaySales});
+    required this.loadWeekdaySales,
+    required this.detailedSale,
+    required this.salesOnSelected});
 
 
-  void onClickedDay(BuildContext context, String buttonDate) {
+  void onClickedDay(BuildContext context, String buttonDate, DateTime date) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
+    loadWeekdaySales(date);
     showDialog(context: context, builder: (_) => Dialog.fullscreen(
       backgroundColor: Colors.white,
       child: Scaffold(
@@ -29,7 +38,48 @@ class WeekWidget extends StatelessWidget {
         ),
         body: Column(
           children: [
-
+            Divider(),
+            Expanded(
+                child: Padding(padding: EdgeInsets.all(9),
+                    child:
+                    ValueListenableBuilder(
+                        valueListenable: salesOnSelected,
+                        builder: (context, sales, _) {
+                          if (sales.isEmpty) {
+                            return Text(l10n.noSalesToday);
+                          }
+                          return ListView.separated(
+                              itemCount: sales.length,
+                              separatorBuilder: (_, _) => Divider(),
+                              itemBuilder: (context, index) {
+                                final sale = sales[index];
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(color: Colors.green, Icons.sell),
+                                    Expanded(child:
+                                    TextButton(
+                                        onPressed: () => detailedSale(sale),
+                                        child: Text(
+                                            "TZS ${sale.total}",
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold)
+                                        )
+                                    )
+                                    ),
+                                    Text(
+                                      DateFormat.Hm(locale)
+                                          .format(sale.createdAt),
+                                    ),
+                                  ],
+                                );
+                              }
+                          );
+                        }
+                    )
+                )
+            ),
           ],
         ),
       ),
@@ -67,7 +117,7 @@ class WeekWidget extends StatelessWidget {
                             return WeekdayButton(
                                 dateLabel: buttonDate,
                                 saleTotal: count, onClicked: () =>
-                                    onClickedDay(context, buttonDate));
+                                    onClickedDay(context, buttonDate, normalized));
                           })
                       )
                   )

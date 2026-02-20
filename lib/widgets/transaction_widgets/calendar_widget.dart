@@ -35,6 +35,7 @@ class _CalendarWidget extends State<CalendarWidget> {
     DateTime firstDate = DateTime.utc(DateTime.now().year - 30);
     DateTime lastDate = DateTime.utc(DateTime.now().year + 30);
     final locale = Localizations.localeOf(context).languageCode;
+    widget.onSelectedChanged(_focusedDay);
     
     return ValueListenableBuilder<Set<DateTime>>
       (valueListenable:
