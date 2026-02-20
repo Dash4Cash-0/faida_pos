@@ -21,15 +21,21 @@ class WeekdayButton extends StatelessWidget {
           children: [
             Divider(height: 10, thickness: 2, indent: 0,endIndent: 0),
               Row(children:[
+                Icon(Icons.calendar_today),
                     Expanded(child:
                     TextButton(
                         onPressed: onClicked, style: TextButton.styleFrom(
                         foregroundColor: Colors.black,
                         backgroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 16)
+                        padding: EdgeInsets.all(14)
                     ),
                         child: Text(dateLabel, style: TextStyle(fontSize: 18)))),
-                    Text("${l10n.sales}: $saleTotal", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                    Text("${l10n.sales}: $saleTotal",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                            color: saleTotal > 0 ? Colors.green : Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18)),
 
             ]),
             Divider(height: 10, thickness: 2, indent: 0,endIndent: 0),
