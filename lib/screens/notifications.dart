@@ -14,6 +14,11 @@ class Notifications extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
+      body:
+      Column(children: [
+
+
+      ]),
     );
   }
 }

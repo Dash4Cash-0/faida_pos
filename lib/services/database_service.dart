@@ -25,7 +25,7 @@ class DatabaseService {
     String databasesPath = await getDatabasesPath();
     String path = join(databasesPath,'faida.db');
 
-    return await openDatabase(path, version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    return await openDatabase(path, version: 4, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -72,7 +72,37 @@ class DatabaseService {
       )
       ''');
     }
+    if(oldVersion < 4){
+      await db.execute('''
+      CREATE TABLE notifications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      saleItemId INTEGER NOT NULL,
+      isLowStock INTEGER DEFAULT 0,
+      isOutOfStock INTEGER DEFAULT 0,
+      isDismissed INTEGER DEFAULT 0,
+      isResolved INTEGER DEFAULT 0
+      createdAt TEXT NOT NULL,
+      resolvedAt TEXT NOT NULL,
+      
+      FOREIGN KEY (saleItemId) REFERENCES sale_items(id)
+      )
+      ''');
+    }
+  }
 
+  Future<void>outOfStockNotification({
+    required SaleItem item}) async {
+    Database db = await instance.db;
+    final product = item.id;
+
+    await db.transaction((tsx) async{
+      tsx.insert('notifications',{
+        'saleItemId': product,
+        'isOutOfStock': 1,
+        'createdAt': DateTime.now(),
+      });
+
+    });
   }
 
   Future<int> insertProduct(Product product) async {
