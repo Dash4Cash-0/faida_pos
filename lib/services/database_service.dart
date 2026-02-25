@@ -101,9 +101,23 @@ class DatabaseService {
         'isOutOfStock': 1,
         'createdAt': DateTime.now(),
       });
-
     });
   }
+
+  Future<void>lowStockNotification({
+    required SaleItem item}) async {
+    Database db = await instance.db;
+    final product = item.id;
+
+    await db.transaction((tsx) async{
+      tsx.insert('notifications',{
+        'saleItemId': product,
+        'isLowStock': 1,
+        'createdAt': DateTime.now(),
+      });
+    });
+  }
+
 
   Future<int> insertProduct(Product product) async {
     Database db = await instance.db;
