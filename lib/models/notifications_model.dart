@@ -20,12 +20,26 @@ class NotificationsModel {
 
 });
 
+  Map<String, dynamic> toMap(){
+    return{
+      'id': id,
+      'saleItemId': saleItemId,
+      'isLowStock': isLowStock,
+      'isOutOfStock': isOutOfStock,
+      'isDismissed': isDismissed,
+      'isResolved': isResolved,
+      'createdAt': createdAt,
+      'resolvedAt': resolvedAt
+    };
+  }
+
   factory NotificationsModel.fromMap(Map<String, dynamic> map){
     return NotificationsModel(
         id: map['id'] as int,
         saleItemId: map['saleItemId'] as int,
         createdAt: map['createdAt'] as DateTime,
-        resolvedAt: map['resolvedAt'] as DateTime );
+        resolvedAt: map['resolvedAt'] as DateTime
+    );
   }
 
 
