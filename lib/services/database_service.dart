@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:faida_pos/models/notifications_model.dart';
 import 'package:faida_pos/models/sale.dart';
 import 'package:path/path.dart';
 import 'package:faida_pos/models/product.dart';
@@ -76,15 +77,16 @@ class DatabaseService {
       await db.execute('''
       CREATE TABLE notifications (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      saleItemId INTEGER NOT NULL,
+      productId INTEGER NOT NULL,
       isLowStock INTEGER DEFAULT 0,
       isOutOfStock INTEGER DEFAULT 0,
       isDismissed INTEGER DEFAULT 0,
-      isResolved INTEGER DEFAULT 0
+      isResolved INTEGER DEFAULT 0,
       createdAt TEXT NOT NULL,
-      resolvedAt TEXT NOT NULL,
+      resolvedAt TEXT,
+      dismissedAt TEXT
       
-      FOREIGN KEY (saleItemId) REFERENCES sale_items(id)
+      FOREIGN KEY (productId) REFERENCES product(id)
       )
       ''');
     }
@@ -99,7 +101,7 @@ class DatabaseService {
       tsx.insert('notifications',{
         'saleItemId': product,
         'isOutOfStock': 1,
-        'createdAt': DateTime.now(),
+        'createdAt': DateTime.now().toIso8601String(),
       });
     });
   }
@@ -113,9 +115,19 @@ class DatabaseService {
       tsx.insert('notifications',{
         'saleItemId': product,
         'isLowStock': 1,
-        'createdAt': DateTime.now(),
+        'createdAt': DateTime.now().toIso8601String(),
       });
     });
+  }
+
+  Future<int>dismissedNotification(
+      NotificationsModel notification,
+      bool isDismissed) async{
+    Database db = await instance.db;
+    return await db.update('notifications',
+        {'isDismissed': isDismissed ? 1 : 0},
+        where: 'id = ?',
+        whereArgs: [notification.id]);
   }
 
 
