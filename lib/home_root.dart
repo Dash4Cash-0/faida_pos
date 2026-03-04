@@ -34,7 +34,9 @@ class _HomeRootState extends State<HomeRoot> {
     Checkout(controller: _controller,),
     Transactions(),
     Reports(),
-    Notifications(controller: notificationController),
+    Notifications(
+      controller: notificationController,
+      productController: productController),
     Menu(),
   ];
 
