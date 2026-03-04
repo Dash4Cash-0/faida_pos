@@ -13,10 +13,12 @@ class DatabaseService {
   static Database? _database;
   DatabaseService._instance();
 
+
   Future<Database> get db async {
     _database ??= await initDb();
     return _database!;
   }
+
 
   Future<Database> initDb() async {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -28,6 +30,7 @@ class DatabaseService {
 
     return await openDatabase(path, version: 4, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
+
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
@@ -42,6 +45,7 @@ class DatabaseService {
     )
     ''');
   }
+
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async{
     if(oldVersion < 2) {
@@ -92,33 +96,36 @@ class DatabaseService {
     }
   }
 
+
   Future<void>outOfStockNotification({
-    required SaleItem item}) async {
+    required Product product}) async {
     Database db = await instance.db;
-    final product = item.id;
+    final item = product.id;
 
     await db.transaction((tsx) async{
       tsx.insert('notifications',{
-        'saleItemId': product,
+        'productId': item,
         'isOutOfStock': 1,
         'createdAt': DateTime.now().toIso8601String(),
       });
     });
   }
 
+
   Future<void>lowStockNotification({
-    required SaleItem item}) async {
+    required Product product}) async {
     Database db = await instance.db;
-    final product = item.id;
+    final item = product.id;
 
     await db.transaction((tsx) async{
       tsx.insert('notifications',{
-        'saleItemId': product,
+        'productId': item,
         'isLowStock': 1,
         'createdAt': DateTime.now().toIso8601String(),
       });
     });
   }
+
 
   Future<int>dismissedNotification(
       NotificationsModel notification,
@@ -130,11 +137,18 @@ class DatabaseService {
         whereArgs: [notification.id]);
   }
 
+  Future<List<NotificationsModel>> getNotifications() async {
+    Database db = await instance.db;
+    final maps = await db.query('notifications', orderBy: 'createdAt DESC');
+    return maps.map((m) => NotificationsModel.fromMap(m)).toList();
+  }
+
 
   Future<int> insertProduct(Product product) async {
     Database db = await instance.db;
     return await db.insert('products', product.toMap());
   }
+
 
   Future<List<Product>> getAllProducts() async {
     Database db = await instance.db;

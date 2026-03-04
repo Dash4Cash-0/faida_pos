@@ -1,4 +1,5 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
+import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/screens/checkout.dart';
 import 'package:faida_pos/screens/menu.dart';
@@ -19,6 +20,7 @@ class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
   late final CheckoutController _controller;
   late final ProductController productController;
+  late final NotificationController notificationController;
 
   @override
   void initState(){
@@ -32,7 +34,7 @@ class _HomeRootState extends State<HomeRoot> {
     Checkout(controller: _controller,),
     Transactions(),
     Reports(),
-    Notifications(),
+    Notifications(controller: notificationController),
     Menu(),
   ];
 

@@ -44,12 +44,9 @@ class NotificationsModel {
         isOutOfStock: map['isOutOfStock'] == 1,
         isDismissed: map['isDismissed'] == 1,
         isResolved: map['isResolved'] == 1,
-        createdAt: map['createdAt'],
-        resolvedAt: map['resolvedAt'],
-        dismissedAt: map['dismissedAt']
+        createdAt: DateTime.parse(map['createdAt']),
+        resolvedAt: map['resolvedAt'] != null ? DateTime.parse(map['resolvedAt']) : null,
+        dismissedAt: map['dismissedAt'] != null ? DateTime.parse(map['dismissedAt']) : null,
     );
   }
-
-
-
 }

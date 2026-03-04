@@ -1,8 +1,14 @@
+import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class Notifications extends StatelessWidget {
-  const Notifications({super.key});
+
+  final NotificationController controller;
+
+  const Notifications({
+    super.key,
+    required this.controller});
 
   @override
   Widget build(BuildContext context) {
