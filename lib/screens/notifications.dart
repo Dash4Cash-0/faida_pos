@@ -37,9 +37,15 @@ class Notifications extends StatelessWidget {
                 itemCount: controller.notifications.length,
                 itemBuilder: (context, index){
                   final n = controller.notifications[index];
-                  final product = productController.getById(n.productId);
+                  final product = productController.products.firstWhere(
+                      (p) => p.id == n.productId);
                   return ListTile(
-                    title: Text(product!.name) ,
+                    title: Text(product.name),
+                    subtitle: Text(n.isOutOfStock == true ? "Out of Stock" : "Low Stock"),
+                    leading: Icon(
+                      n.isOutOfStock == true ? Icons.remove_circle : Icons.warning,
+                      color: n.isOutOfStock == true ? Colors.red : Colors.orange,
+                    ),
                   );
                 });
           })

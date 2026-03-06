@@ -1,3 +1,4 @@
+import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import '../models/product.dart';
 
 class ProductController extends ChangeNotifier {
   List<Product> products = [];
+  late final NotificationController notificationController;
 
   Future<void> load() async {
 
@@ -32,6 +34,14 @@ class ProductController extends ChangeNotifier {
 
   Future<void> updateProduct(Product updated) async {
     await DatabaseService.instance.updateProduct(updated);
+
+    if(updated.inStock == 0) {
+      await DatabaseService.instance.outOfStockNotification(product: updated);
+      await notificationController.load();
+    }else if(updated.inStock <= 10){
+      await DatabaseService.instance.lowStockNotification(product: updated);
+      await notificationController.load();
+    }
 
     final index = products.indexWhere((p) => p.id == updated.id);
     if (index != -1) {

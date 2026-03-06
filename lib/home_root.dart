@@ -28,6 +28,8 @@ class _HomeRootState extends State<HomeRoot> {
     productController = ProductController();
     productController.load();
     _controller = CheckoutController(productController: productController);
+    notificationController = NotificationController();
+    notificationController.load();
   }
 
   late final _screens = [
@@ -45,6 +47,7 @@ class _HomeRootState extends State<HomeRoot> {
     _controller.dispose();
     super.dispose();
   }
+  
 
   @override
   Widget build(BuildContext context) {

@@ -88,7 +88,7 @@ class DatabaseService {
       isResolved INTEGER DEFAULT 0,
       createdAt TEXT NOT NULL,
       resolvedAt TEXT,
-      dismissedAt TEXT
+      dismissedAt TEXT,
       
       FOREIGN KEY (productId) REFERENCES product(id)
       )
