@@ -1,4 +1,5 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/models/sale_item.dart';
@@ -12,6 +13,7 @@ import 'package:faida_pos/widgets/shared/tab_config.dart';
 import 'package:faida_pos/widgets/shared/tabs_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:faida_pos/utils/checkout_utils/charge_button_text.dart';
+import 'package:provider/provider.dart';
 import '../widgets/checkout_widgets/receipt_widget.dart';
 
 
@@ -27,6 +29,7 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   late final l10n = AppLocalizations.of(context)!;
+  late final productController = Provider.of<ProductController>(context, listen: false);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -228,7 +231,7 @@ class _CheckoutState extends State<Checkout> {
     await DatabaseService.instance.processSale(
         items: widget.controller.currentSaleList.value,
         amountReceived: amountReceived);
-    widget.controller.productController
+    await productController
         .commitSale(widget.controller.currentSaleList.value);
 
   } catch(e){
@@ -425,7 +428,7 @@ class _CheckoutState extends State<Checkout> {
           partValues: widget.controller.partValues,
           storedValue: widget.controller.storedValueNotifier.value),
           () => InventoryWidget(
-        productController: widget.controller.productController,
+        productController: productController,
         onProductTap: _onProductTapped,
         refreshOnAddedFavorite: _onAddProductComplete,),
           () => FavoritesWidget(

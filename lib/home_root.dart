@@ -8,6 +8,7 @@ import 'package:faida_pos/screens/reports.dart';
 import 'package:faida_pos/screens/transactions.dart';
 import 'package:faida_pos/widgets/shared/navbar_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeRoot extends StatefulWidget {
   const HomeRoot({super.key});
@@ -19,16 +20,15 @@ class HomeRoot extends StatefulWidget {
 class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
   late final CheckoutController _controller;
-  late final ProductController productController;
   late final NotificationController notificationController;
 
   @override
   void initState(){
     super.initState();
-    productController = ProductController();
-    productController.load();
-    _controller = CheckoutController(productController: productController);
     notificationController = NotificationController();
+    final productController = Provider.of<ProductController>(context, listen:false);
+    _controller = CheckoutController();
+    productController.load();
     notificationController.load();
   }
 
@@ -38,7 +38,7 @@ class _HomeRootState extends State<HomeRoot> {
     Reports(),
     Notifications(
       controller: notificationController,
-      productController: productController),
+      productController: Provider.of<ProductController>(context, listen:false)),
     Menu(),
   ];
 

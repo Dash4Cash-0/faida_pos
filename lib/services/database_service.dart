@@ -137,6 +137,19 @@ class DatabaseService {
         whereArgs: [notification.id]);
   }
 
+  Future<void> resolveNotificationsForProduct(int productId) async {
+    final db = await instance.db;
+    await db.update('notifications',
+      {
+        'isResolved': 1,
+        'resolvedAt': DateTime.now().toIso8601String(),
+      },
+      where: 'productId = ? AND isResolved = 0',
+      whereArgs: [productId],
+    );
+  }
+
+
   Future<List<NotificationsModel>> getNotifications() async {
     Database db = await instance.db;
     final maps = await db.query('notifications', orderBy: 'createdAt DESC');

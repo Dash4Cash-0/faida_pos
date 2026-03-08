@@ -7,7 +7,9 @@ import '../models/product.dart';
 
 class ProductController extends ChangeNotifier {
   List<Product> products = [];
-  late final NotificationController notificationController;
+  final NotificationController notificationController;
+
+  ProductController({required this.notificationController});
 
   Future<void> load() async {
 
@@ -16,32 +18,32 @@ class ProductController extends ChangeNotifier {
 
   }
 
-  void commitSale(List<SaleItem> items) {
+  Future<void> commitSale(List<SaleItem> items) async {
     for(final item in items){
       if(item.productId == null) continue;
       try{
-        var p = products.firstWhere((p) => p.id == item.productId);
-        p.inStock -= item.quantity;
-
+        final p = products.firstWhere((p) => p.id == item.productId);
+        final updatedProduct = p.copyWith(inStock: p.inStock - item.quantity);
+        await updateProduct(updatedProduct);
       }catch(e){
         if (kDebugMode) {
           print("Product ${item.productId} not found");
         }
       }
     }
-    notifyListeners();
+    await load();
   }
 
   Future<void> updateProduct(Product updated) async {
     await DatabaseService.instance.updateProduct(updated);
+    await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
 
     if(updated.inStock == 0) {
       await DatabaseService.instance.outOfStockNotification(product: updated);
-      await notificationController.load();
     }else if(updated.inStock <= 10){
       await DatabaseService.instance.lowStockNotification(product: updated);
-      await notificationController.load();
     }
+    await notificationController.load();
 
     final index = products.indexWhere((p) => p.id == updated.id);
     if (index != -1) {

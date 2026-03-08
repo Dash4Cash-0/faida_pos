@@ -1,5 +1,6 @@
 //import 'package:faida_pos/home_root.dart';
 //import 'package:faida_pos/screens/app_initializer.dart';
+import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/utils/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final productController = ProductController();
+  final notificationController = NotificationController();
+  final productController = ProductController(notificationController: notificationController);
   await productController.load();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
