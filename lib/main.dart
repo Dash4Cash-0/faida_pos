@@ -14,7 +14,8 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final notificationController = NotificationController();
-  final productController = ProductController(notificationController: notificationController);
+  final productController = ProductController
+    (notificationController: notificationController);
   await productController.load();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -29,8 +30,11 @@ void main() async {
     );
   }
 
-  runApp(ChangeNotifierProvider.value(
-    value: productController,
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: productController),
+      ChangeNotifierProvider.value(value: notificationController)
+    ],
     child: const MyApp()),
   );
 }

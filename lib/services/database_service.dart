@@ -148,7 +148,12 @@ class DatabaseService {
       whereArgs: [productId],
     );
   }
-
+Future<void> deleteNotification(int notificationId) async {
+    final db = await instance.db;
+    await db.delete('notifications',
+    where: 'id = ?',
+    whereArgs: [notificationId]);
+}
 
   Future<List<NotificationsModel>> getNotifications() async {
     Database db = await instance.db;

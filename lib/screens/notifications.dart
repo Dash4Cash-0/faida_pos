@@ -1,18 +1,23 @@
 import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
+import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../controllers/product_controller.dart';
 
 class Notifications extends StatelessWidget {
 
-  final NotificationController controller;
-  final ProductController productController;
+  Future<void> _deleteNotification(BuildContext context, int n) async{
+    await DatabaseService.instance.deleteNotification(n);
+    if(context.mounted){
+      Provider.of<NotificationController>(context, listen: false).load();
+    }
+  }
+
 
   const Notifications({
-    super.key,
-    required this.controller,
-    required this.productController});
+    super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +32,22 @@ class Notifications extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
-      body: AnimatedBuilder(
-          animation: controller,
-          builder: (context, _){
-            if(controller.notifications.isEmpty){
+      body: Column(children: [
+        Expanded(child:
+        Consumer<NotificationController>(builder:
+            (context, notificationController,_){
+            final allNotifications = notificationController.notifications;
+
+            if(allNotifications.isEmpty){
               return Center(child: Text("No notifications"));
             }
             return ListView.builder(
-                itemCount: controller.notifications.length,
+                itemCount: allNotifications.length,
                 itemBuilder: (context, index){
-                  final n = controller.notifications[index];
-                  final product = productController.products.firstWhere(
+                  final n = allNotifications[index];
+                  final product =
+                  Provider.of<ProductController>
+                    (context, listen: false).products.firstWhere(
                       (p) => p.id == n.productId);
                   return ListTile(
                     title: Text(product.name),
@@ -46,9 +56,21 @@ class Notifications extends StatelessWidget {
                       n.isOutOfStock == true ? Icons.remove_circle : Icons.warning,
                       color: n.isOutOfStock == true ? Colors.red : Colors.orange,
                     ),
+                    trailing: ElevatedButton.icon(onPressed: (){
+                      _deleteNotification(context, n.id);
+                    },
+                        label: Icon(Icons.delete)),
                   );
                 });
-          })
+        }
+        )
+        ),
+        ElevatedButton(onPressed:() {
+          Provider.of<NotificationController>(context, listen:false).clear();
+            },
+            child: Text("Clear Notifications"))
+      ],
+          )
     );
-  }
+}
 }
