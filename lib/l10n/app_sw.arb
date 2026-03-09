@@ -78,5 +78,8 @@
   "date": "Tarehe",
   "noItemDetails": "Hakuna maelezo ya bidhaa yaliyopatikana",
   "saleDetails": "Maelezo ya Mauzo",
-  "lowStock": "Hisa chache"
+  "lowStock": "Hisa chache",
+  "noNotification": "Hakuna Arifa",
+  "lowStockNotification": "Hisa ya Chini",
+  "clearNotifications": "Futa Arifa"
 }

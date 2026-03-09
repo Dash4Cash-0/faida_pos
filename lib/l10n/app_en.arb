@@ -78,5 +78,8 @@
   "date": "Date",
   "noItemDetails": "No item details available",
   "saleDetails": "Sale Details",
-  "lowStock": "Inventory is too low"
+  "lowStock": "Inventory is too low",
+  "noNotification": "No Notifications",
+  "lowStockNotification": "Low Stock",
+  "clearNotifications": "Clear Notifications"
 }

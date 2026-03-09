@@ -38,11 +38,25 @@ class ProductController extends ChangeNotifier {
     await DatabaseService.instance.updateProduct(updated);
     await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
 
-    if(updated.inStock == 0) {
-      await DatabaseService.instance.outOfStockNotification(product: updated);
-    }else if(updated.inStock <= 10){
-      await DatabaseService.instance.lowStockNotification(product: updated);
+    final hasActive = notificationController.notifications
+        .any((n) => n.productId == updated.id && n.isResolved == false);
+
+    final hasLowStock = notificationController.notifications
+        .any((n) => n.productId == updated.id && n.isLowStock == true);
+
+    if(!hasActive){
+      if(updated.inStock == 0) {
+        if(hasLowStock){
+          await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
+          await DatabaseService.instance.outOfStockNotification(product: updated);
+        }else {
+          await DatabaseService.instance.outOfStockNotification(product: updated);
+        }
+      }else if(updated.inStock <= 10){
+        await DatabaseService.instance.lowStockNotification(product: updated);
+      }
     }
+
     await notificationController.load();
 
     final index = products.indexWhere((p) => p.id == updated.id);

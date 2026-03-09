@@ -39,7 +39,7 @@ class Notifications extends StatelessWidget {
             final allNotifications = notificationController.notifications;
 
             if(allNotifications.isEmpty){
-              return Center(child: Text("No notifications"));
+              return Center(child: Text(l10n.noNotification));
             }
             return ListView.builder(
                 itemCount: allNotifications.length,
@@ -51,7 +51,7 @@ class Notifications extends StatelessWidget {
                       (p) => p.id == n.productId);
                   return ListTile(
                     title: Text(product.name),
-                    subtitle: Text(n.isOutOfStock == true ? "Out of Stock" : "Low Stock"),
+                    subtitle: Text(n.isOutOfStock == true ? l10n.outOfStock : l10n.lowStockNotification),
                     leading: Icon(
                       n.isOutOfStock == true ? Icons.remove_circle : Icons.warning,
                       color: n.isOutOfStock == true ? Colors.red : Colors.orange,
@@ -68,7 +68,7 @@ class Notifications extends StatelessWidget {
         ElevatedButton(onPressed:() {
           Provider.of<NotificationController>(context, listen:false).clear();
             },
-            child: Text("Clear Notifications"))
+            child: Text(l10n.clearNotifications))
       ],
           )
     );
