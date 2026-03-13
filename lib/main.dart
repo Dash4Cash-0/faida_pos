@@ -18,6 +18,7 @@ void main() async {
     (notificationController: notificationController);
   await productController.load();
 
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
@@ -32,8 +33,8 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider.value(value: productController),
-      ChangeNotifierProvider.value(value: notificationController)
+      ChangeNotifierProvider.value(value: notificationController),
+      ChangeNotifierProvider.value(value: productController)
     ],
     child: const MyApp()),
   );

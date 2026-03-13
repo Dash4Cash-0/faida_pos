@@ -14,6 +14,19 @@ class ProductController extends ChangeNotifier {
   Future<void> load() async {
 
     products = await DatabaseService.instance.getAllProducts();
+    for (final product in products) {
+      final hasActive = notificationController.notifications
+          .any((n) => n.productId == product.id && n.isResolved == false);
+
+      if (!hasActive) {
+        if (product.inStock == 0) {
+          await DatabaseService.instance.outOfStockNotification(product: product);
+        } else if (product.inStock <= 10) {
+          await DatabaseService.instance.lowStockNotification(product: product);
+        }
+      }
+    }
+    await notificationController.load();
     notifyListeners();
 
   }
@@ -36,25 +49,19 @@ class ProductController extends ChangeNotifier {
 
   Future<void> updateProduct(Product updated) async {
     await DatabaseService.instance.updateProduct(updated);
-    await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
+
 
     final hasActive = notificationController.notifications
         .any((n) => n.productId == updated.id && n.isResolved == false);
+    await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
 
-    final hasLowStock = notificationController.notifications
-        .any((n) => n.productId == updated.id && n.isLowStock == true);
 
-    if(!hasActive){
-      if(updated.inStock == 0) {
-        if(hasLowStock){
-          await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
-          await DatabaseService.instance.outOfStockNotification(product: updated);
-        }else {
-          await DatabaseService.instance.outOfStockNotification(product: updated);
-        }
-      }else if(updated.inStock <= 10){
-        await DatabaseService.instance.lowStockNotification(product: updated);
+    if (!hasActive) {
+      if (updated.inStock == 0) {
+        await DatabaseService.instance.outOfStockNotification(product: updated);
       }
+    } else if (updated.inStock <= 10) {
+      await DatabaseService.instance.lowStockNotification(product: updated);
     }
 
     await notificationController.load();
