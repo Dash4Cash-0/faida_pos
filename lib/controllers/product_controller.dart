@@ -14,6 +14,7 @@ class ProductController extends ChangeNotifier {
   Future<void> load() async {
 
     products = await DatabaseService.instance.getAllProducts();
+
     for (final product in products) {
       final hasActive = notificationController.notifications
           .any((n) => n.productId == product.id && n.isResolved == false);

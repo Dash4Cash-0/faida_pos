@@ -1,6 +1,8 @@
+import 'package:faida_pos/controllers/notification_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/widgets/shared/nav_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NavbarBottom extends StatelessWidget {
   final int currentIndex;
@@ -14,6 +16,7 @@ class NavbarBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final checkNotifications = Provider.of<NotificationController>(context, listen: true);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -36,9 +39,12 @@ class NavbarBottom extends StatelessWidget {
               label: l10n.reports,
               selected: currentIndex == 2,
               onTap: () => onTabSelected(2)),
-          NavItem(icon: Icons.notifications,
+          NavItem(icon:
+          checkNotifications.notifications.isEmpty
+              ? Icons.notifications : Icons.notifications_active,
               label: l10n.notifications,
               selected: currentIndex == 3,
+              hasNotification: checkNotifications.notifications.isNotEmpty,
               onTap: () => onTabSelected(3)),
           NavItem(icon: Icons.menu,
               label: l10n.menu,

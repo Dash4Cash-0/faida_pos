@@ -1,5 +1,6 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
 import 'package:faida_pos/controllers/notification_controller.dart';
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/screens/checkout.dart';
 import 'package:faida_pos/screens/menu.dart';
 import 'package:faida_pos/screens/notifications.dart';
@@ -26,6 +27,7 @@ class _HomeRootState extends State<HomeRoot> {
     super.initState();
     _controller = CheckoutController();
     Provider.of<NotificationController>(context, listen: false).load();
+    Provider.of<ProductController>(context, listen: false).load();
   }
 
   late final _screens = [

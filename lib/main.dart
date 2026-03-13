@@ -14,6 +14,7 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final notificationController = NotificationController();
+  await notificationController.load();
   final productController = ProductController
     (notificationController: notificationController);
   await productController.load();
