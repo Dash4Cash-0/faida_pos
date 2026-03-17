@@ -1,6 +1,4 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
-import 'package:faida_pos/controllers/notification_controller.dart';
-import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/screens/checkout.dart';
 import 'package:faida_pos/screens/menu.dart';
 import 'package:faida_pos/screens/notifications.dart';
@@ -8,7 +6,6 @@ import 'package:faida_pos/screens/reports.dart';
 import 'package:faida_pos/screens/transactions.dart';
 import 'package:faida_pos/widgets/shared/navbar_bottom.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 
 class HomeRoot extends StatefulWidget {
@@ -26,8 +23,6 @@ class _HomeRootState extends State<HomeRoot> {
   void initState(){
     super.initState();
     _controller = CheckoutController();
-    Provider.of<NotificationController>(context, listen: false).load();
-    Provider.of<ProductController>(context, listen: false).load();
   }
 
   late final _screens = [
