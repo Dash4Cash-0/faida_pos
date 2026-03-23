@@ -32,8 +32,6 @@ class ProductController extends ChangeNotifier {
 
   }
 
-  //FIX NOTIFICATIONS ADDING AGAIN AFTER A SALE HAS BEEN DONE!
-
   Future<void> commitSale(List<SaleItem> items) async {
     for(final item in items){
       if(item.productId == null) continue;
@@ -60,12 +58,7 @@ class ProductController extends ChangeNotifier {
     if(hasActive &&
         notificationController.notifications.any((n) => n.isLowStock ==
             true && updated.inStock == 0)){
-      try{
         await DatabaseService.instance.resolveNotificationsForProduct(updated.id!);
-
-      }catch(e){
-        e.toString();
-      }
     }
 
     if (!hasActive) {
