@@ -1,6 +1,5 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/main.dart';
-import 'package:faida_pos/services/voice_recording_service.dart';
 import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
 import 'package:faida_pos/widgets/shared/add_product.dart';
 import 'package:flutter/foundation.dart';
@@ -11,11 +10,9 @@ import 'app_initializer.dart';
 
 class Menu extends StatelessWidget {
 
-  final VoiceRecordingService recording;
 
   const Menu({
-    super.key,
-    required this.recording});
+    super.key});
 
 
   @override
@@ -47,18 +44,6 @@ class Menu extends StatelessWidget {
               ],
             ),
           ))),
-          GestureDetector(
-            onLongPressStart: (_) async {
-              await recording.startRecording();
-            },
-            onLongPressEnd: (_) async {
-              await recording.stopRecording();
-            },
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: Text("Hold To Speak"),
-            ),
-          ),
           if (kDebugMode) ...[
             SizedBox(height: 20),
             Padding(

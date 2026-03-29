@@ -28,11 +28,12 @@ class _HomeRootState extends State<HomeRoot> {
   }
 
   late final _screens = [
-    Checkout(controller: _controller,),
+    Checkout(controller: _controller,
+    recording: recording,),
     Transactions(),
     Reports(),
     Notifications(),
-    Menu(recording: recording,),
+    Menu(),
   ];
 
   @override

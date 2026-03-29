@@ -4,6 +4,7 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/services/database_service.dart';
+import 'package:faida_pos/services/voice_recording_service.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
@@ -20,22 +21,58 @@ import '../widgets/checkout_widgets/receipt_widget.dart';
 class Checkout extends StatefulWidget {
 
   final CheckoutController controller;
+  final VoiceRecordingService recording;
 
-  const Checkout({super.key, required this.controller});
+  const Checkout({super.key,
+    required this.controller,
+    required this.recording});
 
   @override
   State<Checkout> createState() => _CheckoutState();
 }
 
-class _CheckoutState extends State<Checkout> {
+class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
+  late final List<AnimationController> _barControllers;
+  late final List<Animation<double>> _barAnimations;
   late final l10n = AppLocalizations.of(context)!;
   late final productController = Provider.of<ProductController>(context, listen: false);
   final _formKey = GlobalKey<FormState>();
+  bool _isRecording = false;
+
 
   @override
   void initState(){
     super.initState();
+    _barControllers = List.generate(8, (i) =>AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 250 + (i * 60) + (i % 3 * 40)),
+    ));
+    _barAnimations = _barControllers.map((c) =>
+    Tween<double>(begin: 4, end: 45).animate(
+      CurvedAnimation(parent: c, curve: Curves.easeInOut)
+    )).toList();
     _loadFavoriteProducts();
+  }
+
+  @override
+  void dispose(){
+    for(final c in _barControllers){
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  void _startWave(){
+    for (final c in _barControllers){
+      c.repeat(reverse: true);
+    }
+  }
+
+  void _stopWave(){
+    for(final c in _barControllers){
+      c.stop();
+      c.reset();
+    }
   }
 
   Future<void> _loadFavoriteProducts() async {
@@ -406,15 +443,17 @@ class _CheckoutState extends State<Checkout> {
                                       color: Colors.black,width: 1,
                                       style: BorderStyle.solid,)),
                                 child: Text(l10n.no)),
-                          )
+                          ),
                         ],
-                      )
+                      ),
             ],
           )
             ,)
           ),
         );
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -442,55 +481,130 @@ class _CheckoutState extends State<Checkout> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child:Stack(
+          alignment: Alignment.center,
           children: [
-            TabsWidget(tabs: [
-              TabConfig(l10n.numpad),
-              TabConfig(l10n.inventory),
-              TabConfig(l10n.favorites)],
-                currentIndex: widget.controller.currentIndex,
-                onSelectedTab: (index) {
-              setState(() => widget.controller.currentIndex = index);
-                }),
-            Expanded(child: tabs[widget.controller.currentIndex]()),
-            CheckoutButtonWidget(label: l10n.quickSale,
-                onClicked: () => onQuickSale()),
-            Align(alignment: Alignment.bottomCenter,
-              child:
-            CheckoutButtonWidget(label:
-            getChargeButtonText(currentSaleList: widget.controller.currentSaleList.value,
-                input: widget.controller.input,
-                review: l10n.review, items: l10n.items, charge: l10n.charge),
-                onClicked: () {
-              if(widget.controller.input.isNotEmpty){
-                setState(() {
-                  final customAmount = double.parse(widget.controller.input);
-                  widget.controller.storedValueNotifier.value += customAmount;
-                  widget.controller.currentSaleList.value = [
-                    ...widget.controller.currentSaleList.value,
-                    SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
-                  ];
-                  widget.controller.input = "";
-                });
-              }
-              showModalBottomSheet(
-                  context: context,
-                  builder: (_) =>
-                    CheckoutBottomSheet(
-                      itemsCount: widget.controller.currentSaleList.value.length,
-                      currentSaleItems: widget.controller.currentSaleList.value,
-                      storedValueNotifier: widget.controller.storedValueNotifier,
-                      saleItemNotifier: widget.controller.currentSaleList,
-                      onNewSale: resetSale,
-                      addDiscount: addDiscount,
-                      onCalculate: _onCalculatePressed,),
-                  );
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TabsWidget(tabs: [
+                  TabConfig(l10n.numpad),
+                  TabConfig(l10n.inventory),
+                  TabConfig(l10n.favorites)],
+                    currentIndex: widget.controller.currentIndex,
+                    onSelectedTab: (index) {
+                  setState(() => widget.controller.currentIndex = index);
+                    }),
+                Expanded(child: tabs[widget.controller.currentIndex]()),
+                CheckoutButtonWidget(label: l10n.quickSale,
+                    onClicked: () => onQuickSale()),
+                Align(alignment: Alignment.bottomCenter,
+                  child:
+                CheckoutButtonWidget(label:
+                getChargeButtonText(currentSaleList: widget.controller.currentSaleList.value,
+                    input: widget.controller.input,
+                    review: l10n.review, items: l10n.items, charge: l10n.charge),
+                    onClicked: () {
+                  if(widget.controller.input.isNotEmpty){
+                    setState(() {
+                      final customAmount = double.parse(widget.controller.input);
+                      widget.controller.storedValueNotifier.value += customAmount;
+                      widget.controller.currentSaleList.value = [
+                        ...widget.controller.currentSaleList.value,
+                        SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
+                      ];
+                      widget.controller.input = "";
+                    });
                   }
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (_) =>
+                        CheckoutBottomSheet(
+                          itemsCount: widget.controller.currentSaleList.value.length,
+                          currentSaleItems: widget.controller.currentSaleList.value,
+                          storedValueNotifier: widget.controller.storedValueNotifier,
+                          saleItemNotifier: widget.controller.currentSaleList,
+                          onNewSale: resetSale,
+                          addDiscount: addDiscount,
+                          onCalculate: _onCalculatePressed,),
+                      );
+                      }
+                    )
                 )
-            )
+              ],
+            ),
+            if(_isRecording)
+              Positioned(
+                bottom: 250,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Listening....",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      SizedBox(
+                        height: 60,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: List.generate(20, (i) =>
+                              AnimatedBuilder(
+                                animation: _barAnimations[i % _barAnimations.length],
+                                builder: (context, _) {
+                                  final distanceFromCenter = (i - 9.5).abs();
+                                  final heightMultiplier = 1.0 - (distanceFromCenter / 12);
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 2.5),
+                                    width: 4,
+                                    height: (_barAnimations[i % _barAnimations.length].value * heightMultiplier).clamp(4, 60),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withValues(alpha: 0.6 + (heightMultiplier * 0.4)),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  );
+                                },
+                              ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            Positioned(
+              bottom: 160,
+              child: Listener(
+                onPointerDown: (_) {
+                  setState(() => _isRecording = true);
+                  _startWave();
+                  widget.recording.startRecording();
+                },
+                onPointerUp: (_) {
+                  setState(() => _isRecording = false);
+                  _stopWave();
+                  widget.recording.stopRecording();
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: _isRecording ? Colors.red : Colors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.mic, color: Colors.white),
+                ),
+              ),
+            ),
           ],
-        ),
+        )
       ),
     );
   }
