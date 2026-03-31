@@ -1,4 +1,5 @@
 
+import 'package:faida_pos/services/database_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:http/http.dart' as http;
@@ -6,7 +7,6 @@ import 'package:http/http.dart' as http;
 class VoiceRecordingService {
 
   final record = AudioRecorder();
-  bool isRecording = false;
 
   Future<void>startRecording() async {
     final dir = await getTemporaryDirectory();
@@ -16,12 +16,11 @@ class VoiceRecordingService {
           const RecordConfig(encoder: AudioEncoder.wav),
           path: path);
     }
-    isRecording = true;
   }
 
-  Future<void>stopRecording() async {
+  Future<String?>stopRecording() async {
    final path = await record.stop();
-   if(path == null) return;
+   if(path == null) return null;
 
    final uri = Uri.parse("http://192.168.0.35:8000/transcribe");
    final request = http.MultipartRequest('POST', uri);
@@ -29,8 +28,24 @@ class VoiceRecordingService {
 
    final response = await request.send();
    final body = await response.stream.bytesToString();
-   print("Transcription: $body");
-
-   isRecording = false;
+   return body;
   }
+}
+
+void checkForQuickSale(String transcription) {
+  final lower = transcription.toLowerCase();
+  final isSaleCommand =
+      lower.contains('sell')
+      || lower.contains('sale')
+      || lower.contains("quicksale");
+
+  if(!isSaleCommand) return;
+
+  final numbers = RegExp(r'\d+').allMatches(lower)
+      .map((m) => double.parse(m.group(0)!));
+
+  if(numbers.isEmpty) return;
+  final amount = numbers.first;
+  DatabaseService.instance.processQuickSale(amountReceived: amount);
+
 }
