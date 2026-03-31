@@ -580,7 +580,7 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                 ),
               ),
             Positioned(
-              bottom: 160,
+              bottom: 155,
               child: Listener(
                 onPointerDown: (_) {
                   setState(() => _isRecording = true);
