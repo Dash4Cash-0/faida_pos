@@ -590,7 +590,8 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                 onPointerUp: (_) {
                   setState(() => _isRecording = false);
                   _stopWave();
-                  widget.recording.stopRecording();
+                  widget.recording.checkForQuickSale(
+                      widget.recording.stopRecording() as String);
                 },
                 child: Container(
                   width: 60,

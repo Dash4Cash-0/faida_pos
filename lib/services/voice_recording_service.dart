@@ -30,22 +30,25 @@ class VoiceRecordingService {
    final body = await response.stream.bytesToString();
    return body;
   }
+
+  void checkForQuickSale(String transcription) {
+    final lower = transcription.toLowerCase();
+    print("Transcription: $lower");
+    final isSaleCommand =
+        lower.contains('sell')
+        || lower.contains('sale')
+        || lower.contains("quicksale");
+
+    if(!isSaleCommand) return;
+
+    final numbers = RegExp(r'\d+').allMatches(lower)
+        .map((m) => double.parse(m.group(0)!));
+
+    if(numbers.isEmpty) return;
+    final amount = numbers.first;
+    print("Transcription: $amount");
+    DatabaseService.instance.processQuickSale(amountReceived: amount);
+
+  }
 }
 
-void checkForQuickSale(String transcription) {
-  final lower = transcription.toLowerCase();
-  final isSaleCommand =
-      lower.contains('sell')
-      || lower.contains('sale')
-      || lower.contains("quicksale");
-
-  if(!isSaleCommand) return;
-
-  final numbers = RegExp(r'\d+').allMatches(lower)
-      .map((m) => double.parse(m.group(0)!));
-
-  if(numbers.isEmpty) return;
-  final amount = numbers.first;
-  DatabaseService.instance.processQuickSale(amountReceived: amount);
-
-}
