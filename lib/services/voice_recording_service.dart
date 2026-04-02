@@ -31,24 +31,17 @@ class VoiceRecordingService {
    return body;
   }
 
-  void checkForQuickSale(String transcription) {
-    final lower = transcription.toLowerCase();
+  void triggerQuickSale(String? transcription) {
+    final lower = transcription?.toLowerCase();
     print("Transcription: $lower");
-    final isSaleCommand =
-        lower.contains('sell')
-        || lower.contains('sale')
-        || lower.contains("quicksale");
 
-    if(!isSaleCommand) return;
-
-    final numbers = RegExp(r'\d+').allMatches(lower)
+    final numbers = RegExp(r'\d+').allMatches(lower!)
         .map((m) => double.parse(m.group(0)!));
 
     if(numbers.isEmpty) return;
     final amount = numbers.first;
     print("Transcription: $amount");
     DatabaseService.instance.processQuickSale(amountReceived: amount);
-
   }
 }
 

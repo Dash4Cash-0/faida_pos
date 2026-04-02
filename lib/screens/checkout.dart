@@ -181,7 +181,6 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
     _loadFavoriteProducts();
   }
 
-
   void onNumPressed(String digit){
     setState (() {
       widget.controller.input += digit;
@@ -453,8 +452,19 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
         );
   }
 
-
-
+  void onUnknownVoiceCommand(){
+    showDialog(context: context,
+        builder: (context){
+      Future.delayed(Duration(milliseconds: 1500), () {
+        if(!context.mounted) return;
+        Navigator.pop(context);
+          });
+      return AlertDialog(
+        backgroundColor: Colors.orange,
+        content: Text("I didn't understand, please try again"),
+      );
+        });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -587,11 +597,15 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                   _startWave();
                   widget.recording.startRecording();
                 },
-                onPointerUp: (_) {
+                onPointerUp: (_) async {
                   setState(() => _isRecording = false);
                   _stopWave();
-                  widget.recording.checkForQuickSale(
-                      widget.recording.stopRecording() as String);
+                  if(await widget.recording.stopRecording() == "unknown"){
+                    onUnknownVoiceCommand();
+                  }else{
+                    widget.recording.triggerQuickSale(
+                        await widget.recording.stopRecording());
+                  }
                 },
                 child: Container(
                   width: 60,
