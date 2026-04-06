@@ -460,9 +460,32 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
         Navigator.pop(context);
           });
       return AlertDialog(
-        backgroundColor: Colors.orange,
-        content: Text("I didn't understand, please try again"),
+        backgroundColor: Colors.deepOrange,
+        content: Text("I didn't understand, please try again",
+            style: TextStyle(fontWeight: FontWeight.bold,
+                fontSize: 24)),
       );
+        });
+  }
+
+  void onHelpVoiceCommand(){
+    showDialog(context: context,
+        builder: (context){
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text("Voice command examples",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            shape: Border.all(color: Colors.black,
+                width: 1,
+                style: BorderStyle.solid),
+            content: Text("Try say: 'sell for [amount]' "
+                "or 'make a sale for [amount] to make a quick sale",
+                style: TextStyle(fontSize: 18)),
+            actions: [
+              ElevatedButton(onPressed: () => Navigator.pop(context),
+                  child: Text("Close"))
+            ],
+          );
         });
   }
   @override
@@ -600,11 +623,14 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                 onPointerUp: (_) async {
                   setState(() => _isRecording = false);
                   _stopWave();
-                  if(await widget.recording.stopRecording() == "unknown"){
+                  final result = await widget.recording.stopRecording();
+                  if(result.toString().contains("unknown")){
                     onUnknownVoiceCommand();
+                  }
+                  else if(result.toString().contains("help")){
+                   onHelpVoiceCommand();
                   }else{
-                    widget.recording.triggerQuickSale(
-                        await widget.recording.stopRecording());
+                    widget.recording.triggerQuickSale(result);
                   }
                 },
                 child: Container(
