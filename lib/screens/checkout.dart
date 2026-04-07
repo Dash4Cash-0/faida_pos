@@ -52,6 +52,7 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
       CurvedAnimation(parent: c, curve: Curves.easeInOut)
     )).toList();
     _loadFavoriteProducts();
+    widget.recording.onAddProduct = onAddProductByVoice;
   }
 
   @override
@@ -488,6 +489,25 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
           );
         });
   }
+
+  void onAddProductByVoice(Product product, double quantity){
+    if(product.inStock == 0){
+      _showOutOfStockDialog(product);
+    }else{
+      setState(() {
+        widget.controller.currentSaleList.value = [
+          ...widget.controller.currentSaleList.value,
+          SaleItem(productId: product.id,
+              name: product.name,
+              price: product.price,
+              quantity: quantity)
+        ];
+        widget.controller.storedValueNotifier.value +=
+            product.price * quantity;
+      });
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -628,7 +648,10 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                     onUnknownVoiceCommand();
                   }
                   else if(result.toString().contains("help")){
-                   onHelpVoiceCommand();
+                      onHelpVoiceCommand();
+                  }
+                  else if(result.toString().contains("add")){
+                    widget.recording.addProductsByVoice(result);
                   }else{
                     widget.recording.triggerQuickSale(result);
                   }
