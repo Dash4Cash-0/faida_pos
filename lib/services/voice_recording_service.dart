@@ -11,8 +11,10 @@ import 'package:http/http.dart' as http;
 class VoiceRecordingService {
 
   final record = AudioRecorder();
-  late ProductController productController;
+  final ProductController productController;
   late Function(Product, double) onAddProduct;
+
+  VoiceRecordingService({required this.productController});
 
 
 
@@ -51,6 +53,8 @@ class VoiceRecordingService {
   }
 
   void addProductsByVoice(String? transcription) {
+    print("Products: ${productController.products.map((p) => p.name)}");
+    print("Transcript: $transcription");
     final lower = transcription?.toLowerCase();
     final product = productController.products.cast<Product?>()
         .firstWhere((p) => lower!.contains(p!.name.toLowerCase()),

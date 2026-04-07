@@ -1,4 +1,5 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
+import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/screens/checkout.dart';
 import 'package:faida_pos/screens/menu.dart';
 import 'package:faida_pos/screens/notifications.dart';
@@ -7,6 +8,7 @@ import 'package:faida_pos/screens/transactions.dart';
 import 'package:faida_pos/services/voice_recording_service.dart';
 import 'package:faida_pos/widgets/shared/navbar_bottom.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class HomeRoot extends StatefulWidget {
@@ -19,12 +21,26 @@ class HomeRoot extends StatefulWidget {
 class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
   late final CheckoutController _controller;
-  final recording = VoiceRecordingService();
+  late VoiceRecordingService recording;
+
+  bool _initialized = false;
 
   @override
   void initState(){
     super.initState();
     _controller = CheckoutController();
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    if(!_initialized){
+      final productController = context.read<ProductController>();
+
+      recording = VoiceRecordingService(productController: productController);
+    }
+    _initialized = true;
   }
 
   late final _screens = [
