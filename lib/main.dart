@@ -5,6 +5,7 @@ import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/utils/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -18,6 +19,7 @@ void main() async {
   final productController = ProductController
     (notificationController: notificationController);
   await productController.load();
+  await dotenv.load(fileName: ".env");
 
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);

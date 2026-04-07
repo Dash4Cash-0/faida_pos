@@ -28,6 +28,8 @@ dependencies:
   table_calendar: ^3.2.0
   record: ^6.2.0
   http: ^1.1.0
+  porcupine_flutter: ^4.0.0
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +43,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/splash_logo.png
+    - .env
 
 localization:
   arb-dir: lib/l10n
