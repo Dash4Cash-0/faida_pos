@@ -6,6 +6,7 @@ import 'package:faida_pos/screens/notifications.dart';
 import 'package:faida_pos/screens/reports.dart';
 import 'package:faida_pos/screens/transactions.dart';
 import 'package:faida_pos/services/voice_recording_service.dart';
+import 'package:faida_pos/services/wake_up_service.dart';
 import 'package:faida_pos/widgets/shared/navbar_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _HomeRootState extends State<HomeRoot> {
   int _currentIndex = 0;
   late final CheckoutController _controller;
   late VoiceRecordingService recording;
+  final wakeUp = WakeUpService();
 
   bool _initialized = false;
 
@@ -37,20 +39,13 @@ class _HomeRootState extends State<HomeRoot> {
 
     if(!_initialized){
       final productController = context.read<ProductController>();
-
       recording = VoiceRecordingService(productController: productController);
+      wakeUp.recording = recording;
+      wakeUp.initialize().then((_) => wakeUp.startListening());
+      _initialized = true;
     }
-    _initialized = true;
   }
 
-  late final _screens = [
-    Checkout(controller: _controller,
-    recording: recording,),
-    Transactions(),
-    Reports(),
-    Notifications(),
-    Menu(),
-  ];
 
   @override
   void dispose() {
@@ -60,8 +55,17 @@ class _HomeRootState extends State<HomeRoot> {
 
   @override
   Widget build(BuildContext context) {
+      final screens = [
+        Checkout(controller: _controller,
+        recording: recording,
+        wakeUp: wakeUp,),
+        Transactions(),
+        Reports(),
+        Notifications(),
+        Menu(),
+      ];
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: screens[_currentIndex],
       bottomNavigationBar: NavbarBottom(
           currentIndex: _currentIndex,
           onTabSelected: (index) {

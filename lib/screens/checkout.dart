@@ -5,6 +5,7 @@ import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/models/sale_item.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:faida_pos/services/voice_recording_service.dart';
+import 'package:faida_pos/services/wake_up_service.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_bottom_sheet.dart';
 import 'package:faida_pos/widgets/checkout_widgets/checkout_button_widget.dart';
 import 'package:faida_pos/widgets/checkout_widgets/favorites_tab/favorites_widget.dart';
@@ -22,10 +23,12 @@ class Checkout extends StatefulWidget {
 
   final CheckoutController controller;
   final VoiceRecordingService recording;
+  final WakeUpService wakeUp;
 
   const Checkout({super.key,
     required this.controller,
-    required this.recording});
+    required this.recording,
+    required this.wakeUp});
 
   @override
   State<Checkout> createState() => _CheckoutState();
@@ -53,6 +56,25 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
     )).toList();
     _loadFavoriteProducts();
     widget.recording.onAddProduct = onAddProductByVoice;
+    widget.recording.onVoiceResult = (result) {
+      if (result.toString().contains("unknown")) {
+        onUnknownVoiceCommand();
+      } else if (result.toString().contains("help")) {
+        onHelpVoiceCommand();
+      } else if (result.toString().contains("add")) {
+        widget.recording.addProductsByVoice(result);
+      } else {
+        widget.recording.triggerQuickSale(result);
+      }
+    };
+    widget.wakeUp.onRecordingStateChanged = (isRecording) {
+      setState(() => _isRecording = isRecording);
+      if (isRecording) {
+        _startWave();
+      } else {
+        _stopWave();
+      }
+    };
   }
 
   @override

@@ -30,6 +30,7 @@ dependencies:
   http: ^1.1.0
   porcupine_flutter: ^4.0.0
   flutter_dotenv: ^5.0.2
+  speech_to_text: ^7.3.0
 
 dev_dependencies:
   flutter_test:

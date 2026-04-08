@@ -2,6 +2,7 @@
 import 'package:faida_pos/controllers/product_controller.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/services/database_service.dart';
+import 'package:faida_pos/services/wake_up_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,7 @@ class VoiceRecordingService {
 
   final record = AudioRecorder();
   final ProductController productController;
+  Function(String?)? onVoiceResult;
   late Function(Product, double) onAddProduct;
 
   VoiceRecordingService({required this.productController});
