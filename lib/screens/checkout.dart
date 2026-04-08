@@ -659,6 +659,7 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
               child: Listener(
                 onPointerDown: (_) {
                   setState(() => _isRecording = true);
+                  widget.wakeUp.stopListening();
                   _startWave();
                   widget.recording.startRecording();
                 },
@@ -666,6 +667,9 @@ class _CheckoutState extends State<Checkout> with TickerProviderStateMixin {
                   setState(() => _isRecording = false);
                   _stopWave();
                   final result = await widget.recording.stopRecording();
+                  await Future.delayed(const Duration(milliseconds: 300));
+
+                  widget.wakeUp.startListening();
                   if(result.toString().contains("unknown")){
                     onUnknownVoiceCommand();
                   }
