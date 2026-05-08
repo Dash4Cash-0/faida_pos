@@ -25,13 +25,6 @@ class _HomeRootState extends State<HomeRoot> {
     _controller = CheckoutController();
   }
 
-  late final _screens = [
-    Checkout(controller: _controller,),
-    Transactions(),
-    Reports(),
-    Notifications(),
-    Menu(),
-  ];
 
   @override
   void dispose() {
@@ -41,8 +34,15 @@ class _HomeRootState extends State<HomeRoot> {
 
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      Checkout(controller: _controller,),
+      Transactions(),
+      Reports(),
+      Notifications(),
+      Menu(),
+    ];
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: screens[_currentIndex],
       bottomNavigationBar: NavbarBottom(
           currentIndex: _currentIndex,
           onTabSelected: (index) {
