@@ -81,5 +81,9 @@
   "lowStock": "Inventory is too low",
   "noNotification": "No Notifications",
   "lowStockNotification": "Low Stock",
-  "clearNotifications": "Clear Notifications"
+  "clearNotifications": "Clear Notifications",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "yearly": "Yearly"
 }

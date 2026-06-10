@@ -45,10 +45,10 @@ class _ReportsState extends State<Reports> {
                   currentIndex: _currentIndex,
                   onSelectedTab: _onTabChanged,
                   tabs: [
-                    TabConfig("Daily"),
-                    TabConfig("Weekly"),
-                    TabConfig("Monthly"),
-                    TabConfig("Yearly")]),
+                    TabConfig(l10n.daily),
+                    TabConfig(l10n.weekly),
+                    TabConfig(l10n.monthly),
+                    TabConfig(l10n.yearly)]),
               Expanded(child: tabs[_currentIndex]())
             ],
           )),
