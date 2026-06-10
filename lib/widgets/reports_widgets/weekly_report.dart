@@ -7,10 +7,12 @@ class WeeklyReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Text("PLACEHOLDER TEXT WEEKLY")
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Text("PLACEHOLDER TEXT WEEKLY")
+          ],
+      ),
       ),
     );
   }
