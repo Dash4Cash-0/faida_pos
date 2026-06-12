@@ -1,5 +1,6 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DailyReport extends StatelessWidget {
   const DailyReport({super.key});
@@ -12,6 +13,7 @@ class DailyReport extends StatelessWidget {
     int itemsSold = 23;
     int avgSale = 4355;
     int netProfit = sales - expenses;
+    final formatted = DateFormat('EEEE d/M').format(DateTime.now());
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -22,6 +24,8 @@ class DailyReport extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: 10),
+                    Text(formatted, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
                     SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
