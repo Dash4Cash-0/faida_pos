@@ -85,5 +85,10 @@
   "daily": "Daily",
   "weekly": "Weekly",
   "monthly": "Monthly",
-  "yearly": "Yearly"
+  "yearly": "Yearly",
+  "productsSold": "Products sold",
+  "expenses":"Expenses",
+  "netProf": "Net Profit",
+  "netLoss": "Net Loss",
+  "avgSale": "Average Sale"
 }

@@ -1,3 +1,4 @@
+import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class DailyReport extends StatelessWidget {
@@ -11,7 +12,7 @@ class DailyReport extends StatelessWidget {
     int itemsSold = 23;
     int avgSale = 4355;
     int netProfit = sales - expenses;
-
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       body:
@@ -25,7 +26,7 @@ class DailyReport extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Sales:",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text("${l10n.sales}:",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                         Text("TZS $sales" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
                       ]
                     ),
@@ -33,7 +34,7 @@ class DailyReport extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Expenses:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      Text("${l10n.expenses}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                       Text("TZS $expenses" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
                     ]
                   ),
@@ -41,7 +42,7 @@ class DailyReport extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(netProfit >= 0 ? "Net Profit:" : "Net Loss" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text(netProfit >= 0 ? "${l10n.netProf}:" : "${l10n.netLoss}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                           Text("TZS ${netProfit.abs()}" ,style:
                           TextStyle(
                               fontWeight: FontWeight.bold,
@@ -54,7 +55,7 @@ class DailyReport extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Transactions:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text("${l10n.transactions}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                           Text("$transactions" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
                         ]
                     ),
@@ -62,7 +63,7 @@ class DailyReport extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Products sold" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text("${l10n.productsSold}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                           Text("$itemsSold" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
                         ]
                     ),
@@ -70,7 +71,7 @@ class DailyReport extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Average Sale:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text("${l10n.avgSale}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                           Text("TZS $avgSale" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
                         ]
                     )
