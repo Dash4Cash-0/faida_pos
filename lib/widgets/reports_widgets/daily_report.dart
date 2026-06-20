@@ -82,6 +82,32 @@ class DailyReport extends StatelessWidget {
                           Text("TZS $avgSale" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                         ]
                     ),
+                    Divider(),
+                    SizedBox(height: 30),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            side: BorderSide(color: Colors.black, width: 1),
+                            textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                          ),
+                          child: Text("Add Expense"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            side: BorderSide(color: Colors.black, width: 1),
+                            textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                          ),
+                          child: Text("Show Expenses"),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 ),
