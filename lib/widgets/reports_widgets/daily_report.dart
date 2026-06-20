@@ -2,8 +2,28 @@ import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DailyReport extends StatelessWidget {
+class DailyReport extends StatefulWidget {
   const DailyReport({super.key});
+
+  @override
+  State<DailyReport> createState() => _DailyReportState();
+}
+
+class _DailyReportState extends State<DailyReport> {
+
+  void addExpenses() {
+    showDialog(context: context,
+        builder: (_) => Dialog(
+          backgroundColor: Colors.white,
+          child: Padding(padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+              ],
+            ),),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +108,7 @@ class DailyReport extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: addExpenses,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
