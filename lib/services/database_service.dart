@@ -44,6 +44,44 @@ class DatabaseService {
     isFavorite INTEGER DEFAULT 0
     )
     ''');
+
+    await db.execute('''
+  CREATE TABLE sales (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    total REAL NOT NULL,
+    amountReceived REAL NOT NULL,
+    change REAL NOT NULL,
+    createdAt TEXT NOT NULL
+  )
+  ''');
+
+    await db.execute('''
+  CREATE TABLE sale_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    saleId INTEGER NOT NULL,
+    productId INTEGER,
+    name TEXT NOT NULL,
+    price REAL NOT NULL,
+    quantity REAL NOT NULL,
+    subtotal REAL NOT NULL,
+    FOREIGN KEY (saleId) REFERENCES sales(id)
+  )
+  ''');
+
+    await db.execute('''
+  CREATE TABLE notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER NOT NULL,
+    isLowStock INTEGER DEFAULT 0,
+    isOutOfStock INTEGER DEFAULT 0,
+    isDismissed INTEGER DEFAULT 0,
+    isResolved INTEGER DEFAULT 0,
+    createdAt TEXT NOT NULL,
+    resolvedAt TEXT,
+    dismissedAt TEXT,
+    FOREIGN KEY (productId) REFERENCES products(id)
+  )
+  ''');
   }
 
 
