@@ -90,5 +90,7 @@
   "expenses": "Matumizi",
   "netProf": "Faida Halisi",
   "netLoss": "Hasara Halisi",
-  "avgSale": "Wastani wa Mauzo"
+  "avgSale": "Wastani wa Mauzo",
+  "addExpense": "Ongeza Matumizi",
+  "showExpenses": "Onyesha Matumizi"
 }

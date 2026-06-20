@@ -84,27 +84,32 @@ class DailyReport extends StatelessWidget {
                     ),
                     Divider(),
                     SizedBox(height: 30),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            side: BorderSide(color: Colors.black, width: 1),
-                            textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              side: BorderSide(color: Colors.black, width: 1),
+                              textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                            ),
+                            child: Text(l10n.addExpense, textAlign: TextAlign.center),
                           ),
-                          child: Text("Add Expense"),
                         ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            side: BorderSide(color: Colors.black, width: 1),
-                            textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              side: BorderSide(color: Colors.black, width: 1),
+                              textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                            ),
+                            child: Text(l10n.showExpenses, textAlign: TextAlign.center),
                           ),
-                          child: Text("Show Expenses"),
                         ),
                       ],
                     )

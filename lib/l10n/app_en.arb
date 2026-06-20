@@ -90,5 +90,7 @@
   "expenses":"Expenses",
   "netProf": "Net Profit",
   "netLoss": "Net Loss",
-  "avgSale": "Average Sale"
+  "avgSale": "Average Sale",
+  "addExpense": "Add Expense",
+  "showExpenses": "Show Expenses"
 }
