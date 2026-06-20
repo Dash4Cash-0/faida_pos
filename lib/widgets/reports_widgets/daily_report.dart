@@ -19,6 +19,8 @@ class _DailyReportState extends State<DailyReport> {
   final TextEditingController otherExpense = TextEditingController();
   final TextEditingController expenseDesc = TextEditingController();
   final TextEditingController expenseCost = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
   final List<String> expenseCategories = [
     "Rent",
     "Electricity",
@@ -42,7 +44,7 @@ class _DailyReportState extends State<DailyReport> {
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ReportsController>().load();
+      context.read<ReportsController>().load(_selectedDate);
     });
   }
 
@@ -149,6 +151,16 @@ class _DailyReportState extends State<DailyReport> {
     }
   }
 
+  void nextDay() {
+    setState(() => _selectedDate = _selectedDate.add(Duration(days: 1)));
+    context.read<ReportsController>().load(_selectedDate);
+  }
+
+  void previousDay() {
+    setState(() => _selectedDate = _selectedDate.subtract(Duration(days: 1)));
+    context.read<ReportsController>().load(_selectedDate);
+  }
+
   @override
   void dispose(){
     expensesController.dispose();
@@ -156,7 +168,6 @@ class _DailyReportState extends State<DailyReport> {
     expenseDesc.dispose();
     expenseCost.dispose();
     super.dispose();
-
   }
 
   @override
@@ -168,7 +179,8 @@ class _DailyReportState extends State<DailyReport> {
     final avgSale = reports.avgSale;
     final netProfit = reports.netProfit;
     final transactions = reports.transactions;
-    final formatted = DateFormat('EEEE d/M').format(DateTime.now());
+    final formatted = DateFormat('EEEE d/M').format(_selectedDate);
+    final isToday = DateUtils.isSameDay(_selectedDate, DateTime.now());
     final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
     final fontSize = screenWidth * 0.045;
@@ -183,7 +195,14 @@ class _DailyReportState extends State<DailyReport> {
                     mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 10),
-                    Text(formatted, style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(onPressed: previousDay, icon: Icon(Icons.arrow_back_ios)),
+                        Text(formatted, style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
+                        IconButton(onPressed: isToday ? null : nextDay, icon: Icon(Icons.arrow_forward_ios)),
+                      ],
+                    ),
                     SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -10,9 +10,10 @@ class ReportsController extends ChangeNotifier {
 
   int get netProfit => sales - expenses;
 
-  Future<void> load() async {
-    final salesList = await DatabaseService.instance.getSalesByDate(DateTime.now());
-    final expensesList = await DatabaseService.instance.getExpensesByDate(DateTime.now());
+  Future<void> load([DateTime? date]) async {
+    final target = date ?? DateTime.now();
+    final salesList = await DatabaseService.instance.getSalesByDate(target);
+    final expensesList = await DatabaseService.instance.getExpensesByDate(target);
 
     sales = salesList.fold(0, (sum, s) => sum + s.total);
     expenses = expensesList.fold(0, (sum, e) => sum + e.expCost);
