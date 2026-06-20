@@ -15,6 +15,9 @@ class DailyReport extends StatelessWidget {
     int netProfit = sales - expenses;
     final formatted = DateFormat('EEEE d/M').format(DateTime.now());
     final l10n = AppLocalizations.of(context)!;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final fontSize = screenWidth * 0.045;
+    final titleSize = screenWidth * 0.06;
     return Scaffold(
       backgroundColor: Colors.white,
       body:
@@ -25,32 +28,32 @@ class DailyReport extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 10),
-                    Text(formatted, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+                    Text(formatted, style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
                     SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("${l10n.sales}:",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        Text("TZS $sales" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                        Text("${l10n.sales}:",style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                        Text("TZS $sales" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                       ]
                     ),
                   SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${l10n.expenses}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      Text("TZS $expenses" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                      Text("${l10n.expenses}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                      Text("TZS $expenses" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                     ]
                   ),
                     SizedBox(height: 30),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(netProfit >= 0 ? "${l10n.netProf}:" : "${l10n.netLoss}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text(netProfit >= 0 ? "${l10n.netProf}:" : "${l10n.netLoss}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
                           Text("TZS ${netProfit.abs()}" ,style:
                           TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18, color: netProfit >= 0 ? Colors.green : Colors.red))
+                              fontSize: fontSize, color: netProfit >= 0 ? Colors.green : Colors.red))
                         ]
                     ),
                     SizedBox(height: 10),
@@ -59,26 +62,26 @@ class DailyReport extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${l10n.transactions}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("$transactions" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                          Text("${l10n.transactions}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                          Text("$transactions" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                         ]
                     ),
                     SizedBox(height: 30),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${l10n.productsSold}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("$itemsSold" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                          Text("${l10n.productsSold}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                          Text("$itemsSold" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                         ]
                     ),
                     SizedBox(height: 30),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("${l10n.avgSale}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("TZS $avgSale" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                          Text("${l10n.avgSale}:" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                          Text("TZS $avgSale" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize))
                         ]
-                    )
+                    ),
                   ],
                 ),
                 ),
