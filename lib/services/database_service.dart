@@ -39,8 +39,8 @@ class DatabaseService {
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT,
-    price REAL NOT NULL,
-    inStock REAL NOT NULL,
+    price INTEGER NOT NULL,
+    inStock INTEGER NOT NULL,
     image TEXT,
     isFavorite INTEGER DEFAULT 0
     )
@@ -49,9 +49,9 @@ class DatabaseService {
     await db.execute('''
   CREATE TABLE sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    total REAL NOT NULL,
-    amountReceived REAL NOT NULL,
-    change REAL NOT NULL,
+    total INTEGER NOT NULL,
+    amountReceived INTEGER NOT NULL,
+    change INTEGER NOT NULL,
     createdAt TEXT NOT NULL
   )
   ''');
@@ -62,9 +62,9 @@ class DatabaseService {
     saleId INTEGER NOT NULL,
     productId INTEGER,
     name TEXT NOT NULL,
-    price REAL NOT NULL,
-    quantity REAL NOT NULL,
-    subtotal REAL NOT NULL,
+    price INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    subtotal INTEGER NOT NULL,
     FOREIGN KEY (saleId) REFERENCES sales(id)
   )
   ''');
@@ -87,7 +87,7 @@ class DatabaseService {
     await db.execute('''
   CREATE TABLE expenses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    expCost REAL NOT NULL,
+    expCost INTEGER NOT NULL,
     expCategory TEXT NOT NULL,
     expDesc TEXT,
     createdAt TEXT NOT NULL
@@ -99,16 +99,16 @@ class DatabaseService {
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async{
     if(oldVersion < 2) {
       await db.execute(
-        'ALTER TABLE products ADD COLUMN inStock REAL NOT NULL DEFAULT 0'
+        'ALTER TABLE products ADD COLUMN inStock INTEGER NOT NULL DEFAULT 0'
       );
     }
     if(oldVersion < 3) {
       await db.execute('''
       CREATE TABLE sales (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      total REAL NOT NULL,
-      amountReceived REAL NOT NULL,
-      change REAL NOT NULL,
+      total INTEGER NOT NULL,
+      amountReceived INTEGER NOT NULL,
+      change INTEGER NOT NULL,
       createdAt TEXT NOT NULL
       )
       ''');
@@ -118,9 +118,9 @@ class DatabaseService {
       saleId INTEGER NOT NULL,
       productId INTEGER,
       name TEXT NOT NULL,
-      price REAL NOT NULL,
-      quantity REAL NOT NULL,
-      subtotal REAL NOT NULL,
+      price INTEGER NOT NULL,
+      quantity INTEGER NOT NULL,
+      subtotal INTEGER NOT NULL,
       
       FOREIGN KEY (saleId) REFERENCES sales(id)
       )
@@ -147,7 +147,7 @@ class DatabaseService {
       await db.execute('''
       CREATE TABLE expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      expCost REAL NOT NULL,
+      expCost INTEGER NOT NULL,
       expCategory TEXT NOT NULL,
       expDesc TEXT,
       createdAt TEXT NOT NULL
@@ -304,7 +304,7 @@ Future<void> deleteNotification(int notificationId) async {
 
   Future<bool> decreaseStock({
     required int productId,
-    required double quantity
+    required int quantity
 }) async {
     final db = await instance.db;
     final int result = await db.rawUpdate(
@@ -321,7 +321,7 @@ Future<void> deleteNotification(int notificationId) async {
 
   Future<bool> increaseStock({
     required int productId,
-    required double quantity
+    required int quantity
   }) async {
     final db = await instance.db;
     final int result = await db.rawUpdate(
@@ -337,7 +337,7 @@ Future<void> deleteNotification(int notificationId) async {
   }
 
   Future<void> processQuickSale({
-    required double amountReceived
+    required int amountReceived
 }) async {
     final db  = await instance.db;
 
@@ -388,13 +388,13 @@ Future<void> deleteNotification(int notificationId) async {
 
   Future<void> processSale({
     required List<SaleItem> items,
-    required double amountReceived
+    required int amountReceived
 }) async {
     final db = await instance.db;
 
     await db.transaction((txn) async {
-      final total = items.fold(0.0, (sum, i) => sum + i.subtotal);
-      final change = amountReceived - total;
+      final int total = items.fold(0, (sum, i) => sum + i.subtotal);
+      final int change = amountReceived - total;
 
       final saleId = await txn.insert('sales', {
         'total': total,

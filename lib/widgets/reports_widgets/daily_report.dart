@@ -11,6 +11,8 @@ class DailyReport extends StatefulWidget {
 
 class _DailyReportState extends State<DailyReport> {
   final TextEditingController expensesController = TextEditingController();
+  final TextEditingController otherExpense = TextEditingController();
+  final TextEditingController expenseDesc = TextEditingController();
   final List<String> expenseCategories = [
     "Rent",
     "Electricity",
@@ -49,6 +51,7 @@ class _DailyReportState extends State<DailyReport> {
                   DropdownMenu<String>(
                     controller: expensesController,
                     enableFilter: true,
+                    label: Text("Category"),
                     width: screenWidth - 80,
                     menuHeight: screenHeight * 0.35,
                     onSelected: (value) => setDialogState(() {}),
@@ -58,12 +61,20 @@ class _DailyReportState extends State<DailyReport> {
                   ),
                   if (expensesController.text == "Other") ...[
                     SizedBox(height: 16),
-                    TextField(
+                    TextFormField(
+                      controller: otherExpense,
                         maxLength: 30,
                         decoration: InputDecoration(
                             label: Text("What kind of expense?"),
                             border: OutlineInputBorder())),
                   ],
+                SizedBox(height: 16),
+                  TextFormField(
+                    controller: expenseDesc,
+                    maxLength: 100,
+                    decoration: InputDecoration(
+                      label: Text("Description"),
+                      border: OutlineInputBorder())),
                   SizedBox(height: 20),
                 ],
               ),
@@ -75,6 +86,8 @@ class _DailyReportState extends State<DailyReport> {
   @override
   void dispose(){
     expensesController.dispose();
+    otherExpense.dispose();
+    expenseDesc.dispose();
     super.dispose();
 
   }

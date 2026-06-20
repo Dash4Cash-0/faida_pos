@@ -4,9 +4,8 @@ import '../models/sale_item.dart';
 
 class CheckoutController {
 
-
-  final ValueNotifier <List<SaleItem>> currentSaleList = ValueNotifier<List<SaleItem>>([]);
-  final storedValueNotifier = ValueNotifier<double>(0);
+  final ValueNotifier<List<SaleItem>> currentSaleList = ValueNotifier<List<SaleItem>>([]);
+  final storedValueNotifier = ValueNotifier<int>(0);
   final controller = TextEditingController();
 
   String input = "";
@@ -15,7 +14,6 @@ class CheckoutController {
   String currentSale = "";
   List<Product> favoriteProducts = [];
   bool isLoadingProducts = true;
-
 
   void dispose() {
     storedValueNotifier.dispose();

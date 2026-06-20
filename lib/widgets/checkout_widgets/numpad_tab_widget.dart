@@ -10,7 +10,7 @@ class NumpadTabWidget extends StatelessWidget {
   final VoidCallback onPlusPressed;
   final String value;
   final String partValues;
-  final double storedValue;
+  final int storedValue;
 
   const NumpadTabWidget({
     super.key,

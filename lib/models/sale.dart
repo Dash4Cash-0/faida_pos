@@ -1,9 +1,9 @@
 class Sale {
   final int? id;
   final DateTime createdAt;
-  final double total;
-  final double amountReceived;
-  final double change;
+  final int total;
+  final int amountReceived;
+  final int change;
 
   Sale({
     this.id,
@@ -27,9 +27,9 @@ class Sale {
    return Sale(
      id: map['id'],
      createdAt: DateTime.parse(map['createdAt']),
-     total: map['total'],
-     amountReceived: map['amountReceived'],
-     change: map['change']
+     total: (map['total'] as num).toInt(),
+     amountReceived: (map['amountReceived'] as num).toInt(),
+     change: (map['change'] as num).toInt(),
    );
   }
 }

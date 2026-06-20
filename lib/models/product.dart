@@ -2,8 +2,8 @@ class Product {
   final int? id;
   final String name;
   final String description;
-  final double price;
-  double inStock;
+  final int price;
+  int inStock;
   final String? image;
   final bool isFavorite;
 
@@ -30,8 +30,8 @@ class Product {
     return Product(id: map['id'],
         name: map['name'],
         description: map['description'],
-        price: map['price'],
-        inStock: map['inStock'],
+        price: (map['price'] as num).toInt(),
+        inStock: (map['inStock'] as num).toInt(),
         image: map['image'],
         isFavorite: map['isFavorite'] == 1);
   }
@@ -40,8 +40,8 @@ class Product {
     int? id,
     String? name,
     String? description,
-    double? price,
-    double? inStock,
+    int? price,
+    int? inStock,
     String? image,
     bool? isFavorite,
   }) {

@@ -1,6 +1,6 @@
 class Expense {
   final int? id;
-  final double expCost;
+  final int expCost;
   final String expCategory;
   final String? expDesc;
   final DateTime createdAt;
@@ -26,7 +26,7 @@ class Expense {
   factory Expense.fromMap(Map<String, dynamic> map) {
     return Expense(
       id: map['id'] as int,
-      expCost: map['expCost'] as double,
+      expCost: (map['expCost'] as num).toInt(),
       expCategory: map['expCategory'] as String,
       expDesc: map['expDesc'] as String?,
       createdAt: DateTime.parse(map['createdAt']),

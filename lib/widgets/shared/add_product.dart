@@ -40,8 +40,8 @@ class _AddProductState extends State<AddProduct> {
     late final product = Product(
         name: _nameController.text,
         description: _descriptionController.text,
-        price: double.parse(_priceController.text),
-        inStock: double.parse(_inStockController.text),
+        price: int.parse(_priceController.text),
+        inStock: int.parse(_inStockController.text),
         image: imagePath,
         isFavorite: _isFavorite);
 

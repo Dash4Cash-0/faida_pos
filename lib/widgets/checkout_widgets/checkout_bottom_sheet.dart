@@ -8,10 +8,10 @@ class CheckoutBottomSheet extends StatefulWidget {
   final int itemsCount;
   final List<SaleItem> currentSaleItems;
   final ValueNotifier<List<SaleItem>> saleItemNotifier;
-  final ValueNotifier<double> storedValueNotifier;
+  final ValueNotifier<int> storedValueNotifier;
   final VoidCallback onNewSale;
   final Function(String) addDiscount;
-  final void Function(double amountReceived) onCalculate;
+  final void Function(int amountReceived) onCalculate;
 
   const CheckoutBottomSheet({super.key,
     required this.itemsCount,
@@ -104,12 +104,12 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                     )
                                                 ),
                                               SizedBox(height: 8),
-                                              ValueListenableBuilder<double>
+                                              ValueListenableBuilder<int>
                                                 (valueListenable: widget.storedValueNotifier,
                                                   builder: (context, total, _) {
                                                   return TextFormField(
                                                     controller: controller,
-                                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                    keyboardType: TextInputType.number,
                                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                                     decoration: InputDecoration(border: UnderlineInputBorder(),
                                                       labelText: "${l10n.totalPrice}: ${widget.storedValueNotifier.value} TZS",
@@ -120,7 +120,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                         value.isEmpty) {
                                                       return l10n.receivedAmountError;
                                                     }
-                                                    final parsed = double.tryParse(value.trim());
+                                                    final parsed = int.tryParse(value.trim());
                                                     if (parsed == null) {
                                                       return l10n.numberError;
                                                     }
@@ -144,7 +144,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
                                                     onClicked: () {
                                                       if (_formKey.currentState?.validate() ==
                                                           true) {
-                                                        final amount = double.tryParse(controller.text.trim());
+                                                        final amount = int.tryParse(controller.text.trim());
                                                         if (amount != null) {
                                                           widget.onCalculate(amount);
                                                         }

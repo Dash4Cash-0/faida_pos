@@ -3,10 +3,10 @@ class SaleItem {
   final int? saleId;
   final int? productId;
   final String name;
-  final double price;
-  final double quantity;
+  final int price;
+  final int quantity;
 
-  double get subtotal => price * quantity;
+  int get subtotal => price * quantity;
 
   SaleItem({
     this.id,
@@ -23,8 +23,8 @@ class SaleItem {
         saleId: map['saleId'] as int?,
         productId: map['productId'] as int?,
         name: map['name'] as String,
-        price: (map['price'] as num).toDouble(),
-        quantity: (map['quantity'] as num).toDouble(),
+        price: (map['price'] as num).toInt(),
+        quantity: (map['quantity'] as num).toInt(),
     );
   }
 

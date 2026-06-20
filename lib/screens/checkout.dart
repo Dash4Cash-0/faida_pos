@@ -86,18 +86,17 @@ class _CheckoutState extends State<Checkout> {
                 children: [
                   TextFormField(
                     controller: quantity,
-                    keyboardType: TextInputType.numberWithOptions(
-                        decimal: true),
+                    keyboardType: TextInputType.number,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(border: OutlineInputBorder(),
                         labelText: l10n.enterQuantity),
                     validator: (value) {
-                      if(value == null || value.isEmpty || double.parse(value) <= 0){
+                      if(value == null || value.isEmpty || int.parse(value) <= 0){
                         return l10n.enterQuantity;
                       }
-                      if(double.parse(value) > product.inStock){
+                      if(int.parse(value) > product.inStock){
                         return "${l10n.lowStock}\n"
-                            "${l10n.inStock}:${product.inStock.round()}";
+                            "${l10n.inStock}:${product.inStock}";
                       }
                       return null;
                     },
@@ -123,10 +122,10 @@ class _CheckoutState extends State<Checkout> {
                               SaleItem(productId: product.id,
                                   name: product.name,
                                   price: product.price,
-                                  quantity: double.parse(quantity.text))
+                                  quantity: int.parse(quantity.text))
                             ];
                             widget.controller.storedValueNotifier.value +=
-                                product.price * double.parse(quantity.text);
+                                product.price * int.parse(quantity.text);
                           });
                         }
                           Navigator.pop(context);
@@ -163,11 +162,11 @@ class _CheckoutState extends State<Checkout> {
   void onPlusPressed(){
     if(widget.controller.input.isEmpty) return;
     setState(() {
-      final current = double.parse(widget.controller.input);
+      final current = int.parse(widget.controller.input);
       widget.controller.storedValueNotifier.value += current;
       widget.controller.currentSaleList.value = [
        ...widget.controller.currentSaleList.value,
-        SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
+        SaleItem(productId: null, name: l10n.customAmount, price: int.parse(widget.controller.input), quantity: 1)
       ];
       widget.controller.input = "";
     });
@@ -187,9 +186,9 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       switch (discount) {
         case "5%":
-          final double fivePercent = -widget.controller.storedValueNotifier.value * 0.05;
+          final int fivePercent = -(widget.controller.storedValueNotifier.value * 0.05).round();
           setState(() {
-            widget.controller.storedValueNotifier.value *= 0.95;
+            widget.controller.storedValueNotifier.value = (widget.controller.storedValueNotifier.value * 0.95).round();
             widget.controller.currentSaleList.value = [
               ...widget.controller.currentSaleList.value,
             SaleItem(productId: null, name: "5% ${l10n.discount}: ", price: fivePercent, quantity: 1)
@@ -197,9 +196,9 @@ class _CheckoutState extends State<Checkout> {
           });
           break;
         case "10%":
-          final double tenPercent = -widget.controller.storedValueNotifier.value * 0.1;
+          final int tenPercent = -(widget.controller.storedValueNotifier.value * 0.1).round();
           setState(() {
-            widget.controller.storedValueNotifier.value *= 0.90;
+            widget.controller.storedValueNotifier.value = (widget.controller.storedValueNotifier.value * 0.90).round();
             widget.controller.currentSaleList.value = [
               ...widget.controller.currentSaleList.value,
               SaleItem(productId: null, name: "10% ${l10n.discount}: ", price: tenPercent, quantity: 1)
@@ -207,9 +206,9 @@ class _CheckoutState extends State<Checkout> {
           });
           break;
         case "15%":
-          final double fifteenPercent = -widget.controller.storedValueNotifier.value * 0.15;
+          final int fifteenPercent = -(widget.controller.storedValueNotifier.value * 0.15).round();
           setState(() {
-            widget.controller.storedValueNotifier.value *=0.85;
+            widget.controller.storedValueNotifier.value = (widget.controller.storedValueNotifier.value * 0.85).round();
             widget.controller.currentSaleList.value = [
               ...widget.controller.currentSaleList.value,
               SaleItem(productId: null, name: "15% ${l10n.discount}: ", price: fifteenPercent, quantity: 1)
@@ -224,7 +223,7 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 
-  void _onCalculatePressed(double amountReceived) async {
+  void _onCalculatePressed(int amountReceived) async {
 
     Navigator.pop(context);
   try{
@@ -276,7 +275,7 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void _showCustomDialog(){
-    double customDiscount;
+    int customDiscount;
     setState(() {
       showDialog(context: context, builder: (BuildContext context) => Dialog(
         backgroundColor: Colors.white,
@@ -311,7 +310,8 @@ class _CheckoutState extends State<Checkout> {
             ),
                 onPressed: () => {
               setState(() {
-              customDiscount = -widget.controller.storedValueNotifier.value * (double.parse(widget.controller.controller.text) / 100);
+              final pct = double.parse(widget.controller.controller.text) / 100;
+              customDiscount = -(widget.controller.storedValueNotifier.value * pct).round();
               widget.controller.currentSaleList.value = [
                     ...widget.controller.currentSaleList.value,
                     SaleItem(
@@ -321,7 +321,7 @@ class _CheckoutState extends State<Checkout> {
                       quantity: 1)
                   ];
 
-              widget.controller.storedValueNotifier.value *= 1.0 - (double.parse(widget.controller.controller.text) / 100);
+              widget.controller.storedValueNotifier.value = (widget.controller.storedValueNotifier.value * (1 - pct)).round();
               widget.controller.controller.text = "";
               }),
                 Navigator.pop(context)},
@@ -335,7 +335,7 @@ class _CheckoutState extends State<Checkout> {
   void onQuickSale(){
     if(widget.controller.input.isNotEmpty) {
       setState(() {
-        final current = double.parse(widget.controller.input);
+        final current = int.parse(widget.controller.input);
         widget.controller.storedValueNotifier.value += current;
       });
     }
@@ -465,11 +465,11 @@ class _CheckoutState extends State<Checkout> {
                 onClicked: () {
               if(widget.controller.input.isNotEmpty){
                 setState(() {
-                  final customAmount = double.parse(widget.controller.input);
+                  final customAmount = int.parse(widget.controller.input);
                   widget.controller.storedValueNotifier.value += customAmount;
                   widget.controller.currentSaleList.value = [
                     ...widget.controller.currentSaleList.value,
-                    SaleItem(productId: null, name: l10n.customAmount, price: double.parse(widget.controller.input), quantity: 1)
+                    SaleItem(productId: null, name: l10n.customAmount, price: int.parse(widget.controller.input), quantity: 1)
                   ];
                   widget.controller.input = "";
                 });

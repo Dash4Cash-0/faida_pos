@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 
 class ReceiptWidget extends StatelessWidget {
-  final double amountToPay;
-  final double amountReceived;
+  final int amountToPay;
+  final int amountReceived;
   final VoidCallback onNewSale;
   final ValueNotifier<List<SaleItem>> soldProducts;
 
@@ -15,21 +15,21 @@ class ReceiptWidget extends StatelessWidget {
     required this.amountReceived,
     required this.onNewSale,
     required this.soldProducts});
-  
-  
-  double calcChange() {
-    double change = 0;
+
+
+  int calcChange() {
+    int change = 0;
     if(amountToPay < amountReceived) {
       change = amountReceived - amountToPay;
     }
     return change;
   }
-  
-  String getSellCompleted(double amount, String completed, String change){
+
+  String getSellCompleted(int amount, String completed, String change){
     if(amount == 0){
       return "$completed!";
     }else{
-      return "$change: TZS ${amount.toStringAsFixed(0)}";
+      return "$change: TZS $amount";
     }
   }
 
@@ -75,7 +75,7 @@ class ReceiptWidget extends StatelessWidget {
                             style: TextStyle(fontSize: 10),
                           )
                           ),
-                          Text("TZS ${item.subtotal.toStringAsFixed(0)}",
+                          Text("TZS ${item.subtotal}",
                           style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       );

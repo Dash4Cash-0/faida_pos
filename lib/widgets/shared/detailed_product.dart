@@ -26,7 +26,7 @@ class _DetailedProductState extends State<DetailedProduct> {
   late TextEditingController nameController;
   late TextEditingController descController;
   late TextEditingController priceController;
-  late double costPerUnit;
+  late int costPerUnit;
   late bool isFavorite;
   bool isEditing = false;
   late Product _product;
@@ -123,7 +123,7 @@ class _DetailedProductState extends State<DetailedProduct> {
           SizedBox(height: 16),
           TextFormField(
               controller: priceController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: TextInputType.number,
               enabled: isEditing,
               decoration: InputDecoration(
                   labelText: l10n.price,
@@ -133,7 +133,7 @@ class _DetailedProductState extends State<DetailedProduct> {
           SizedBox(height: 16),
           TextFormField(
               controller: currentStockController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: TextInputType.number,
               enabled: isEditing,
               decoration: InputDecoration(
                   labelText: l10n.currentStock,
@@ -212,8 +212,8 @@ class _DetailedProductState extends State<DetailedProduct> {
         Product(id: widget.productId,
             name: nameController.text,
             description: descController.text,
-            price: double.parse(priceController.text),
-            inStock: double.parse(currentStockController.text),
+            price: int.parse(priceController.text),
+            inStock: int.parse(currentStockController.text),
             image: _product.image,
             isFavorite: isFavorite);
     //widget.refreshOnAddedFavorite();
