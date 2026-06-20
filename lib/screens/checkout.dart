@@ -1,5 +1,6 @@
 import 'package:faida_pos/controllers/checkout_controller.dart';
 import 'package:faida_pos/controllers/product_controller.dart';
+import 'package:faida_pos/controllers/reports_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/models/product.dart';
 import 'package:faida_pos/models/sale_item.dart';
@@ -232,6 +233,7 @@ class _CheckoutState extends State<Checkout> {
         amountReceived: amountReceived);
     await productController
         .commitSale(widget.controller.currentSaleList.value);
+    if (mounted) context.read<ReportsController>().load();
 
   } catch(e){
     if(!mounted) return;

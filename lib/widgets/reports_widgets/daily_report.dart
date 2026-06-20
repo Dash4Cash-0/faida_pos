@@ -1,6 +1,11 @@
+import 'package:faida_pos/controllers/reports_controller.dart';
 import 'package:faida_pos/l10n/app_localizations.dart';
+import 'package:faida_pos/models/expense_model.dart';
+import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DailyReport extends StatefulWidget {
   const DailyReport({super.key});
@@ -13,6 +18,7 @@ class _DailyReportState extends State<DailyReport> {
   final TextEditingController expensesController = TextEditingController();
   final TextEditingController otherExpense = TextEditingController();
   final TextEditingController expenseDesc = TextEditingController();
+  final TextEditingController expenseCost = TextEditingController();
   final List<String> expenseCategories = [
     "Rent",
     "Electricity",
@@ -32,8 +38,15 @@ class _DailyReportState extends State<DailyReport> {
     "Taxes",
     "Other",
   ];
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReportsController>().load();
+    });
+  }
 
-  void addExpenses(double fontSize, double titleSize) {
+  void addExpenses(double fontSize, double titleSize, AppLocalizations l10n) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     showDialog(context: context,
@@ -41,7 +54,8 @@ class _DailyReportState extends State<DailyReport> {
           builder: (context, setDialogState) => Dialog(
             backgroundColor: Colors.white,
             child: Padding(padding: EdgeInsets.all(20),
-              child: Column(
+              child: SingleChildScrollView(child:
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text("Add Expense", style:
@@ -50,6 +64,9 @@ class _DailyReportState extends State<DailyReport> {
                   SizedBox(height: 30),
                   DropdownMenu<String>(
                     controller: expensesController,
+                    menuStyle: MenuStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white),
+                        side: WidgetStatePropertyAll(BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid))),
                     enableFilter: true,
                     label: Text("Category"),
                     width: screenWidth - 80,
@@ -73,14 +90,63 @@ class _DailyReportState extends State<DailyReport> {
                     controller: expenseDesc,
                     maxLength: 100,
                     decoration: InputDecoration(
-                      label: Text("Description"),
+                      label: Text(l10n.description),
                       border: OutlineInputBorder())),
-                  SizedBox(height: 20),
+                  SizedBox(height: 16),
+                  TextFormField(
+                      controller: expenseCost,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(30)
+                      ],
+                      decoration: InputDecoration(
+                          label: Text("Cost"),
+                          border: OutlineInputBorder())),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(child:
+                      ElevatedButton(
+                        onPressed: () {
+                            saveExpense(int.parse(expenseCost.text), expensesController.text, expenseDesc.text);
+                            Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          side: BorderSide(color: Colors.black, width: 1),
+                          textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                        ), child: Text("Save", textAlign: TextAlign.center))),
+                      SizedBox(width: 10),
+                      Expanded(child:
+                      ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            side: BorderSide(color: Colors.black, width: 1),
+                            textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                          ), child: Text("Cancel", textAlign: TextAlign.center)))
+                    ],
+                  )
                 ],
               ),
             ),
           ),
-        ));
+        )));
+  }
+
+  void saveExpense(int cost, String category, String desc) async{
+    if (desc.isEmpty){
+      desc = "No description";
+    }
+    final created = DateTime.now();
+    final expense = Expense(expCost: cost, expCategory: category, expDesc: desc, createdAt: created);
+    try{
+      await DatabaseService.instance.insertExpense(expense);
+      if (mounted) context.read<ReportsController>().load();
+    }catch(e){
+      print("Something went wrong");
+    }
   }
 
   @override
@@ -88,18 +154,20 @@ class _DailyReportState extends State<DailyReport> {
     expensesController.dispose();
     otherExpense.dispose();
     expenseDesc.dispose();
+    expenseCost.dispose();
     super.dispose();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    int sales = 10000;
-    int expenses = 4000;
-    int transactions = 3;
-    int itemsSold = 23;
-    int avgSale = 4355;
-    int netProfit = sales - expenses;
+    final reports = context.watch<ReportsController>();
+    final sales = reports.sales;
+    final expenses = reports.expenses;
+    final itemsSold = reports.itemsSold;
+    final avgSale = reports.avgSale;
+    final netProfit = reports.netProfit;
+    final transactions = reports.transactions;
     final formatted = DateFormat('EEEE d/M').format(DateTime.now());
     final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -175,7 +243,7 @@ class _DailyReportState extends State<DailyReport> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => addExpenses(fontSize, titleSize),
+                            onPressed: () => addExpenses(fontSize, titleSize, l10n),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
