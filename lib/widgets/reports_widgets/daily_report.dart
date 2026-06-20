@@ -10,19 +10,69 @@ class DailyReport extends StatefulWidget {
 }
 
 class _DailyReportState extends State<DailyReport> {
+  final TextEditingController expensesController = TextEditingController();
+  final List<String> expenseCategories = [
+    "Rent",
+    "Electricity",
+    "Water",
+    "Internet",
+    "Phone / Airtime",
+    "Security / Guard",
+    "Insurance",
+    "Salaries / Wages",
+    "Transport Allowance",
+    "Equipment Repair",
+    "Cleaning Supplies",
+    "Packaging / Bags",
+    "Marketing / Advertising",
+    "Bank / Mobile Money Fees",
+    "Licenses / Permits",
+    "Taxes",
+    "Other",
+  ];
 
-  void addExpenses() {
+  void addExpenses(double fontSize, double titleSize) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     showDialog(context: context,
-        builder: (_) => Dialog(
-          backgroundColor: Colors.white,
-          child: Padding(padding: EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-              ],
-            ),),
+        builder: (_) => StatefulBuilder(
+          builder: (context, setDialogState) => Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Add Expense", style:
+                  TextStyle(fontWeight: FontWeight.bold,
+                      fontSize: titleSize)),
+                  SizedBox(height: 30),
+                  DropdownMenu<String>(
+                    controller: expensesController,
+                    enableFilter: true,
+                    width: screenWidth - 80,
+                    menuHeight: screenHeight * 0.35,
+                    onSelected: (value) => setDialogState(() {}),
+                    dropdownMenuEntries: expenseCategories
+                        .map((e) => DropdownMenuEntry(value: e, label: e))
+                        .toList(),
+                  ),
+                  if (expensesController.text == "Other") ...[
+                    SizedBox(height: 16),
+                    TextField(decoration: InputDecoration(border: OutlineInputBorder())),
+                  ],
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
         ));
+  }
+
+  @override
+  void dispose(){
+    expensesController.dispose();
+    super.dispose();
+
   }
 
   @override
@@ -108,7 +158,7 @@ class _DailyReportState extends State<DailyReport> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: addExpenses,
+                            onPressed: () => addExpenses(fontSize, titleSize),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
