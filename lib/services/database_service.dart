@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:faida_pos/models/expense_model.dart';
 import 'package:faida_pos/models/notifications_model.dart';
 import 'package:faida_pos/models/sale.dart';
 import 'package:path/path.dart';
@@ -28,7 +29,7 @@ class DatabaseService {
     String databasesPath = await getDatabasesPath();
     String path = join(databasesPath,'faida.db');
 
-    return await openDatabase(path, version: 4, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    return await openDatabase(path, version: 5, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
 
@@ -82,6 +83,16 @@ class DatabaseService {
     FOREIGN KEY (productId) REFERENCES products(id)
   )
   ''');
+
+    await db.execute('''
+  CREATE TABLE expenses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    expCost REAL NOT NULL,
+    expCategory TEXT NOT NULL,
+    expDesc TEXT,
+    createdAt TEXT NOT NULL
+  )
+  ''');
   }
 
 
@@ -129,6 +140,17 @@ class DatabaseService {
       dismissedAt TEXT,
       
       FOREIGN KEY (productId) REFERENCES product(id)
+      )
+      ''');
+    }
+    if(oldVersion < 5){
+      await db.execute('''
+      CREATE TABLE expenses (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      expCost REAL NOT NULL,
+      expCategory TEXT NOT NULL,
+      expDesc TEXT,
+      createdAt TEXT NOT NULL
       )
       ''');
     }
@@ -339,6 +361,29 @@ Future<void> deleteNotification(int notificationId) async {
       orderBy: 'createdAt DESC',
     );
     return List.generate(maps.length, (i) => Sale.fromMap(maps[i]));
+  }
+
+  Future<int> insertExpense(Expense expense) async {
+    final db = await instance.db;
+    return await db.insert('expenses', expense.toMap());
+  }
+
+  Future<List<Expense>> getExpensesByDate(DateTime date) async {
+    final db = await instance.db;
+    final startOfDay = DateTime(date.year, date.month, date.day);
+    final startTomorrow = startOfDay.add(Duration(days: 1));
+    final maps = await db.query(
+      'expenses',
+      where: 'createdAt >= ? AND createdAt < ?',
+      whereArgs: [startOfDay.toIso8601String(), startTomorrow.toIso8601String()],
+      orderBy: 'createdAt DESC',
+    );
+    return maps.map((m) => Expense.fromMap(m)).toList();
+  }
+
+  Future<void> deleteExpense(int id) async {
+    final db = await instance.db;
+    await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> processSale({

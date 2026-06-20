@@ -58,7 +58,11 @@ class _DailyReportState extends State<DailyReport> {
                   ),
                   if (expensesController.text == "Other") ...[
                     SizedBox(height: 16),
-                    TextField(decoration: InputDecoration(border: OutlineInputBorder())),
+                    TextField(
+                        maxLength: 30,
+                        decoration: InputDecoration(
+                            label: Text("What kind of expense?"),
+                            border: OutlineInputBorder())),
                   ],
                   SizedBox(height: 20),
                 ],
