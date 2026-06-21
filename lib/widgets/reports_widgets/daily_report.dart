@@ -40,6 +40,29 @@ class _DailyReportState extends State<DailyReport> {
     "Taxes",
     "Other",
   ];
+
+  String _translateCategory(String key, AppLocalizations l10n) {
+    switch (key) {
+      case "Rent": return l10n.catRent;
+      case "Electricity": return l10n.catElectricity;
+      case "Water": return l10n.catWater;
+      case "Internet": return l10n.catInternet;
+      case "Phone / Airtime": return l10n.catPhoneAirtime;
+      case "Security / Guard": return l10n.catSecurity;
+      case "Insurance": return l10n.catInsurance;
+      case "Salaries / Wages": return l10n.catSalaries;
+      case "Transport Allowance": return l10n.catTransport;
+      case "Equipment Repair": return l10n.catEquipmentRepair;
+      case "Cleaning Supplies": return l10n.catCleaningSupplies;
+      case "Packaging / Bags": return l10n.catPackaging;
+      case "Marketing / Advertising": return l10n.catMarketing;
+      case "Bank / Mobile Money Fees": return l10n.catBankFees;
+      case "Licenses / Permits": return l10n.catLicenses;
+      case "Taxes": return l10n.catTaxes;
+      case "Other": return l10n.catOther;
+      default: return key;
+    }
+  }
   @override
   void initState(){
     super.initState();
@@ -60,7 +83,7 @@ class _DailyReportState extends State<DailyReport> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Add Expense", style:
+                  Text(l10n.addExpense, style:
                   TextStyle(fontWeight: FontWeight.bold,
                       fontSize: titleSize)),
                   SizedBox(height: 30),
@@ -70,21 +93,21 @@ class _DailyReportState extends State<DailyReport> {
                         backgroundColor: WidgetStatePropertyAll(Colors.white),
                         side: WidgetStatePropertyAll(BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid))),
                     enableFilter: true,
-                    label: Text("Category"),
+                    label: Text(l10n.category),
                     width: screenWidth - 80,
                     menuHeight: screenHeight * 0.35,
                     onSelected: (value) => setDialogState(() {}),
                     dropdownMenuEntries: expenseCategories
-                        .map((e) => DropdownMenuEntry(value: e, label: e))
+                        .map((e) => DropdownMenuEntry(value: e, label: _translateCategory(e, l10n)))
                         .toList(),
                   ),
-                  if (expensesController.text == "Other") ...[
+                  if (expensesController.text == "Other" || expensesController.text == "Nyingine") ...[
                     SizedBox(height: 16),
                     TextFormField(
                       controller: otherExpense,
                         maxLength: 30,
                         decoration: InputDecoration(
-                            label: Text("What kind of expense?"),
+                            label: Text(l10n.whatKindExpense),
                             border: OutlineInputBorder())),
                   ],
                 SizedBox(height: 16),
@@ -101,7 +124,7 @@ class _DailyReportState extends State<DailyReport> {
                         LengthLimitingTextInputFormatter(30)
                       ],
                       decoration: InputDecoration(
-                          label: Text("Cost"),
+                          label: Text(l10n.cost),
                           border: OutlineInputBorder())),
                   SizedBox(height: 16),
                   Row(
@@ -117,7 +140,7 @@ class _DailyReportState extends State<DailyReport> {
                           foregroundColor: Colors.black,
                           side: BorderSide(color: Colors.black, width: 1),
                           textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-                        ), child: Text("Save", textAlign: TextAlign.center))),
+                        ), child: Text(l10n.save, textAlign: TextAlign.center))),
                       SizedBox(width: 10),
                       Expanded(child:
                       ElevatedButton(
@@ -127,7 +150,7 @@ class _DailyReportState extends State<DailyReport> {
                             foregroundColor: Colors.black,
                             side: BorderSide(color: Colors.black, width: 1),
                             textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-                          ), child: Text("Cancel", textAlign: TextAlign.center)))
+                          ), child: Text(l10n.cancel, textAlign: TextAlign.center)))
                     ],
                   )
                 ],
@@ -145,7 +168,7 @@ class _DailyReportState extends State<DailyReport> {
     final expense = Expense(expCost: cost, expCategory: category, expDesc: desc, createdAt: created);
     try{
       await DatabaseService.instance.insertExpense(expense);
-      if (mounted) context.read<ReportsController>().load();
+      if (mounted) context.read<ReportsController>().load(_selectedDate);
     }catch(e){
       if(!mounted) return;
       showDialog(
@@ -172,49 +195,121 @@ class _DailyReportState extends State<DailyReport> {
     }
   }
 
-  void showExpenses(List<Expense> expensesList, double fontSize, double titleSize) {
+  void showExpenses(double fontSize, double titleSize) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Expenses", style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
-            const SizedBox(height: 12),
-            if (expensesList.isEmpty)
-              Text("No expenses for this day.", style: TextStyle(fontSize: fontSize))
-            else
-              Expanded(
-                child: ListView.separated(
-                  itemCount: expensesList.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (_, i) {
-                    final e = expensesList[i];
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(e.expCategory, style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
-                              if (e.expDesc != null && e.expDesc!.isNotEmpty)
-                                Text(e.expDesc!, style: TextStyle(fontSize: fontSize * 0.85, color: Colors.grey)),
-                            ],
-                          ),
-                        ),
-                        Text("TZS ${e.expCost}", style: TextStyle(fontSize: fontSize)),
-                      ],
-                    );
-                  },
+      builder: (ctx) => Consumer<ReportsController>(
+        builder: (context, reports, child) {
+          final l10n = AppLocalizations.of(context)!;
+          return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.expenses, style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
+              const SizedBox(height: 12),
+              if (reports.expensesList.isEmpty)
+                Text(l10n.noExpensesDay, style: TextStyle(fontSize: fontSize))
+              else
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: reports.expensesList.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (_, i) {
+                      final e = reports.expensesList[i];
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(_translateCategory(e.expCategory, l10n), style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                        trailing: Text("TZS ${e.expCost}", style: TextStyle(fontSize: fontSize)),
+                        onTap: () {
+                          showExpenseDetails(_translateCategory(e.expCategory, l10n), e.expDesc ?? '', e.expCost, fontSize, titleSize, l10n);
+                        },
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              backgroundColor: Colors.red,
+                              title: Text(l10n.deleteExpense),
+                              content: Text(l10n.deleteExpenseConfirm,
+                                  style: TextStyle(fontSize: fontSize)),
+                              actions: [
+                                Row(
+                                  children: [
+                                    Expanded(child:
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await DatabaseService.instance.deleteExpense(e.id!);
+                                          if (mounted) this.context.read<ReportsController>().load(_selectedDate);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          backgroundColor: Colors.white,
+                                          side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+                                        ),
+                                        child: Text(l10n.yes))),
+                                    SizedBox(width: 10),
+                                    Expanded(child:
+                                      ElevatedButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          backgroundColor: Colors.white,
+                                          side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+                                        ),
+                                        child: Text(l10n.no))),
+                                  ],
+                                )
+                              ],
+                            ));
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-          ],
-        ),
+            ],
+          ),
+        );
+        },
       ),
     );
+  }
+
+  void showExpenseDetails(String expenseCategory, String expenseDescription,
+      int expenseCost, double fontSize, double titleSize, AppLocalizations l10n) {
+    showDialog(context: context,
+        builder: (_) => Dialog(
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(expenseCategory, style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
+                SizedBox(height: 16),
+                if (expenseDescription.isNotEmpty)
+                  Text(expenseDescription, style: TextStyle(fontSize: fontSize, color: Colors.grey)),
+                SizedBox(height: 16),
+                Text("TZS $expenseCost", style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid),
+                      textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                    ),
+                    child: Text(l10n.ok)),
+                )
+              ],
+            ),
+          )
+        ));
   }
 
   void nextDay() {
@@ -341,7 +436,7 @@ class _DailyReportState extends State<DailyReport> {
                         SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => showExpenses(reports.expensesList, fontSize, titleSize),
+                            onPressed: () => showExpenses(fontSize, titleSize),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
