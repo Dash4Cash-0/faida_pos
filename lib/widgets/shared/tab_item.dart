@@ -18,9 +18,12 @@ class TabItem extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(tabLabel, style: TextStyle(fontSize: 24,
-              color: Colors.black,
-              fontWeight: FontWeight.bold)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(tabLabel, style: TextStyle(fontSize: 24,
+                color: Colors.black,
+                fontWeight: FontWeight.bold)),
+          ),
         ],
       ),
     );
