@@ -109,7 +109,7 @@ class _DailyReportState extends State<DailyReport> {
                       Expanded(child:
                       ElevatedButton(
                         onPressed: () {
-                            saveExpense(int.parse(expenseCost.text), expensesController.text, expenseDesc.text);
+                            saveExpense(int.parse(expenseCost.text), expensesController.text, expenseDesc.text, l10n);
                             Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -137,7 +137,7 @@ class _DailyReportState extends State<DailyReport> {
         )));
   }
 
-  void saveExpense(int cost, String category, String desc) async{
+  void saveExpense(int cost, String category, String desc, AppLocalizations l10n) async{
     if (desc.isEmpty){
       desc = "No description";
     }
@@ -147,7 +147,28 @@ class _DailyReportState extends State<DailyReport> {
       await DatabaseService.instance.insertExpense(expense);
       if (mounted) context.read<ReportsController>().load();
     }catch(e){
-      print("Something went wrong");
+      if(!mounted) return;
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            backgroundColor: Colors.red,
+            title: Text(l10n.error),
+            content: Text(l10n.wentWrong,
+                style: TextStyle(fontSize: 16)),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                        color: Colors.black,
+                        width: 1, style:
+                    BorderStyle.solid)
+                ),
+                child: Text(l10n.ok),)
+            ],
+          ));
     }
   }
 
