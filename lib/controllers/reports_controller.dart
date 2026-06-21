@@ -1,3 +1,4 @@
+import 'package:faida_pos/models/expense_model.dart';
 import 'package:faida_pos/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -7,6 +8,7 @@ class ReportsController extends ChangeNotifier {
   int transactions = 0;
   int itemsSold = 0;
   int avgSale = 0;
+  List<Expense> expensesList = [];
 
   int get netProfit => sales - expenses;
 
@@ -14,6 +16,7 @@ class ReportsController extends ChangeNotifier {
     final target = date ?? DateTime.now();
     final salesList = await DatabaseService.instance.getSalesByDate(target);
     final expensesList = await DatabaseService.instance.getExpensesByDate(target);
+    this.expensesList = expensesList;
 
     sales = salesList.fold(0, (sum, s) => sum + s.total);
     expenses = expensesList.fold(0, (sum, e) => sum + e.expCost);

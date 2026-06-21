@@ -172,6 +172,51 @@ class _DailyReportState extends State<DailyReport> {
     }
   }
 
+  void showExpenses(List<Expense> expensesList, double fontSize, double titleSize) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Expenses", style: TextStyle(fontWeight: FontWeight.bold, fontSize: titleSize)),
+            const SizedBox(height: 12),
+            if (expensesList.isEmpty)
+              Text("No expenses for this day.", style: TextStyle(fontSize: fontSize))
+            else
+              Expanded(
+                child: ListView.separated(
+                  itemCount: expensesList.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (_, i) {
+                    final e = expensesList[i];
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(e.expCategory, style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize)),
+                              if (e.expDesc != null && e.expDesc!.isNotEmpty)
+                                Text(e.expDesc!, style: TextStyle(fontSize: fontSize * 0.85, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                        Text("TZS ${e.expCost}", style: TextStyle(fontSize: fontSize)),
+                      ],
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void nextDay() {
     setState(() => _selectedDate = _selectedDate.add(Duration(days: 1)));
     context.read<ReportsController>().load(_selectedDate);
@@ -296,7 +341,7 @@ class _DailyReportState extends State<DailyReport> {
                         SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => showExpenses(reports.expensesList, fontSize, titleSize),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
