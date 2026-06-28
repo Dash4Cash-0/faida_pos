@@ -13,12 +13,14 @@ class Numpad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-          GridView.count(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final aspectRatio = (constraints.maxWidth / 3) / (constraints.maxHeight / 4);
+        return GridView.count(
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          childAspectRatio: 1.8,
+          childAspectRatio: aspectRatio,
           children: [
             ...List.generate(9, (index) {
               final number = (index + 1).toString();
@@ -30,6 +32,8 @@ class Numpad extends StatelessWidget {
             numButton("+", onPlusPressed)
           ],
         );
+      },
+    );
   }
 
   Widget numButton(String label, VoidCallback onTap) {
