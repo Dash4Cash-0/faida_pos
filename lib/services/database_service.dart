@@ -381,6 +381,17 @@ Future<void> deleteNotification(int notificationId) async {
     return maps.map((m) => Expense.fromMap(m)).toList();
   }
 
+  Future<List<Expense>> getExpensesByDateRange(DateTime start, DateTime end) async {
+    final db = await instance.db;
+    final maps = await db.query(
+      'expenses',
+      where: 'createdAt >= ? AND createdAt < ?',
+      whereArgs: [start.toIso8601String(), end.toIso8601String()],
+      orderBy: 'createdAt DESC',
+    );
+    return maps.map((m) => Expense.fromMap(m)).toList();
+  }
+
   Future<void> deleteExpense(int id) async {
     final db = await instance.db;
     await db.delete('expenses', where: 'id = ?', whereArgs: [id]);

@@ -12,6 +12,28 @@ class ReportsController extends ChangeNotifier {
 
   int get netProfit => sales - expenses;
 
+  Future<void> loadRange(DateTime start, DateTime end) async {
+    final salesList = await DatabaseService.instance.getSalesInDateRange(start, end);
+    final expList = await DatabaseService.instance.getExpensesByDateRange(start, end);
+    expensesList = expList;
+
+    sales = salesList.fold(0, (sum, s) => sum + s.total);
+    expenses = expList.fold(0, (sum, e) => sum + e.expCost);
+    transactions = salesList.length;
+    avgSale = transactions > 0 ? sales ~/ transactions : 0;
+
+    int totalItems = 0;
+    for (final sale in salesList) {
+      if (sale.id != null) {
+        final items = await DatabaseService.instance.getSaleItems(sale.id!);
+        totalItems += items.fold(0, (sum, item) => sum + item.quantity);
+      }
+    }
+    itemsSold = totalItems;
+
+    notifyListeners();
+  }
+
   Future<void> load([DateTime? date]) async {
     final target = date ?? DateTime.now();
     final salesList = await DatabaseService.instance.getSalesByDate(target);
