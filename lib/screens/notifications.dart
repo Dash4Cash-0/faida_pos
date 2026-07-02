@@ -65,7 +65,11 @@ class Notifications extends StatelessWidget {
         }
         )
         ),
-        ElevatedButton(onPressed:() {
+        ElevatedButton(style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          side: BorderSide(color: Colors.black, width: 1, style: BorderStyle.solid)
+        ), onPressed:() {
           Provider.of<NotificationController>(context, listen:false).clear();
             },
             child: Text(l10n.clearNotifications))
