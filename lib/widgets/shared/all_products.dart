@@ -51,7 +51,7 @@ class _AllProductsState extends State<AllProducts> {
                   builder: (context, productController, _) {
                     final allProducts = productController.products;
 
-                    if (allProducts.isEmpty) {
+                    if (productController.isLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
 

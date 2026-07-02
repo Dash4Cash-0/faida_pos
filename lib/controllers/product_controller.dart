@@ -7,11 +7,14 @@ import '../models/product.dart';
 
 class ProductController extends ChangeNotifier {
   List<Product> products = [];
+  bool isLoading = true;
   final NotificationController notificationController;
 
   ProductController({required this.notificationController});
 
   Future<void> load() async {
+    isLoading = true;
+    notifyListeners();
 
     products = await DatabaseService.instance.getAllProducts();
 
@@ -28,8 +31,8 @@ class ProductController extends ChangeNotifier {
       }
     }
     await notificationController.load();
+    isLoading = false;
     notifyListeners();
-
   }
 
   Future<void> commitSale(List<SaleItem> items) async {
