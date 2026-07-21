@@ -1,6 +1,8 @@
 import 'package:faida_pos/l10n/app_localizations.dart';
 import 'package:faida_pos/main.dart';
+import 'package:faida_pos/security/pin_lock.dart';
 import 'package:faida_pos/security/pin_setup.dart';
+import 'package:faida_pos/services/app_storage.dart';
 import 'package:faida_pos/widgets/menu_widgets/menu_button.dart';
 import 'package:faida_pos/widgets/shared/add_product.dart';
 import 'package:flutter/foundation.dart';
@@ -42,8 +44,17 @@ class Menu extends StatelessWidget {
               ],
             ),
           ))),
-          MenuButton(label: "Set PIN", onClicked: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => PinSetup() ));
+          MenuButton(label: "Set PIN", onClicked: () async {
+            String? pinHash = await AppStorage.read('app_pin_hash');
+            if(context.mounted){
+              if (pinHash == null) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => PinSetup() ));
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => PinLock()));
+              }
+            } else {
+              return;
+            }
           }),
           if (kDebugMode) ...[
             SizedBox(height: 20),
